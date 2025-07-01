@@ -40,4 +40,9 @@ public class LeaveRequest {
         APPROVED,
         REJECTED
     }
+    
+    @PrePersist
+    protected void onCreate() {
+        this.createdAt = LocalDateTime.now();
+    }
 }

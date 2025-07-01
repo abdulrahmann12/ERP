@@ -41,4 +41,9 @@ public class InventoryLog {
         RETURN,
         INVENTORY_CORRECTION
     }
+    
+    @PrePersist
+    protected void onCreate() {
+        this.createdAt = LocalDateTime.now();
+    }
 }

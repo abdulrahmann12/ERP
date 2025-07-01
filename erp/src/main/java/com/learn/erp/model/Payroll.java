@@ -36,4 +36,9 @@ public class Payroll {
     private BigDecimal netSalary;
 
     private LocalDateTime createdAt;
+    
+    @PrePersist
+    protected void onCreate() {
+        this.createdAt = LocalDateTime.now();
+    }
 }
