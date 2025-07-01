@@ -28,6 +28,7 @@ public class Department {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long departmentId;
 
+    @Column(unique = true)
     private String name;
 
     @Column(columnDefinition = "TEXT")
