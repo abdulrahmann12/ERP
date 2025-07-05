@@ -28,9 +28,19 @@ public class Product {
 
     private Integer stock;
 
-    private String unit;
+    @Enumerated(EnumType.STRING)
+    private Unit unit;
 
     @ManyToOne
     @JoinColumn(name = "category_id", nullable = false)
     private Category category;
+    
+    public enum Unit {
+        PIECE,
+        KILOGRAM,
+        LITER,
+        BOX,
+        METER,
+        DOZEN
+    }
 }
