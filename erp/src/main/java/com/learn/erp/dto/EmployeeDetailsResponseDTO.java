@@ -8,7 +8,7 @@ import java.time.LocalDate;
 @Data
 public class EmployeeDetailsResponseDTO {
     private Long employeeId;
-    private Long userId;
+    private UserSummaryDTO user;
     private String nationalId;
     private LocalDate hireDate;
     private String jobTitle;

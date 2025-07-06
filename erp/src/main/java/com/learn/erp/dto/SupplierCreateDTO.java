@@ -18,6 +18,6 @@ public class SupplierCreateDTO {
     @NotBlank(message = "Email is required")
     private String email;
 
-    @Email(message = "Address is required")
+    @NotBlank(message = "Address is required")
     private String address;
 }

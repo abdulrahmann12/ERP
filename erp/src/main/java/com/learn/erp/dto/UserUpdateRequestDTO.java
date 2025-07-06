@@ -1,8 +1,6 @@
 package com.learn.erp.dto;
 
 import java.time.LocalDate;
-
-import com.learn.erp.model.User;
 import com.learn.erp.model.User.Gender;
 
 import jakarta.validation.constraints.Email;

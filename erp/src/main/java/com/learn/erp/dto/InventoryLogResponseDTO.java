@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 public class InventoryLogResponseDTO {
 
     private Long logId;
-    private ProductSummaryDTO product;
+    private ProductResponseDTO product;
     private Integer quantityBefore;
     private Integer quantityAfter;
     private ActionType actionType;

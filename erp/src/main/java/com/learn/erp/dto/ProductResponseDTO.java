@@ -8,7 +8,6 @@ import com.learn.erp.model.Product.Unit;
 
 @Data
 public class ProductResponseDTO {
-
     private Long productId;
     private String name;
     private String code;

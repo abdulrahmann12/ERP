@@ -1,7 +1,5 @@
 package com.learn.erp.dto;
 
-import java.time.LocalDate;
-
 import com.learn.erp.model.User;
 
 import jakarta.validation.constraints.Email;
