@@ -38,4 +38,9 @@ public class Purchase {
     @OneToMany(mappedBy = "purchase", cascade = CascadeType.ALL, orphanRemoval =  true)
     @Builder.Default
     private List<PurchaseItem> items = new ArrayList<>();
+    
+    @PrePersist
+    protected void onCreate() {
+        this.date = LocalDateTime.now();
+    }
 }

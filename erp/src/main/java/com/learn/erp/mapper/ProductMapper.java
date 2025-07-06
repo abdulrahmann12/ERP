@@ -14,10 +14,10 @@ public interface ProductMapper {
 	@Mapping(target = "categoryName", source = "category.name")
 	ProductResponseDTO toDTO(Product product);
 	
-	@Mapping(target = "category.id", source = "categoryId")
+	@Mapping(target = "category.categoryId", source = "categoryId")
+	@Mapping(target = "productId", ignore = true)
 	Product toEntity(ProductCreateDTO dto);
 	
-	@Mapping(target = "category.id", source = "categoryId")
+	@Mapping(target = "category.categoryId", source = "categoryId")
 	Product toEntity(ProductUpdateDTO dto);
-	
 }

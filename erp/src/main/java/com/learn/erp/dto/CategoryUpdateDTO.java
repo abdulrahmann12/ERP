@@ -6,6 +6,7 @@ import lombok.Data;
 
 @Data
 public class CategoryUpdateDTO {
+	
     @NotNull(message = "Category ID is required")
     private Long categoryId;
 

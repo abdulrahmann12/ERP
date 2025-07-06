@@ -14,9 +14,17 @@ public interface AttendanceMapper {
 	AttendanceResponseDTO toDTO(Attendance attendance);
 	
 	@Mapping(target = "user.id", source = "userId")
+	@Mapping(target = "attendanceId", ignore = true)
+	@Mapping(target = "checkOut", ignore = true)
+	@Mapping(target = "workingHours", ignore = true)
+	@Mapping(target = "status", ignore = true)
 	Attendance toEntity(AttendanceCheckInDTO dto);
 	
-	@Mapping(target = "user.id", source = "userId")
+	@Mapping(target = "attendanceId", ignore = true)
+	@Mapping(target = "checkIn", ignore = true)
+	@Mapping(target = "workingHours", ignore = true)
+	@Mapping(target = "status", ignore = true)
+	@Mapping(target = "user.id", ignore = true)
+	@Mapping(target = "date", ignore = true)
 	Attendance toEntity(AttendanceCheckOutDTO dto);
-	
 }

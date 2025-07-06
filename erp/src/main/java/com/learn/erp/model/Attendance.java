@@ -39,4 +39,9 @@ public class Attendance {
         LATE,
         ON_LEAVE
     }
+    
+    @PrePersist
+    protected void onCreate() {
+        this.date = LocalDate.now();
+    }
 }

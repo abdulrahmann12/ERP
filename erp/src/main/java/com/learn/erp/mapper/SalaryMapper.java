@@ -14,6 +14,7 @@ public interface SalaryMapper {
 	SalaryResponseDTO toDTO(Salary salary);
 	
 	@Mapping(target = "user.id", source = "userId")
+	@Mapping(target = "salaryId" , ignore = true)
 	Salary toEntity(SalaryCreateDTO dto);
 	
 	@Mapping(target = "user.id", source = "userId")
