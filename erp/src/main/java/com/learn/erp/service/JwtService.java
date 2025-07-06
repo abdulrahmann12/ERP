@@ -29,7 +29,6 @@ public class JwtService {
 
 	private final TokenRepository tokenRepository;
 
-
 	@Value("${secret}")
 	private String secret;
 	
