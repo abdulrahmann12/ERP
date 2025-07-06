@@ -12,6 +12,7 @@ import lombok.Data;
 @Data
 public class ViewUserResponseDTO {
 
+	private Long userId;
     private String username;
     private String email;
     private String fullName;

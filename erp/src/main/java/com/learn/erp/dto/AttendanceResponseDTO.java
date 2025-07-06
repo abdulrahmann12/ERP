@@ -11,7 +11,6 @@ public class AttendanceResponseDTO {
 
     private Long attendanceId;
     private UserSummaryDTO user;
-    private String userFullName;
     private LocalDate date;
     private LocalTime checkIn;
     private LocalTime checkOut;

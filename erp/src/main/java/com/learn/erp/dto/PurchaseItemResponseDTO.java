@@ -9,7 +9,7 @@ public class PurchaseItemResponseDTO {
 
     private Long purchaseItemId;
 
-    private ProductSummaryDTO product;
+    private ProductResponseDTO product;
 
     private Integer quantity;
 

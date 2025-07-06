@@ -6,6 +6,8 @@ import lombok.Data;
 @Data
 public class DepartmentUpdateRequestDTO {
 	
+    private Long departmentId;
+	
 	@NotBlank(message = "Name is required")
     private String name;
 	

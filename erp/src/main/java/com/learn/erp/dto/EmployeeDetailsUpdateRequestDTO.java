@@ -9,6 +9,8 @@ import java.time.LocalDate;
 @Data
 public class EmployeeDetailsUpdateRequestDTO {
 
+    private Long employeeId;
+	
     @NotBlank(message = "National ID is required")
     @Size(min = 14, max = 14, message = "National ID must be exactly 14 digits")
     private String nationalId;
