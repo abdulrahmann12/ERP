@@ -8,12 +8,13 @@ import com.learn.erp.dto.EmployeeDetailsResponseDTO;
 import com.learn.erp.dto.EmployeeDetailsUpdateRequestDTO;
 import com.learn.erp.model.EmployeeDetails;
 
-@Mapper(componentModel = "spring", uses = UserMapper.class)
+@Mapper(componentModel = "spring")
 public interface EmployeeMapper {
 
 	EmployeeDetailsResponseDTO toDTO(EmployeeDetails employeeDetails);
 	
 	@Mapping(target = "user.id", source = "userId")
+	@Mapping(target = "employeeId" , ignore = true)
 	EmployeeDetails toEntity(EmployeeDetailsCreateRequestDTO dto);
 	
 	@Mapping(target = "user.id", source = "userId")

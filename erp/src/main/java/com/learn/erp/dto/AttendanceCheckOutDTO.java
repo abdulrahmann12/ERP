@@ -8,8 +8,8 @@ import java.time.LocalTime;
 @Data
 public class AttendanceCheckOutDTO {
 
-    @NotNull(message = "User ID is required")
-    private Long userId;
+    @NotNull(message = "Attendance Id is required")
+	private Long attendanceId;
 
     @NotNull(message = "Check-out time is required")
     private LocalTime checkOut;
