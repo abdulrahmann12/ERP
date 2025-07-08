@@ -15,7 +15,7 @@ public class ResetPasswordRequestDTO {
 	@NotBlank(message = "Code is required")
 	private String code;
 	
-	@NotBlank(message = "Passwo	rd is required")
+	@NotBlank(message = "Password is required")
 	@Size(min = 6, message = "Password too short")
 	private String newPassword;
 }
