@@ -35,8 +35,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter{
 	    this.userDetailsService = userDetailsService;
 	    this.tokenRepository = tokenRepository;
 	}
-	
-	
+		
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
 	        throws ServletException, IOException {
@@ -91,11 +90,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter{
 	    response.getWriter().write(mapper.writeValueAsString(errorDetails));
 	}
 	
-
 	private String extractToken(HttpServletRequest request) {
 	    String authHeader = request.getHeader("Authorization");
-	    
-	    
+	    	    
 	    if (authHeader == null || !authHeader.startsWith("Bearer ")) {
 	        throw new AuthenticationCredentialsNotFoundException(Messages.MISSING_TOKEN);
 	    }
