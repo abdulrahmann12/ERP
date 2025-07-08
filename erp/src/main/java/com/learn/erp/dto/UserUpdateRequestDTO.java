@@ -5,6 +5,7 @@ import com.learn.erp.model.User.Gender;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 @Data
@@ -19,13 +20,11 @@ public class UserUpdateRequestDTO {
 	
 	@NotBlank(message = "Full name is required")
     private String fullName;
-	
-    private String image;
-	
+		
 	@NotBlank(message = "Phone is required")
     private String phone;
 	
-	@NotBlank(message = "Gender is required")
+	@NotNull(message = "Gender is required")
     private Gender gender;
     
 	private LocalDate birthDate;

@@ -41,6 +41,7 @@ public class Messages {
     public static final String USER_UPDATE_PROFILE = "User role updated successfully";
     public static final String USER_UPDATE_IMAGE = "User image updated successfully";
     public static final String DELETE_USER = "User deleted successfully";
+    public static final String UPDATE_USER = "User updated successfully";
     
 	// ==================== Department Messages ====================
     public static final String DEPARTMENT_NOT_FOUND = "Department not found";
@@ -69,5 +70,7 @@ public class Messages {
     public static final String ADD_PRODUCT = "Product added successfully";
     public static final String UPDATE_PRODUCT = "Product updated successfully";
     
-    
+	// ==================== Image Messages ====================
+    public static final String EMPTY_IMAGE = "Image file is empty or null";
+    public static final String UPLOAD_IMAGE_FAILED = "Error occurred while uploading image";
 }

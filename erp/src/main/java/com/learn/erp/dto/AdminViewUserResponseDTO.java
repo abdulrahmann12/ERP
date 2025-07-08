@@ -21,7 +21,5 @@ public class AdminViewUserResponseDTO {
     private String department;
     private LocalDate birthDate;
     private LocalDateTime createdAt;
-    private Boolean active;
-
-    
+    private Boolean active;    
 }
