@@ -9,9 +9,6 @@ import lombok.Data;
 
 @Data
 public class AdminUpdateUserRequestDTO {
-
-	@NotNull(message = "User Id is required")
-	private Long userId;
 	
 	@Email(message = "Invalid email format")
 	@NotBlank(message = "Email is required")
@@ -23,7 +20,7 @@ public class AdminUpdateUserRequestDTO {
 	@NotBlank(message = "Phone is required")
     private String phone;
 	    
-    @NotBlank(message = "Role is required")
+	@NotNull(message = "Role is required")
     private User.Role role;
     
     private Long departmentId;
