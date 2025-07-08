@@ -44,8 +44,11 @@ public class Messages {
     
 	// ==================== Department Messages ====================
     public static final String DEPARTMENT_NOT_FOUND = "Department not found";
+    public static final String DEPARTMENT_ALREADY_EXISTS = "Department with this name already exist";
     public static final String DEPARTMENT_UPDATE= "Department updated successfully";
     public static final String DELETE_DEPARTMENT = "Department deleted successfully";
+    public static final String ADD_DEPARTMENT = "Department added successfully";
+    public static final String CANNOT_DELETE_DEPARTMENT = "Cannot delete department with assigned users.";
 	
 	// ==================== Format Messages ====================
     public static final String FORMAT_ERROR = "Malformed JSON request";

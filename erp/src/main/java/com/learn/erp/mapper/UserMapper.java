@@ -37,6 +37,7 @@ public interface UserMapper {
 	@Mapping(target = "image", ignore = true)
 	@Mapping(target = "phone", ignore = true)
 	@Mapping(target = "authorities", ignore = true)
+	@Mapping(target = "requestCode", ignore = true)
 	User toEntity(AdminCreateUserRequestDTO dto);
 
 	@Mapping(target = "department.departmentId", source = "departmentId")
@@ -52,6 +53,7 @@ public interface UserMapper {
 	@Mapping(target = "authorities", ignore = true)
 	@Mapping(target = "password", ignore = true)
 	@Mapping(target = "username", ignore = true)
+	@Mapping(target = "requestCode", ignore = true)
 	User toEntity(AdminUpdateUserRequestDTO dto);
 
 	@Mapping(target = "active", ignore = true)
@@ -61,6 +63,7 @@ public interface UserMapper {
 	@Mapping(target = "authorities", ignore = true)
 	@Mapping(target = "role", ignore = true)
 	@Mapping(target = "password", ignore = true)
+	@Mapping(target = "requestCode", ignore = true)
 	@Mapping(target = "id", ignore = true)
 	User toEntity(UserUpdateRequestDTO dto);	
 }
