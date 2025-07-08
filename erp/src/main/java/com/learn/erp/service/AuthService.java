@@ -21,12 +21,14 @@ import com.learn.erp.exception.MailSendingException;
 import com.learn.erp.exception.UserNotFoundException;
 import com.learn.erp.exception.UsernameAlreadyExistsException;
 import com.learn.erp.mapper.UserMapper;
+import com.learn.erp.model.Department;
 import com.learn.erp.model.User;
 import com.learn.erp.repository.DepartmentRepository;
 import com.learn.erp.repository.TokenRepository;
 import com.learn.erp.repository.UserRepository;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
@@ -42,6 +44,7 @@ public class AuthService {
 	private final EmailService emailService;
 	private final DepartmentRepository departmentRepository;
 	
+	@Transactional
 	public AuthResponse login(LoginRequestDTO loginRequest) {
 		User user = getUserByEmail(loginRequest.getEmail());
 	    String accessToken = jwtService.generateToken(user);
@@ -60,11 +63,12 @@ public class AuthService {
 	    userRepository.findByUsername(user.getUsername())
         .ifPresent(u -> { throw new UsernameAlreadyExistsException(); });
 
-	    departmentRepository.findById(dto.getDepartmentId())
-        .orElseThrow(DepartmentNotFoundException::new);
+	    Department department = departmentRepository.findById(dto.getDepartmentId())
+	            .orElseThrow(DepartmentNotFoundException::new);
 	    
 		user.setPassword(passwordEncoder.encode(dto.getPassword()));
 		user.setActive(true);
+		 user.setDepartment(department);
 		User savedUser = userRepository.save(user);
 		return userMapper.toAdminViewUserDTO(savedUser);
 	}

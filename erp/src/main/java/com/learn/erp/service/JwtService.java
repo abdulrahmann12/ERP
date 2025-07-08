@@ -4,6 +4,7 @@ package com.learn.erp.service;
 import java.security.Key;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
@@ -21,6 +22,7 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -111,14 +113,14 @@ public class JwtService {
 	    tokenRepository.save(token);
 	}
 	
+	@Transactional
 	public void revokeAllUserTokens(User user) {
-	    var validUserTokens = tokenRepository.findAllValidTokenByUser(user.getId());
+	    List<Token> validUserTokens = tokenRepository.findAllValidTokenByUser(user.getId());
 	    validUserTokens.forEach(token -> {
 	        token.setExpired(true);
 	        token.setRevoked(true);
-	        tokenRepository.delete(token);
 	    });
-	    tokenRepository.deleteAll(validUserTokens);
+	    tokenRepository.saveAll(validUserTokens);
 	}
 	
 }
