@@ -72,6 +72,8 @@ public class User implements UserDetails{
     private LocalDateTime createdAt;
 
     private Boolean active;
+    
+	private String requestCode;
 	
     public enum Role {
         ADMIN,
@@ -108,7 +110,7 @@ public class User implements UserDetails{
 	@Override
 	public String getUsername() {
 		// TODO Auto-generated method stub
-		return username;
+		return email;
 	}
 	
 	@Override

@@ -81,6 +81,7 @@ public class GlobalExceptionHandler {
         ProductNotFoundException.class,
         EmailAlreadyExistsException.class,
         InsufficientStockException.class,
+        DepartmentNotFoundException.class
 
     })
     public ResponseEntity<BasicResponse> handleNotFoundBusinessExceptions(Exception ex, WebRequest request) {

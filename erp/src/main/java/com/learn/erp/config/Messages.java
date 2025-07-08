@@ -4,12 +4,12 @@ public class Messages {
 
 	// ==================== Email Messages ====================
     public static final String RESET_PASSWORD = "Reset your password";
-    public static final String CONFIRM_EMAIL = "Confirm your email address";
+    public static final String RESEND_CODE = "A new code was sent";
     public static final String FAILED_EMAIL = "Failed to send email. Please try again later";
 	
 	// ==================== Auth Messages ====================
     public static final String LOGIN_SUCCESS = "Login successfully";
-    public static final String REGISTER_SUCCESS = "Register successfully";
+    public static final String CREATE_NEW_USER = "New user created successfully";
     public static final String LOGOUT_SUCCESS = "Logged out successfully";
     public static final String ALREADY_LOGGED_OUT = "You are already logged out";
     public static final String INVALID_CONFIRM_EMAIL = "Invalid confirmation code";
@@ -19,6 +19,7 @@ public class Messages {
     public static final String CODE_SENT = "Code sent successfully";
     public static final String INVALID_RESET_CODE = "Invalid reset code";
     public static final String EMAIL_ALREADY_EXISTS = "Email already exists";
+    public static final String USERNAME_ALREADY_EXISTS = "Username already exists";
     public static final String BAD_CREDENTIALS = "Invalid username or password";
     public static final String AUTH_FAILED = "Authentication failed";
     public static final String REQUEST_NOT_SUPPORTED = "Request method not supported";
@@ -40,6 +41,11 @@ public class Messages {
     public static final String USER_UPDATE_PROFILE = "User role updated successfully";
     public static final String USER_UPDATE_IMAGE = "User image updated successfully";
     public static final String DELETE_USER = "User deleted successfully";
+    
+	// ==================== Department Messages ====================
+    public static final String DEPARTMENT_NOT_FOUND = "Department not found";
+    public static final String DEPARTMENT_UPDATE= "Department updated successfully";
+    public static final String DELETE_DEPARTMENT = "Department deleted successfully";
 	
 	// ==================== Format Messages ====================
     public static final String FORMAT_ERROR = "Malformed JSON request";

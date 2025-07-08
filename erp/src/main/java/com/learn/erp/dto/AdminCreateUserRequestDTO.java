@@ -4,6 +4,7 @@ import com.learn.erp.model.User;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 
@@ -21,8 +22,8 @@ public class AdminCreateUserRequestDTO {
 	@Size(min = 6, message = "Password too short")
     private String password;
     
-	@NotBlank(message = "Role is required")
-    private User.Role role;
+	@NotNull(message = "Role is required")
+	private User.Role role;
     
     private Long departmentId;
 }
