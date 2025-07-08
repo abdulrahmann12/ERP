@@ -57,7 +57,7 @@ public class AuthController {
 	
 	@PostMapping("/create-user")
 	@PreAuthorize("hasRole('ADMIN')")
-	public ResponseEntity<BasicResponse> register(@Valid @RequestBody AdminCreateUserRequestDTO user){
+	public ResponseEntity<BasicResponse> register(@RequestBody AdminCreateUserRequestDTO user){
 		return ResponseEntity.ok(new BasicResponse(Messages.CREATE_NEW_USER,authService.craateUser(user)));
 	}
 	
