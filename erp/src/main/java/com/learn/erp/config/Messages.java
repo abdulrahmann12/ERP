@@ -74,10 +74,18 @@ public class Messages {
     public static final String EMPTY_IMAGE = "Image file is empty or null";
     public static final String UPLOAD_IMAGE_FAILED = "Error occurred while uploading image";
     
-	// ==================== Employee Messages ====================  
+	// ==================== Employee Messages ====================   
     public static final String EMPLOYEE_NOT_FOUND = "Employee not found";
     public static final String DELETE_EMPLOYEE = "Employee deleted successfully";
     public static final String UPDATE_EMPLOYEE = "Employee updated successfully";
     public static final String ADD_EMPLOYEE = "Employee added successfully";
     public static final String EMPLOYEE_ALREADY_EXISTS = "Employee details already exist for this user.";
+    
+    // ==================== Attendance Messages ==================== 
+    public static final String USER_ALREADY_CHECKIN = "User already checked in today";
+    public static final String USER_ALREADY_CHECK_OUT = "User already checked out today";
+    public static final String MUST_CHECKIN = "You must check in before checking out";
+    public static final String CHECK_IN = "Check-in successful";
+    public static final String CHECK_OUT = "Check-out successful";
+    
 }

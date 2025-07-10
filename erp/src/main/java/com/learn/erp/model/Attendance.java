@@ -37,7 +37,8 @@ public class Attendance {
         PRESENT,
         ABSENT,
         LATE,
-        ON_LEAVE
+        ON_LEAVE,
+        AUTO_CHECKED_OUT
     }
     
     @PrePersist

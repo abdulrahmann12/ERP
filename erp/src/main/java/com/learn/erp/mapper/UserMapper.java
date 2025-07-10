@@ -6,6 +6,7 @@ import org.mapstruct.*;
 
 import com.learn.erp.dto.AdminCreateUserRequestDTO;
 import com.learn.erp.dto.AdminViewUserResponseDTO;
+import com.learn.erp.dto.HRViewUserResponseDTO;
 import com.learn.erp.dto.UserSummaryDTO;
 import com.learn.erp.dto.ViewUserResponseDTO;
 import com.learn.erp.model.User;
@@ -17,6 +18,11 @@ public interface UserMapper {
 	@Mapping(target = "userId", source = "id")
 	@Mapping(target = "username", expression = "java(user.getUsernameField())")
 	AdminViewUserResponseDTO toAdminViewUserDTO(User user);
+	
+	@Mapping(target = "department", source = "department.name")
+	@Mapping(target = "userId", source = "id")
+	@Mapping(target = "username", expression = "java(user.getUsernameField())")
+	HRViewUserResponseDTO toAHRViewUserDTO(User user);
 	
 	@Mapping(target = "username", expression = "java(user.getUsernameField())")
 	List<AdminViewUserResponseDTO> toAdminViewUserDTOS(List<User> user);
