@@ -84,7 +84,8 @@ public class GlobalExceptionHandler {
         DepartmentNotFoundException.class,
         DuplicateResourceException.class,
         EmployeeNotFoundException.class,
-
+        AlreadyCheckedOutException.class,
+        
     })
     public ResponseEntity<BasicResponse> handleNotFoundBusinessExceptions(Exception ex, WebRequest request) {
         return buildErrorResponse(ex, request, HttpStatus.NOT_FOUND);
