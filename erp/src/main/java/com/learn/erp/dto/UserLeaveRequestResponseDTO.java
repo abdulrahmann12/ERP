@@ -7,10 +7,9 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Data
-public class LeaveRequestResponseDTO {
+public class UserLeaveRequestResponseDTO {
 
     private Long requestId;
-    private HRViewUserResponseDTO user;
     private LocalDate startDate;
     private LocalDate endDate;
     private String reason;

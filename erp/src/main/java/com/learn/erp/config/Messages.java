@@ -88,4 +88,10 @@ public class Messages {
     public static final String CHECK_IN = "Check-in successful";
     public static final String CHECK_OUT = "Check-out successful";
     
+    // ==================== Leave Request Messages ==================== 
+    public static final String REQUEST_NOT_FOUND = "Leave request not found";
+    public static final String LEAVE_REQUEST_SUBMITTED = "Leave request submitted successfully.";
+    public static final String LEAVE_REQUEST_STATUS_UPDATED = "Leave request status updated.";
+    public static final String USER_HAVE_PEMDING_REQUEST = "You already have a pending leave request in this period.";
+    
 }

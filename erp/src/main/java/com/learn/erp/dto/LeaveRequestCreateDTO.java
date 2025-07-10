@@ -10,9 +10,6 @@ import java.time.LocalDate;
 @Data
 public class LeaveRequestCreateDTO {
 
-    @NotNull(message = "User ID is required")
-    private Long userId;
-
     @NotNull(message = "Start date is required")
     @FutureOrPresent(message = "Start date must be today or in the future")
     private LocalDate startDate;

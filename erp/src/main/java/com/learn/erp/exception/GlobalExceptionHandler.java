@@ -85,6 +85,7 @@ public class GlobalExceptionHandler {
         DuplicateResourceException.class,
         EmployeeNotFoundException.class,
         AlreadyCheckedOutException.class,
+        LeaveRequestNotFoundException.class,
         
     })
     public ResponseEntity<BasicResponse> handleNotFoundBusinessExceptions(Exception ex, WebRequest request) {
