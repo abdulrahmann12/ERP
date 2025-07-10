@@ -1,8 +1,10 @@
 package com.learn.erp.repository;
 
 import com.learn.erp.model.LeaveRequest;
-import com.learn.erp.model.User;
 import com.learn.erp.model.LeaveRequest.Status;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -12,9 +14,16 @@ import java.util.List;
 @Repository
 public interface LeaveRequestRepository extends JpaRepository<LeaveRequest, Long> {
 
-    List<LeaveRequest> findByUser(User user);
+    Page<LeaveRequest> findAll(Pageable pageable);
 
-    List<LeaveRequest> findByStatus(Status status);
+    Page<LeaveRequest> findByUser_Id(Long userId, Pageable pageable);
 
-    List<LeaveRequest> findByStartDateBetween(LocalDate start, LocalDate end);
+    Page<LeaveRequest> findByUser_IdAndStatus(Long userId, Status status, Pageable pageable);
+
+    List<LeaveRequest> findByUser_IdAndStatus(Long userId, LeaveRequest.Status status);
+
+
+    Page<LeaveRequest> findByStatus(Status status, Pageable pageable);
+
+    List<LeaveRequest> findByStartDateLessThanEqualAndEndDateGreaterThanEqual(LocalDate end, LocalDate start);
 }
