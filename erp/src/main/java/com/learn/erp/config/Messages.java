@@ -34,8 +34,9 @@ public class Messages {
     public static final String ACCESS_DENIED = "You do not have permission to access this resource";
     public static final String MISSING_TOKEN = "JWT token is missing";
     
-	// ==================== User Messages ====================
+	// ==================== User Messages ==================== 
     public static final String USER_NOT_FOUND = "User not found";
+    public static final String USERNAME_NOT_FOUND = "User not found with username or email: ";
     public static final String USER_NOT_AUTHENTICATED = "User not authenticated";
     public static final String CHANGE_ROLES_ERROR = "Invalid role. Please provide one of: ADMIN, CUSTOMER, etc.";
     public static final String USER_UPDATE_PROFILE = "User role updated successfully";
