@@ -15,17 +15,22 @@ public interface UserMapper {
 
 	@Mapping(target = "department", source = "department.name")
 	@Mapping(target = "userId", source = "id")
+	@Mapping(target = "username", expression = "java(user.getUsernameField())")
 	AdminViewUserResponseDTO toAdminViewUserDTO(User user);
 	
+	@Mapping(target = "username", expression = "java(user.getUsernameField())")
 	List<AdminViewUserResponseDTO> toAdminViewUserDTOS(List<User> user);
 
+	
 	@Mapping(target = "department", source = "department.name")
 	@Mapping(target = "userId", source = "id")
+	@Mapping(target = "username", expression = "java(user.getUsernameField())")
 	UserSummaryDTO toSummaryDTO(User user);
 
 	
 	@Mapping(target = "department", source = "department.name")
 	@Mapping(target = "userId", source = "id")
+	@Mapping(target = "username", expression = "java(user.getUsernameField())")
 	ViewUserResponseDTO toViewUserDTO(User user);
 	
 	@Mapping(target = "department.departmentId", source = "departmentId")

@@ -63,7 +63,8 @@ public class UserService {
 				.orElseThrow(() -> new UserNotFoundException());
 		
 	    userRepository.findByUsername(dto.getUsername())
-        .ifPresent(u -> { throw new UsernameAlreadyExistsException(); });
+	    .filter(user -> !user.getId().equals(userId))
+	    .ifPresent(user -> { throw new UsernameAlreadyExistsException();});
 	    
 		existingUser.setFullName(dto.getFullName());
 		existingUser.setPhone(dto.getPhone());

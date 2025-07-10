@@ -46,7 +46,9 @@ public class AuthService {
 	
 	@Transactional
 	public AuthResponse login(LoginRequestDTO loginRequest) {
-		User user = getUserByEmail(loginRequest.getEmail());
+	    User user = userRepository.findByUsername(loginRequest.getUsernameOrEmail())
+	            .or(() -> userRepository.findByEmail(loginRequest.getUsernameOrEmail()))
+	            .orElseThrow(UserNotFoundException::new);
 	    String accessToken = jwtService.generateToken(user);
 	    String refreshToken = jwtService.generateRefreshToken(user);
 	    jwtService.revokeAllUserTokens(user);

@@ -38,7 +38,7 @@ public class AuthController {
 	
 	@PostMapping("/login")
 	public ResponseEntity<BasicResponse> login(@Valid @RequestBody LoginRequestDTO loginRequest){
-		authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword()));
+		authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getUsernameOrEmail(), loginRequest.getPassword()));
 		AuthResponse authResponse = authService.login(loginRequest);
 		return ResponseEntity.ok(new BasicResponse(Messages.LOGIN_SUCCESS,authResponse));
 	}
