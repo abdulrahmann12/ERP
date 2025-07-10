@@ -123,6 +123,15 @@ public class UserService {
 		userRepository.delete(user);
 	}
 	
+	public Page<AdminViewUserResponseDTO> getUsersByDepartmentId(Long departmentId, int page, int size) {
+		departmentRepository.findById(departmentId)
+				 .orElseThrow(() -> new DepartmentNotFoundException());
+		Pageable pageable = PageRequest.of(page, size);
+		Page<User> usersPage = userRepository.findAllByDepartment_DepartmentId(departmentId, pageable);
+		return usersPage.map(userMapper::toAdminViewUserDTO);
+
+	}
+
 	public List<Role> getAllRoles(){
 		return Arrays.asList(Role.values());
 	}

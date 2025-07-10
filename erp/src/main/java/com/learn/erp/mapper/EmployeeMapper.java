@@ -5,18 +5,15 @@ import org.mapstruct.Mapping;
 
 import com.learn.erp.dto.EmployeeDetailsCreateRequestDTO;
 import com.learn.erp.dto.EmployeeDetailsResponseDTO;
-import com.learn.erp.dto.EmployeeDetailsUpdateRequestDTO;
 import com.learn.erp.model.EmployeeDetails;
 
 @Mapper(componentModel = "spring")
 public interface EmployeeMapper {
 
+	@Mapping(target = "userId", source = "user.id")
 	EmployeeDetailsResponseDTO toDTO(EmployeeDetails employeeDetails);
 	
 	@Mapping(target = "user.id", source = "userId")
 	@Mapping(target = "employeeId" , ignore = true)
 	EmployeeDetails toEntity(EmployeeDetailsCreateRequestDTO dto);
-	
-	@Mapping(target = "user.id", source = "userId")
-	EmployeeDetails toEntity(EmployeeDetailsUpdateRequestDTO dto);
 }

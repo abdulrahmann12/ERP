@@ -13,7 +13,7 @@ public class EmployeeDetailsCreateRequestDTO {
     private Long userId;
 
     @NotBlank(message = "National ID is required")
-    @Size(min = 14, max = 14, message = "National ID must be exactly 14 digits")
+    @Pattern(regexp = "\\d{14}", message = "National ID must be exactly 14 digits")
     private String nationalId;
 
     @NotNull(message = "Hire date is required")

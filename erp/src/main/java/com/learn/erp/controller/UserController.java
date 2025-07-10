@@ -100,4 +100,13 @@ public class UserController {
 	    public List<Role> getAllRoles() {
 	        return userService.getAllRoles();
 	    }
+	    
+	    @GetMapping("/department/{departmentId}/users")
+	    @PreAuthorize("hasRole('ADMIN')")
+	    public ResponseEntity<Page<AdminViewUserResponseDTO>> getUsersByDepartment(
+	    		@PathVariable Long departmentId,
+	            @RequestParam(defaultValue = "0") int page,
+	            @RequestParam(defaultValue = "10") int size) {
+	        return ResponseEntity.ok(userService.getUsersByDepartmentId(departmentId, page, size));
+	    }
 }

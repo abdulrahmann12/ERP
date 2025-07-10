@@ -52,10 +52,9 @@ public class Messages {
     public static final String ADD_DEPARTMENT = "Department added successfully";
     public static final String CANNOT_DELETE_DEPARTMENT = "Cannot delete department with assigned users.";
 	
-	// ==================== Format Messages ====================
+	// ==================== Error Messages ====================
     public static final String FORMAT_ERROR = "Malformed JSON request";
     public static final String INVALID_DATA = "Invalid data. Please check your request body";
-
     
 	// ==================== Category Messages ==================== 
     public static final String CATEGORY_NOT_FOUND = "Category not found";
@@ -74,4 +73,11 @@ public class Messages {
 	// ==================== Image Messages ====================
     public static final String EMPTY_IMAGE = "Image file is empty or null";
     public static final String UPLOAD_IMAGE_FAILED = "Error occurred while uploading image";
+    
+	// ==================== Employee Messages ====================  
+    public static final String EMPLOYEE_NOT_FOUND = "Employee not found";
+    public static final String DELETE_EMPLOYEE = "Employee deleted successfully";
+    public static final String UPDATE_EMPLOYEE = "Employee updated successfully";
+    public static final String ADD_EMPLOYEE = "Employee added successfully";
+    public static final String EMPLOYEE_ALREADY_EXISTS = "Employee details already exist for this user.";
 }
