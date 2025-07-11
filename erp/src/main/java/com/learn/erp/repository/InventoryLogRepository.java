@@ -11,9 +11,8 @@ import java.util.List;
 @Repository
 public interface InventoryLogRepository extends JpaRepository<InventoryLog, Long> {
 
-    List<InventoryLog> findByProduct(Product product);
-
     List<InventoryLog> findByProductAndActionType(Product product, ActionType actionType);
 
     List<InventoryLog> findByActionType(ActionType actionType);
+    List<InventoryLog> findByProduct_ProductId(Long productId);
 }

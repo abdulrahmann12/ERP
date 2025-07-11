@@ -16,4 +16,19 @@ public class ProductResponseDTO {
     private Integer stock;
     private Unit unit;
     private String categoryName;
+    private String userFullName;
+    
+    public ProductResponseDTO(Long productId, String name, String code, String description,
+            BigDecimal price, Integer stock, Unit unit,
+            String categoryName, String userFullName) {
+			this.productId = productId;
+			this.name = name;
+			this.code = code;
+			this.description = description;
+			this.price = price;
+			this.stock = stock;
+			this.unit = unit;
+			this.categoryName = categoryName;
+			this.userFullName = userFullName;
+}
 }

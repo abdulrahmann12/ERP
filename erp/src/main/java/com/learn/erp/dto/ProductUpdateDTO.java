@@ -11,9 +11,6 @@ import com.learn.erp.model.Product.Unit;
 @Data
 public class ProductUpdateDTO {
 
-    @NotNull(message = "Product ID is required")
-    private Long productId;
-
     @NotBlank(message = "Name is required")
     private String name;
 
@@ -31,7 +28,7 @@ public class ProductUpdateDTO {
     @Min(value = 0, message = "Stock cannot be negative")
     private Integer stock;
 
-    @NotBlank(message = "Unit is required")
+    @NotNull(message = "Unit is required")
     private Unit unit;
 
     @NotNull(message = "Category ID is required")

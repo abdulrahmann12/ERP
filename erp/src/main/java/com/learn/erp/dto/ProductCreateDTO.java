@@ -27,7 +27,7 @@ public class ProductCreateDTO {
     @Min(value = 0, message = "Stock cannot be negative")
     private Integer stock;
 
-    @NotBlank(message = "Unit is required")
+    @NotNull(message = "Unit is required")
     private Unit unit;
 
     @NotNull(message = "Category ID is required")
