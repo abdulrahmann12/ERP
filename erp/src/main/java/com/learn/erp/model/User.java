@@ -4,7 +4,6 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
-
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -94,7 +93,6 @@ public class User implements UserDetails{
     protected void onCreate() {
         this.createdAt = LocalDateTime.now();
     }
-	
 	
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {

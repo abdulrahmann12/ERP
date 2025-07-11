@@ -70,7 +70,7 @@ public class AuthService {
 	    
 		user.setPassword(passwordEncoder.encode(dto.getPassword()));
 		user.setActive(true);
-		 user.setDepartment(department);
+		user.setDepartment(department);
 		User savedUser = userRepository.save(user);
 		return userMapper.toAdminViewUserDTO(savedUser);
 	}
