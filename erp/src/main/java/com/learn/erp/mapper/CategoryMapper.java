@@ -13,11 +13,11 @@ public interface CategoryMapper {
 
 	CategoryResponseDTO toDTO(Category category);
 	
-	
 	@Mapping(target = "categoryId", ignore = true)
 	@Mapping(target = "products", ignore = true)
 	Category toEntity(CategoryCreateDTO dto);
 	
+	@Mapping(target = "categoryId", ignore = true)
 	@Mapping(target = "products", ignore = true)
 	Category toEntity(CategoryUpdateDTO dto);
 }
