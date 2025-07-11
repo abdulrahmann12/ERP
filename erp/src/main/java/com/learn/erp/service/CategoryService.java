@@ -12,9 +12,12 @@ import com.learn.erp.dto.CategoryCreateDTO;
 import com.learn.erp.dto.CategoryResponseDTO;
 import com.learn.erp.dto.CategoryUpdateDTO;
 import com.learn.erp.exception.CategoryNotFoundException;
+import com.learn.erp.exception.UserNotFoundException;
 import com.learn.erp.mapper.CategoryMapper;
 import com.learn.erp.model.Category;
+import com.learn.erp.model.User;
 import com.learn.erp.repository.CategoryRepository;
+import com.learn.erp.repository.UserRepository;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -26,12 +29,17 @@ public class CategoryService {
 	
 	private final CategoryRepository categoryRepository;
 	private final CategoryMapper categoryMapper;
+	private final UserRepository userRepository;
 	
-	public CategoryResponseDTO createCategory(@Valid CategoryCreateDTO dto) {
+	public CategoryResponseDTO createCategory(Long userId, @Valid CategoryCreateDTO dto) {
+		User user = userRepository.findById(userId)
+				.orElseThrow(() -> new UserNotFoundException());
+		
 	    if (categoryRepository.findByName(dto.getName()).isPresent()) {
 	        throw new IllegalArgumentException(Messages.CATEGORY_ALREADY_EXISTS);
 	    }
 	    Category category = categoryMapper.toEntity(dto);	
+	    category.setCreatedBy(user);
 	    Category savedCategory = categoryRepository.save(category);
 		return categoryMapper.toDTO(savedCategory);
 	}

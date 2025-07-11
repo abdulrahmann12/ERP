@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,6 +19,7 @@ import com.learn.erp.dto.BasicResponse;
 import com.learn.erp.dto.CategoryCreateDTO;
 import com.learn.erp.dto.CategoryResponseDTO;
 import com.learn.erp.dto.CategoryUpdateDTO;
+import com.learn.erp.model.User;
 import com.learn.erp.service.CategoryService;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -33,8 +35,8 @@ public class CategoryController {
 	
 	@PostMapping
 	@PreAuthorize("hasRole('STORE_MANAGER')")
-	public ResponseEntity<BasicResponse> createCategory(@RequestBody CategoryCreateDTO categoryDTO) {
-		CategoryResponseDTO createdCategory = categoryService.createCategory(categoryDTO);
+	public ResponseEntity<BasicResponse> createCategory(@AuthenticationPrincipal User user, @RequestBody CategoryCreateDTO categoryDTO) {
+		CategoryResponseDTO createdCategory = categoryService.createCategory(user.getId(), categoryDTO);
         return ResponseEntity.ok(new BasicResponse(Messages.ADD_CATEGORY, createdCategory));		
 	}
 	
