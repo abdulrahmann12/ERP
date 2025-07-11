@@ -21,6 +21,8 @@ public class Product {
     private String name;
 
     private String code;
+    
+    private String image;
 
     private String description;
 
@@ -34,6 +36,10 @@ public class Product {
     @ManyToOne
     @JoinColumn(name = "category_id", nullable = false)
     private Category category;
+    
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User createdBy;
     
     public enum Unit {
         PIECE,

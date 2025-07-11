@@ -15,4 +15,5 @@ public class InventoryLogResponseDTO {
     private ActionType actionType;
     private String note;
     private LocalDateTime createdAt;
+    private String userFullName;
 }

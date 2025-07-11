@@ -94,4 +94,8 @@ public class Messages {
     public static final String LEAVE_REQUEST_STATUS_UPDATED = "Leave request status updated.";
     public static final String USER_HAVE_PEMDING_REQUEST = "You already have a pending leave request in this period.";
     
+    // ==================== Inventory Messages ==================== 
+    public static final String STOCK_UPDATED = "Stock updated";
+    public static final String CREATE_PRODUCT = "Initial product creation";
+    
 }
