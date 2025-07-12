@@ -104,8 +104,13 @@ public class Messages {
     public static final String UPDATE_SALARY = "Salary updated successfully";
     public static final String SALARY_ALREADY_EXISTS = "This user already has a salary record.";
     
-	// ==================== Bonus Messages ==================== 
+	// ==================== Bonus Messages ====================  
     public static final String BONUS_NOT_FOUND = "Bonus not found";
     public static final String ADD_BONUS = "Bonus added successfully";
     public static final String DELETE_BONUS = "Bonus deleted successfully";
+    
+    // ==================== Payroll Messages ====================
+    public static final String PAYROLL_ALREADY_EXISTS = "Payroll already exists for user: ";
+    public static final String PAYROLL_NOT_FOUND = "No payroll found for this user at the given month/year";
+    public static final String GENERATE_PAYROLL = "Payroll generated successfully";
 }

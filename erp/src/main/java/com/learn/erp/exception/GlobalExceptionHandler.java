@@ -88,6 +88,8 @@ public class GlobalExceptionHandler {
         LeaveRequestNotFoundException.class,
         SalaryNotFoundException.class,
         BonusNotFoundException.class,
+        PayrollAlreadyExistsException.class,
+        PayrollNotFoundException.class,
         
         
     })
