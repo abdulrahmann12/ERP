@@ -17,5 +17,6 @@ public interface ProductMapper {
 	@Mapping(target = "category.categoryId", source = "categoryId")
 	@Mapping(target = "createdBy", ignore = true)
 	@Mapping(target = "productId", ignore = true)
+	@Mapping(target = "image", ignore = true)
 	Product toEntity(ProductCreateDTO dto);
 }
