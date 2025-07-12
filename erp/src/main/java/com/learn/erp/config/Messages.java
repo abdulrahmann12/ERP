@@ -113,4 +113,18 @@ public class Messages {
     public static final String PAYROLL_ALREADY_EXISTS = "Payroll already exists for user: ";
     public static final String PAYROLL_NOT_FOUND = "No payroll found for this user at the given month/year";
     public static final String GENERATE_PAYROLL = "Payroll generated successfully";
+    
+	// ==================== Customer Messages ====================
+    public static final String CUSTOMER_NOT_FOUND = "Customer not found";
+    public static final String ADD_CUSTOMER = "Customer Added successfully";
+    public static final String DELETE_CUSTOMER = "Customer deleted successfully";
+    public static final String UPDATE_CUSTOMER = "Customer updated successfully";
+    public static final String CUSTOMER_ALREADY_EXISTS = "Customer with this email already exists.";
+    
+	// ==================== Supplier Messages ==================== 
+    public static final String SUPPLIER_NOT_FOUND = "Supplier not found";
+    public static final String DELETE_SUPPLIER = "Supplier deleted successfully";
+    public static final String UPDATE_SUPPLIER = "Supplier updated successfully";
+    public static final String SUPPLIER_ALREADY_EXISTS = "Supplier with this email already exists.";
+
 }
