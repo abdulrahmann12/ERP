@@ -19,7 +19,7 @@ public class PayrollController {
     private final PayrollService payrollService;
 
     @PostMapping("/generate")
-    @PreAuthorize("hasRole('HR')")
+    @PreAuthorize("hasRole('ACCOUNTANT')")
     public ResponseEntity<BasicResponse> generatePayrollForAllUsers(
             @RequestParam int month,
             @RequestParam int year) {
@@ -29,7 +29,7 @@ public class PayrollController {
     }
 
     @GetMapping("/user/{userId}")
-    @PreAuthorize("hasRole('HR')")
+    @PreAuthorize("hasRole('ACCOUNTANT')")
     public ResponseEntity<PayrollResponseDTO> getPayrollForUser(
             @PathVariable Long userId,
             @RequestParam int month,

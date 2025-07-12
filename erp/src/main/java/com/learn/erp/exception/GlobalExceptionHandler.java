@@ -90,6 +90,8 @@ public class GlobalExceptionHandler {
         BonusNotFoundException.class,
         PayrollAlreadyExistsException.class,
         PayrollNotFoundException.class,
+        SupplierNotFoundException.class,
+        CustomerNotFoundException.class,
         
         
     })
