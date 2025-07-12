@@ -123,6 +123,7 @@ public class Messages {
     
 	// ==================== Supplier Messages ==================== 
     public static final String SUPPLIER_NOT_FOUND = "Supplier not found";
+    public static final String ADD_SUPPLIER = "Supplier Added successfully";
     public static final String DELETE_SUPPLIER = "Supplier deleted successfully";
     public static final String UPDATE_SUPPLIER = "Supplier updated successfully";
     public static final String SUPPLIER_ALREADY_EXISTS = "Supplier with this email already exists.";
