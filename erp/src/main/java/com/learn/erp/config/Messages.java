@@ -103,4 +103,9 @@ public class Messages {
     public static final String ADD_SALARY = "Salary added successfully";
     public static final String UPDATE_SALARY = "Salary updated successfully";
     public static final String SALARY_ALREADY_EXISTS = "This user already has a salary record.";
+    
+	// ==================== Bonus Messages ==================== 
+    public static final String BONUS_NOT_FOUND = "Bonus not found";
+    public static final String ADD_BONUS = "Bonus added successfully";
+    public static final String DELETE_BONUS = "Bonus deleted successfully";
 }
