@@ -9,6 +9,6 @@ import java.math.BigDecimal;
 public class SalaryResponseDTO {
 
     private Long salaryId;
-    private UserSummaryDTO user;
+    private HRViewUserResponseDTO user;
     private BigDecimal basicSalary;
 }
