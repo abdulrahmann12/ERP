@@ -98,4 +98,9 @@ public class Messages {
     public static final String STOCK_UPDATED = "Stock updated";
     public static final String CREATE_PRODUCT = "Initial product creation";
     
+	// ==================== Salary Messages ==================== 
+    public static final String SALARY_NOT_FOUND = "Salary not found";
+    public static final String ADD_SALARY = "Salary added successfully";
+    public static final String UPDATE_SALARY = "Salary updated successfully";
+    public static final String SALARY_ALREADY_EXISTS = "This user already has a salary record.";
 }

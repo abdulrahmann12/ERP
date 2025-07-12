@@ -86,6 +86,7 @@ public class GlobalExceptionHandler {
         EmployeeNotFoundException.class,
         AlreadyCheckedOutException.class,
         LeaveRequestNotFoundException.class,
+        SalaryNotFoundException.class,
         
     })
     public ResponseEntity<BasicResponse> handleNotFoundBusinessExceptions(Exception ex, WebRequest request) {
