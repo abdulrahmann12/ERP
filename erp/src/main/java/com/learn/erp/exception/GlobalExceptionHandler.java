@@ -92,6 +92,7 @@ public class GlobalExceptionHandler {
         PayrollNotFoundException.class,
         SupplierNotFoundException.class,
         CustomerNotFoundException.class,
+        SaleNotFoundException.class,
         
         
     })
