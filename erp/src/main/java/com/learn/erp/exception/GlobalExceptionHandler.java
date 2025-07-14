@@ -93,6 +93,8 @@ public class GlobalExceptionHandler {
         SupplierNotFoundException.class,
         CustomerNotFoundException.class,
         SaleNotFoundException.class,
+        PurchaseNotFoundException.class,
+        UnauthorizedActionException.class,
         
         
     })
