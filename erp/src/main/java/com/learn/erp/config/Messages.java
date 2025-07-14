@@ -24,7 +24,8 @@ public class Messages {
     public static final String AUTH_FAILED = "Authentication failed";
     public static final String REQUEST_NOT_SUPPORTED = "Request method not supported";
     public static final String NOT_SALES_EMPLOYEE = "User does not have SALES_EMPLOYEE role.";
-
+    public static final String NOT_PURCHASES_EMPLOYEE = "User does not have PURCHASING_OFFICER role.";
+    
 	// ==================== Token Messages ====================
     public static final String INVALID_REFRESH_TOKEN = "Invalid or missing refresh token";
     public static final String NEW_TOKEN_GENERATED = "New token generated successfully";
@@ -133,4 +134,8 @@ public class Messages {
 	// ==================== Sale Messages ====================  
     public static final String SALE_NOT_FOUND = "Sale not found";
     public static final String ADD_SALE = "Sale Added successfully";
+    
+	// ==================== Purchase Messages ====================  
+    public static final String PURCHASE_NOT_FOUND = "Purchase not found";
+    public static final String ADD_PURCHASE = "Purchase Added successfully";
 }

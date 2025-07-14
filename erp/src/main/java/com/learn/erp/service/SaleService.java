@@ -18,6 +18,7 @@ import com.learn.erp.dto.SaleResponseDTO;
 import com.learn.erp.exception.CustomerNotFoundException;
 import com.learn.erp.exception.ProductNotFoundException;
 import com.learn.erp.exception.SaleNotFoundException;
+import com.learn.erp.exception.UnauthorizedActionException;
 import com.learn.erp.exception.UserNotFoundException;
 import com.learn.erp.mapper.CustomerMapper;
 import com.learn.erp.mapper.SaleMapper;
@@ -93,7 +94,7 @@ public class SaleService {
                 .orElseThrow(UserNotFoundException::new);
 
         if (user.getRole() != User.Role.SALES_EMPLOYEE) {
-            throw new IllegalArgumentException(Messages.NOT_SALES_EMPLOYEE);
+            throw new UnauthorizedActionException(Messages.NOT_SALES_EMPLOYEE);
         }
         
         List<Sale> sales = saleRepository.findByUser(user);
