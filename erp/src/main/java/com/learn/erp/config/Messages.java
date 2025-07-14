@@ -7,7 +7,7 @@ public class Messages {
     public static final String RESEND_CODE = "A new code was sent";
     public static final String FAILED_EMAIL = "Failed to send email. Please try again later";
 	
-	// ==================== Auth Messages ====================
+	// ==================== Auth Messages ==================== 
     public static final String LOGIN_SUCCESS = "Login successfully";
     public static final String CREATE_NEW_USER = "New user created successfully";
     public static final String LOGOUT_SUCCESS = "Logged out successfully";
@@ -23,6 +23,7 @@ public class Messages {
     public static final String BAD_CREDENTIALS = "Invalid username or password";
     public static final String AUTH_FAILED = "Authentication failed";
     public static final String REQUEST_NOT_SUPPORTED = "Request method not supported";
+    public static final String NOT_SALES_EMPLOYEE = "User does not have SALES_EMPLOYEE role.";
 
 	// ==================== Token Messages ====================
     public static final String INVALID_REFRESH_TOKEN = "Invalid or missing refresh token";
@@ -69,6 +70,7 @@ public class Messages {
     public static final String DELETE_PRODUCT = "Product deleted successfully";
     public static final String ADD_PRODUCT = "Product added successfully";
     public static final String UPDATE_PRODUCT = "Product updated successfully";
+    public static final String NOT_ENOUGH_STOCK ="Not enough stock for product: ";
     
 	// ==================== Image Messages ====================
     public static final String EMPTY_IMAGE = "Image file is empty or null";
@@ -128,4 +130,7 @@ public class Messages {
     public static final String UPDATE_SUPPLIER = "Supplier updated successfully";
     public static final String SUPPLIER_ALREADY_EXISTS = "Supplier with this email already exists.";
 
+	// ==================== Sale Messages ====================  
+    public static final String SALE_NOT_FOUND = "Sale not found";
+    public static final String ADD_SALE = "Sale Added successfully";
 }
