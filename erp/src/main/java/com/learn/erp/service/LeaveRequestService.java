@@ -44,6 +44,11 @@ public class LeaveRequestService {
 	public UserLeaveRequestResponseDTO createLeaveRequest(Long userId, @Valid LeaveRequestCreateDTO dto) {
 		User user = userRepository.findById(userId)
 				.orElseThrow(() -> new UserNotFoundException());
+		
+	    if (dto.getStartDate().isAfter(dto.getEndDate())) {
+	        throw new IllegalArgumentException(Messages.ERROR_DATE);
+	    }
+	    
 		List<LeaveRequest> overlappingRequests = leaveRequestRepository
 		        .findByUser_IdAndStatus(userId, Status.PENDING)
 		        .stream()
