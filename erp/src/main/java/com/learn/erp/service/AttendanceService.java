@@ -2,6 +2,7 @@ package com.learn.erp.service;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -16,6 +17,7 @@ import com.learn.erp.config.Messages;
 import com.learn.erp.dto.AttendanceResponseDTO;
 import com.learn.erp.exception.AlreadyCheckedOutException;
 import com.learn.erp.exception.DuplicateResourceException;
+import com.learn.erp.exception.MailSendingException;
 import com.learn.erp.exception.UserNotFoundException;
 import com.learn.erp.mapper.AttendanceMapper;
 import com.learn.erp.model.Attendance;
@@ -34,6 +36,7 @@ public class AttendanceService {
 	private final AttendanceRepository attendanceRepository;
 	private final UserRepository userRepository;
 	private final AttendanceMapper attendanceMapper;
+	private final EmailService emailService;
 
 	public AttendanceResponseDTO checkIn(Long userId) {
 		User user = userRepository.findById(userId)
@@ -104,8 +107,8 @@ public class AttendanceService {
 	    Page<Attendance> attendances = attendanceRepository.findAllByDate(date, pageable);
 	    return attendances.map(attendanceMapper::toDTO);
 	}
-	
-	@Scheduled(cron = "0 59 23 * * *")
+		
+	@Scheduled(cron = "0 0 17 * * *")
     public void autoCheckOutMissingAttendances() {
 		
 		LocalDate today = LocalDate.now();
@@ -120,5 +123,40 @@ public class AttendanceService {
         	att.setStatus(Status.AUTO_CHECKED_OUT);
         }
         attendanceRepository.saveAll(attendances);
+	}
+	
+	@Scheduled(cron = "0 59 23 * * *")
+	public void markAbsencesAndNotify() {
+		LocalDate today = LocalDate.now();
+		
+		List<User> allUsers = userRepository.findAll();
+		List<Attendance> todaysAttendances = attendanceRepository.findByDate(today);
+	    List<Long> attendedUserIds = todaysAttendances.stream()
+	            .map(a -> a.getUser().getId())
+	            .toList();
+	    
+	    List<Attendance> absences = new ArrayList<>();
+	    
+	    for(User user : allUsers) {
+	    	if(!attendedUserIds.contains(user.getId())) {
+	    		Attendance absent = Attendance.builder()
+	    				.user(user)
+	    				.date(today)
+	    				.status(Status.ABSENT)
+	    				.checkIn(null)
+	    				.checkOut(null)
+	    				.workingHours(0)
+	    				.build();
+	    		
+	    		absences.add(absent);
+	    		
+	    		try {
+	    			emailService.sendAbsenceAlert(user);	
+	    			}catch (Exception e) {
+	    				throw new MailSendingException();
+	    			}
+	    		}
+	    	}
+	    attendanceRepository.saveAll(absences);
 	}
 }

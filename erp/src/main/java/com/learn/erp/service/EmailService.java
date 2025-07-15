@@ -29,9 +29,9 @@ public class EmailService {
         sendEmail(
             user.getEmail(),
             "Welcome to ERP System!",
-            "emails/welcome", // path to welcome.html
+            "emails/welcome", 
             new ContextBuilder()
-                .add("username", user.getUsername()) // أو أي اسم حابب تعرضه
+                .add("username", user.getUsername()) 
                 .build()
         );
     }
@@ -40,13 +40,25 @@ public class EmailService {
         sendEmail(
             user.getEmail(),
             "You're officially part of the team!",
-            "emails/employee-welcome", // المسار لقالب welcome.html
+            "emails/employee-welcome", 
             new ContextBuilder()
-                .add("username", user.getUsername()) // ممكن تستخدم fullName لو تحب
+                .add("username", user.getUsername()) 
                 .build()
         );
     }
 
+    public void sendAbsenceAlert(User user) {
+        sendEmail(
+            user.getEmail(),
+            "Absence Alert - Missed Check-in",
+            "emails/absent-alert",
+            new ContextBuilder()
+                .add("username", user.getUsername())
+                .build()
+        );
+    }
+    
+    
     public void sendCode(User user, String subject) {
         sendEmail(
                 user.getEmail(),
