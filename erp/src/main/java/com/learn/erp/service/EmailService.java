@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 
+import com.learn.erp.model.LeaveRequest;
 import com.learn.erp.model.User;
 
 @Service
@@ -54,6 +55,19 @@ public class EmailService {
             "emails/absent-alert",
             new ContextBuilder()
                 .add("username", user.getUsername())
+                .build()
+        );
+    }
+    
+    public void sendLeaveApproved(User user, LeaveRequest request) {
+        sendEmail(
+            user.getEmail(),
+            "Leave Request Approved",
+            "emails/leave-approved",
+            new ContextBuilder()
+                .add("username", user.getUsername())
+                .add("startDate", request.getStartDate())
+                .add("endDate", request.getEndDate())
                 .build()
         );
     }
