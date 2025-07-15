@@ -1,5 +1,7 @@
 package com.learn.erp.service;
 
+import java.time.LocalDate;
+import java.util.Iterator;
 import java.util.List;
 
 import org.springframework.data.domain.Page;
@@ -15,11 +17,14 @@ import com.learn.erp.dto.LeaveRequestStatusUpdateDTO;
 import com.learn.erp.dto.UserLeaveRequestResponseDTO;
 import com.learn.erp.exception.DuplicateResourceException;
 import com.learn.erp.exception.LeaveRequestNotFoundException;
+import com.learn.erp.exception.MailSendingException;
 import com.learn.erp.exception.UserNotFoundException;
 import com.learn.erp.mapper.LeaveRequestMapper;
+import com.learn.erp.model.Attendance;
 import com.learn.erp.model.LeaveRequest;
 import com.learn.erp.model.LeaveRequest.Status;
 import com.learn.erp.model.User;
+import com.learn.erp.repository.AttendanceRepository;
 import com.learn.erp.repository.LeaveRequestRepository;
 import com.learn.erp.repository.UserRepository;
 
@@ -34,6 +39,8 @@ public class LeaveRequestService {
 	private final LeaveRequestRepository leaveRequestRepository;
 	private final LeaveRequestMapper leaveRequestMapper;
 	private final UserRepository userRepository;
+	private final AttendanceRepository attendanceRepository;
+	private final EmailService emailService;
 	
 	public UserLeaveRequestResponseDTO createLeaveRequest(Long userId, @Valid LeaveRequestCreateDTO dto) {
 		User user = userRepository.findById(userId)
@@ -82,8 +89,46 @@ public class LeaveRequestService {
     public void updateLeaveRequestStatus(Long requestId, @Valid LeaveRequestStatusUpdateDTO dto) {
         LeaveRequest request = leaveRequestRepository.findById(requestId)
             .orElseThrow(() -> new LeaveRequestNotFoundException());
-        
+
         request.setStatus(dto.getStatus());
         leaveRequestRepository.save(request);
+
+        if (dto.getStatus() == Status.APPROVED) {
+            handleLeaveApproval(request);
+        }
+    }
+    
+    private void handleLeaveApproval(LeaveRequest request) {
+        createLeaveAttendances(request);
+        try {
+            emailService.sendLeaveApproved(request.getUser(), request);
+        } catch (Exception e) {
+            throw new MailSendingException();
+        }
+    }
+
+    private void createLeaveAttendances(LeaveRequest request) {
+        User user = request.getUser();
+        LocalDate start = request.getStartDate();
+        LocalDate end = request.getEndDate();
+
+        for (LocalDate date = start; !date.isAfter(end); date = date.plusDays(1)) {
+            boolean alreadyExists = attendanceRepository
+                    .findByUser_IdAndDate(user.getId(), date)
+                    .isPresent();
+
+            if (!alreadyExists) {
+                Attendance leaveAttendance = Attendance.builder()
+                        .user(user)
+                        .date(date)
+                        .status(Attendance.Status.ON_LEAVE)
+                        .checkIn(null)
+                        .checkOut(null)
+                        .workingHours(0)
+                        .build();
+
+                attendanceRepository.save(leaveAttendance);
+            }
+        }
     }
 }
