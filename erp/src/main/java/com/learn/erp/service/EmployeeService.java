@@ -12,6 +12,7 @@ import com.learn.erp.dto.EmployeeDetailsResponseDTO;
 import com.learn.erp.dto.EmployeeDetailsUpdateRequestDTO;
 import com.learn.erp.exception.DuplicateResourceException;
 import com.learn.erp.exception.EmployeeNotFoundException;
+import com.learn.erp.exception.MailSendingException;
 import com.learn.erp.exception.UserNotFoundException;
 import com.learn.erp.mapper.EmployeeMapper;
 import com.learn.erp.model.EmployeeDetails;
@@ -31,6 +32,7 @@ public class EmployeeService {
 	private final EmployeeDetailsRepository employeeDetailsRepository;
 	private final EmployeeMapper employeeMapper;
 	private final UserRepository userRepository;
+	private final EmailService emailService;
 	
 	public EmployeeDetailsResponseDTO addNewEmployee(@Valid EmployeeDetailsCreateRequestDTO dto) {
 		User user = userRepository.findById(dto.getUserId())
@@ -42,6 +44,11 @@ public class EmployeeService {
 		EmployeeDetails newEmployee = employeeMapper.toEntity(dto);
 		newEmployee.setUser(user);
 		employeeDetailsRepository.save(newEmployee);
+		try {
+		emailService.sendEmployeeWelcomeEmail(user);	
+		}catch (Exception e) {
+			throw new MailSendingException();
+		}
 		return employeeMapper.toDTO(newEmployee);
 	}
 	
