@@ -72,6 +72,20 @@ public class EmailService {
         );
     }
     
+    public void sendLeaveRejected(User user, LeaveRequest request) {
+        sendEmail(
+            user.getEmail(),
+            "Leave Request Rejected",
+            "emails/leave-rejected",
+            new ContextBuilder()
+                .add("username", user.getUsername())
+                .add("startDate", request.getStartDate())
+                .add("endDate", request.getEndDate())
+                .build()
+        );
+    }
+
+    
     
     public void sendCode(User user, String subject) {
         sendEmail(
