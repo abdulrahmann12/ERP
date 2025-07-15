@@ -20,6 +20,7 @@ public interface AttendanceRepository extends JpaRepository<Attendance, Long> {
 
 	Page<Attendance> findAllByDate(LocalDate date, Pageable pageable);
 
+	List<Attendance> findByDate(LocalDate date);
     Page<Attendance> findAllByUser_Id(Long userId, Pageable pageable);
     List<Attendance> findByDateAndCheckOutIsNull(LocalDate date);
     Optional<Attendance> findByUser_IdAndDate(Long userId, LocalDate date);
