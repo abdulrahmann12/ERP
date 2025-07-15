@@ -21,9 +21,31 @@ public class EmailService {
     private final TemplateEngine templateEngine;
     private final PdfGeneratorService pdfGenerator;
 
-    
     @Value("${spring.mail.username}")
     private String fromEmail;
+   
+   
+    public void sendWelcomeEmail(User user) {
+        sendEmail(
+            user.getEmail(),
+            "Welcome to ERP System!",
+            "emails/welcome", // path to welcome.html
+            new ContextBuilder()
+                .add("username", user.getUsername()) // أو أي اسم حابب تعرضه
+                .build()
+        );
+    }
+    
+    public void sendEmployeeWelcomeEmail(User user) {
+        sendEmail(
+            user.getEmail(),
+            "You're officially part of the team!",
+            "emails/employee-welcome", // المسار لقالب welcome.html
+            new ContextBuilder()
+                .add("username", user.getUsername()) // ممكن تستخدم fullName لو تحب
+                .build()
+        );
+    }
 
     public void sendCode(User user, String subject) {
         sendEmail(

@@ -72,6 +72,11 @@ public class AuthService {
 		user.setActive(true);
 		user.setDepartment(department);
 		User savedUser = userRepository.save(user);
+		try {
+		emailService.sendWelcomeEmail(user);	
+		}catch (Exception e) {
+			throw new MailSendingException();
+		}
 		return userMapper.toAdminViewUserDTO(savedUser);
 	}
 	
