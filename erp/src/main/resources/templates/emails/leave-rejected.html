@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ERP System | Leave Rejected</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: #f9f9f7;
+      font-family: 'Inter', sans-serif;
+    }
+    .container {
+      background-color: #ffffff;
+      border-radius: 12px;
+      box-shadow: 0 4px 24px rgba(0, 0, 0, 0.05);
+    }
+    .header {
+      background-color: #fff4f4;
+      color: #a94442;
+    }
+    .button {
+      background-color: #a94442;
+      color: white !important;
+    }
+  </style>
+</head>
+<body>
+
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color: #f9f9f7; padding: 40px 0;">
+  <tr>
+    <td align="center">
+      <table class="container" width="100%" style="max-width: 600px; margin: 0 auto;">
+        
+        <!-- Logo -->
+        <tr>
+          <td align="center" style="padding: 40px 0 20px;">
+            <img src="https://res.cloudinary.com/djhbgtqbg/image/upload/v1752604050/erp_xykvdx.avif"
+                 alt="ERP System Logo"
+                 width="150"
+                 style="display: block; margin: 0 auto;">
+          </td>
+        </tr>
+
+        <!-- Header -->
+        <tr>
+          <td class="header" style="padding: 30px 40px; text-align: center;">
+            <h1 style="font-size: 26px; margin: 0 0 10px; font-weight: 600;">Leave Request Rejected</h1>
+            <p style="font-size: 16px; margin: 0;">Your leave request was not approved</p>
+          </td>
+        </tr>
+
+        <!-- Body -->
+        <tr>
+          <td style="padding: 40px;">
+            <p style="font-size: 16px; margin-bottom: 20px;">
+              Hello <strong th:text="${username}" style="color: #a94442;">[Username]</strong>,
+            </p>
+            <p style="font-size: 16px; margin-bottom: 20px;">
+              We regret to inform you that your leave request for the period from 
+              <strong th:text="${startDate}">[Start Date]</strong> to 
+              <strong th:text="${endDate}">[End Date]</strong> has been rejected.
+            </p>
+            <p style="font-size: 16px; margin-bottom: 30px;">
+              If you have any questions, feel free to contact the HR department.
+            </p>
+
+            <table align="center" cellpadding="0" cellspacing="0" style="margin: 30px 0;">
+              <tr>
+                <td align="center">
+                  <a href="#" class="button" style="display: inline-block; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: 500;">
+                    View Your Requests
+                  </a>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+
+        <!-- Footer -->
+        <tr>
+          <td style="padding: 20px 40px; background-color: #fff4f4; text-align: center;">
+            <p style="font-size: 14px; color: #a94442; margin: 0;">Need help? Contact <a href="mailto:support@erpsystem.com" style="color: #a94442;">support@erpsystem.com</a></p>
+          </td>
+        </tr>
+        <tr>
+          <td style="padding: 20px 40px; text-align: center;">
+            <p style="font-size: 12px; color: #a89f94; margin: 0;">
+              © 2025 ERP System. All rights reserved.
+            </p>
+          </td>
+        </tr>
+
+      </table>
+    </td>
+  </tr>
+</table>
+
+</body>
+</html>

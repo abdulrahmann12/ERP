@@ -1,7 +1,6 @@
 package com.learn.erp.service;
 
 import java.time.LocalDate;
-import java.util.Iterator;
 import java.util.List;
 
 import org.springframework.data.domain.Page;
@@ -94,16 +93,19 @@ public class LeaveRequestService {
         leaveRequestRepository.save(request);
 
         if (dto.getStatus() == Status.APPROVED) {
-            handleLeaveApproval(request);
-        }
-    }
-    
-    private void handleLeaveApproval(LeaveRequest request) {
-        createLeaveAttendances(request);
-        try {
-            emailService.sendLeaveApproved(request.getUser(), request);
-        } catch (Exception e) {
-            throw new MailSendingException();
+            createLeaveAttendances(request);
+            try {
+                emailService.sendLeaveApproved(request.getUser(), request);
+                } catch (Exception e) {
+                throw new MailSendingException();
+                }
+            }
+        else if (dto.getStatus() == Status.REJECTED) {
+            try {
+                emailService.sendLeaveRejected(request.getUser(), request);
+            } catch (Exception e) {
+                throw new MailSendingException();
+            }
         }
     }
 
