@@ -21,7 +21,6 @@ public class PdfGeneratorService {
 
     private final SaleRepository saleRepository;
     private final SaleMapper saleMapper;
-
     private final TemplateEngine templateEngine;
 
     @Autowired
@@ -62,12 +61,10 @@ public class PdfGeneratorService {
         }
     }
 
-    
     public byte[] generateSalePdfById(Long saleId) {
         Sale sale = saleRepository.findById(saleId)
                 .orElseThrow(SaleNotFoundException::new);
-
         SaleResponseDTO dto = saleMapper.toDTO(sale);
-        return generateSalePdf(dto); // دي الدالة اللي بتحول HTML إلى PDF
+        return generateSalePdf(dto); 
     }
 }

@@ -94,25 +94,28 @@ public class LeaveRequestService {
         LeaveRequest request = leaveRequestRepository.findById(requestId)
             .orElseThrow(() -> new LeaveRequestNotFoundException());
 
-        request.setStatus(dto.getStatus());
+        Status oldStatus = request.getStatus(); 
+        Status newStatus = dto.getStatus();
+
+        if (oldStatus != Status.PENDING) {
+            throw new IllegalArgumentException(Messages.LEAVE_REQUEST_STATUS_ALREADY_UPDATED);
+        }
+
+        request.setStatus(newStatus);
         leaveRequestRepository.save(request);
 
-        if (dto.getStatus() == Status.APPROVED) {
-            createLeaveAttendances(request);
-            try {
+        try {
+            if (newStatus == Status.APPROVED) {
+                createLeaveAttendances(request);
                 emailService.sendLeaveApproved(request.getUser(), request);
-                } catch (Exception e) {
-                throw new MailSendingException();
-                }
-            }
-        else if (dto.getStatus() == Status.REJECTED) {
-            try {
+            } else if (newStatus == Status.REJECTED) {
                 emailService.sendLeaveRejected(request.getUser(), request);
-            } catch (Exception e) {
-                throw new MailSendingException();
             }
+        } catch (Exception e) {
+            throw new MailSendingException();
         }
     }
+
 
     private void createLeaveAttendances(LeaveRequest request) {
         User user = request.getUser();
@@ -120,6 +123,7 @@ public class LeaveRequestService {
         LocalDate end = request.getEndDate();
 
         for (LocalDate date = start; !date.isAfter(end); date = date.plusDays(1)) {
+        	System.out.println("Processing date: " + date);
             boolean alreadyExists = attendanceRepository
                     .findByUser_IdAndDate(user.getId(), date)
                     .isPresent();
