@@ -113,7 +113,7 @@ public class EmailService {
                 .add("saleId", sale.getSaleId())
                 .add("totalAmount", sale.getTotalAmount())
                 .build()
-        );
+        		);
     }
     
     public void sendSaleInvoiceWithPdf(String toEmail, Long saleId, BigDecimal totalAmount, byte[] pdfBytes) {
@@ -129,8 +129,6 @@ public class EmailService {
             "Invoice-" + saleId + ".pdf"
         );
     }
-
-    
     
     public void sendCode(User user, String subject) {
         sendEmail(
@@ -143,8 +141,6 @@ public class EmailService {
                         .build()
         );
     }
-
-    
 
     private void sendEmail(String to, String subject, String templatePath, Context context) {
         try {

@@ -43,6 +43,8 @@ public class Attendance {
     
     @PrePersist
     protected void onCreate() {
-        this.date = LocalDate.now();
+        if (this.date == null) {
+            this.date = LocalDate.now();
+        }
     }
 }
