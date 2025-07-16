@@ -15,6 +15,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -76,5 +78,16 @@ public class SaleController {
     public ResponseEntity<BigDecimal> getCustomerTotalSales(@PathVariable Long customerId) {
         BigDecimal totalSales = saleService.getCustomerTotalSales(customerId);
         return ResponseEntity.ok(totalSales);
+    }
+     
+    @GetMapping("/{saleId}/pdf")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('SALES_EMPLOYEE')")
+    public ResponseEntity<byte[]> downloadSalePdf(@PathVariable Long saleId) {
+        byte[] pdfBytes = saleService.generateSalePdfById(saleId);
+
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=invoice-" + saleId + ".pdf")
+                .contentType(MediaType.APPLICATION_PDF)
+                .body(pdfBytes);
     }
 }

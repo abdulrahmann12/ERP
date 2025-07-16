@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Low Stock Alert</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: #f9f9f7;
+      font-family: 'Inter', sans-serif;
+    }
+    .container {
+      background-color: #ffffff;
+      border-radius: 12px;
+      box-shadow: 0 4px 24px rgba(0, 0, 0, 0.05);
+    }
+    .header-banner {
+      background-color: #f5f2ea;
+      color: #5a4a3a;
+      padding: 30px 40px;
+      text-align: center;
+    }
+    .header-banner h1 {
+      font-size: 28px;
+      margin: 0 0 10px;
+      font-weight: 600;
+    }
+    .content {
+      padding: 40px 40px 20px;
+      color: #5a4a3a;
+    }
+    .content p {
+      font-size: 16px;
+      margin: 0 0 20px;
+      line-height: 1.6;
+    }
+    .footer {
+      padding: 20px 40px;
+      background-color: #f5f2ea;
+      text-align: center;
+    }
+    .footer p {
+      font-size: 12px;
+      color: #a89f94;
+      margin: 0;
+    }
+    @media only screen and (max-width: 600px) {
+      .container {
+        padding: 20px !important;
+      }
+      .header-banner h1 {
+        font-size: 24px !important;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="padding: 40px 0; background-color: #f9f9f7;">
+  <tr>
+    <td align="center">
+      <table class="container" width="100%" style="max-width: 600px; margin: 0 auto;">
+        
+        <!-- Logo Header -->
+        <tr>
+          <td align="center" style="padding: 40px 0 20px;">
+            <img src="https://res.cloudinary.com/djhbgtqbg/image/upload/v1752604050/erp_xykvdx.avif"
+                 alt="ERP System Logo"
+                 width="150"
+                 style="display: block; margin: 0 auto;">
+          </td>
+        </tr>
+
+        <!-- Header Banner -->
+        <tr>
+          <td class="header-banner">
+            <h1>Low Stock Alert</h1>
+            <p>The stock level for one of your products is critically low.</p>
+          </td>
+        </tr>
+
+        <!-- Main Content -->
+        <tr>
+          <td class="content">
+            <p>Hello <strong th:text="${username}">[Username]</strong>,</p>
+            <p>
+              The product <strong th:text="${productName}">[Product Name]</strong> now has only 
+              <strong th:text="${stock}">[Stock]</strong> units remaining in stock.
+            </p>
+            <p>
+              Please consider restocking this item soon to avoid running out of inventory.
+            </p>
+          </td>
+        </tr>
+
+        <!-- Footer -->
+        <tr>
+          <td class="footer">
+            <p>© 2025 ERP System. All rights reserved.</p>
+          </td>
+        </tr>
+
+      </table>
+    </td>
+  </tr>
+</table>
+
+</body>
+</html>

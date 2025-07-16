@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Sale Confirmation</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
+
+    body {
+      background-color: #f4f4f0;
+      font-family: 'Inter', sans-serif;
+      margin: 0;
+      padding: 40px;
+    }
+
+    .email-container {
+      background-color: #ffffff;
+      max-width: 600px;
+      margin: auto;
+      padding: 40px;
+      border-radius: 16px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+    }
+
+    .header {
+      font-size: 28px;
+      color: #2f2f2f;
+      font-weight: 600;
+      margin-bottom: 20px;
+    }
+
+    .paragraph {
+      font-size: 16px;
+      color: #4d4d4d;
+      line-height: 1.6;
+      margin-bottom: 16px;
+    }
+
+    .highlight {
+      font-weight: 600;
+      color: #1a73e8;
+    }
+
+    .footer {
+      margin-top: 30px;
+      font-size: 14px;
+      color: #999;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="email-container">
+    <div class="header">✅ Sale Confirmed!</div>
+    
+    <p class="paragraph">
+      Hello <span th:text="${customerName}">[Customer]</span>,
+    </p>
+
+    <p class="paragraph">
+      We are pleased to confirm your sale order 
+      <span class="highlight">#<span th:text="${saleId}">[123]</span></span>.
+    </p>
+
+    <p class="paragraph">
+      The total amount is 
+      <span class="highlight" th:text="${totalAmount}">[2350.00]</span> EGP.
+    </p>
+
+    <p class="paragraph">
+      Thank you for shopping with us. We hope to serve you again soon!
+    </p>
+
+    <div class="footer">This is an automated message from ERP System</div>
+  </div>
+</body>
+</html>
