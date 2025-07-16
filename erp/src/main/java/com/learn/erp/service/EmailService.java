@@ -3,6 +3,9 @@ package com.learn.erp.service;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
+
+import java.math.BigDecimal;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -11,7 +14,10 @@ import org.springframework.stereotype.Service;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 
+import com.learn.erp.model.Customer;
 import com.learn.erp.model.LeaveRequest;
+import com.learn.erp.model.Product;
+import com.learn.erp.model.Sale;
 import com.learn.erp.model.User;
 
 @Service
@@ -20,7 +26,6 @@ public class EmailService {
 
     private final JavaMailSender javaMailSender;
     private final TemplateEngine templateEngine;
-    private final PdfGeneratorService pdfGenerator;
 
     @Value("${spring.mail.username}")
     private String fromEmail;
@@ -84,6 +89,46 @@ public class EmailService {
                 .build()
         );
     }
+    
+    public void sendLowStockAlert(User manager, Product product) {
+        sendEmail(
+            manager.getEmail(),
+            "Low Stock Alert: " + product.getName(),
+            "emails/low-stock-alert",
+            new ContextBuilder()
+                .add("username", manager.getFullName())
+                .add("productName", product.getName())
+                .add("stock", product.getStock())
+                .build()
+        );
+    }
+
+    public void sendSaleConfirmation(Customer customer, Sale sale) {
+        sendEmail(
+            customer.getEmail(),
+            "Sale Confirmation - Order #" + sale.getSaleId(),
+            "emails/sale-confirmation",
+            new ContextBuilder()
+                .add("customerName", customer.getName())
+                .add("saleId", sale.getSaleId())
+                .add("totalAmount", sale.getTotalAmount())
+                .build()
+        );
+    }
+    
+    public void sendSaleInvoiceWithPdf(String toEmail, Long saleId, BigDecimal totalAmount, byte[] pdfBytes) {
+        sendEmailWithAttachment(
+            toEmail,
+            "Sale Invoice #" + saleId,
+            "emails/sale-confirmation",
+            new ContextBuilder()
+                .add("saleId", saleId)
+                .add("totalAmount", totalAmount)
+                .build(),
+            pdfBytes,
+            "Invoice-" + saleId + ".pdf"
+        );
+    }
 
     
     
@@ -99,6 +144,7 @@ public class EmailService {
         );
     }
 
+    
 
     private void sendEmail(String to, String subject, String templatePath, Context context) {
         try {

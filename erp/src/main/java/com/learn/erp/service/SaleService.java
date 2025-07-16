@@ -16,6 +16,7 @@ import com.learn.erp.dto.SaleCreateDTO;
 import com.learn.erp.dto.SaleItemCreateDTO;
 import com.learn.erp.dto.SaleResponseDTO;
 import com.learn.erp.exception.CustomerNotFoundException;
+import com.learn.erp.exception.MailSendingException;
 import com.learn.erp.exception.ProductNotFoundException;
 import com.learn.erp.exception.SaleNotFoundException;
 import com.learn.erp.exception.UnauthorizedActionException;
@@ -46,6 +47,8 @@ public class SaleService {
     private final ProductRepository productRepository;
     private final SaleMapper saleMapper;
     private final CustomerMapper customerMapper;
+    private final EmailService emailService;
+    private final PdfGeneratorService generatorService;
     
     public SaleResponseDTO createSale(Long userId, @Valid SaleCreateDTO dto) {
         User user = userRepository.findById(userId)
@@ -72,6 +75,16 @@ public class SaleService {
             product.setStock(product.getStock() - itemDTO.getQuantity());
             productRepository.save(product);
             
+            if(product.getStock() < 10) {
+            	 List<User> storeManagers = userRepository.findByRole(User.Role.STORE_MANAGER);
+            	 for (User manager : storeManagers) {
+            	        try {
+            	            emailService.sendLowStockAlert(manager, product);
+            	        } catch (Exception e) {
+            	            throw new MailSendingException();
+            	        } 
+            	 }
+            }
             BigDecimal price = product.getPrice();
             BigDecimal lineTotal = price.multiply(BigDecimal.valueOf(itemDTO.getQuantity()));
             totalAmount = totalAmount.add(lineTotal);
@@ -86,6 +99,19 @@ public class SaleService {
         }
         sale.setTotalAmount(totalAmount);
         Sale savedSale = saleRepository.save(sale);
+        
+        try {
+        	byte[] pdfBytes = generatorService.generateSalePdf(saleMapper.toDTO(savedSale));
+        	emailService.sendSaleInvoiceWithPdf(
+        		    customer.getEmail(),
+        		    savedSale.getSaleId(),
+        		    savedSale.getTotalAmount(),
+        		    pdfBytes
+        		);
+        } catch (Exception e) {
+            throw new MailSendingException();
+        }
+        
         return saleMapper.toDTO(savedSale);
     }
     
@@ -143,5 +169,9 @@ public class SaleService {
                 .totalSales(totalAmount)
                 .numberOfOrders(sales.size())
                 .build();
+    }
+    
+    public byte[] generateSalePdfById(Long saleId) {
+        return generatorService.generateSalePdfById(saleId);
     }
 }
