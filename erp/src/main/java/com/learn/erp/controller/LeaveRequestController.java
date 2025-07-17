@@ -16,8 +16,13 @@ import com.learn.erp.model.LeaveRequest.Status;
 import com.learn.erp.model.User;
 import com.learn.erp.service.LeaveRequestService;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 
+@Tag(
+	    name = "Leave Request Controller",
+	    description = "API for submitting and managing employee leave requests (by user or HR)."
+	)
 @RestController
 @RequestMapping("/api/leave-requests")
 @RequiredArgsConstructor

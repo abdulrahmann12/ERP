@@ -8,6 +8,7 @@ import com.learn.erp.dto.SupplierPurchaseReportDTO;
 import com.learn.erp.model.User;
 import com.learn.erp.service.PurchaseService;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.data.domain.Page;
@@ -21,6 +22,10 @@ import org.springframework.web.bind.annotation.*;
 import java.math.BigDecimal;
 import java.util.List;
 
+@Tag(
+	    name = "Purchase Controller",
+	    description = "API for managing purchases, including creating purchase orders, viewing purchase history, and generating reports or PDFs."
+	)
 @RestController
 @RequestMapping("/api/purchases")
 @RequiredArgsConstructor

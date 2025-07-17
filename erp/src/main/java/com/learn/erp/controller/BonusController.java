@@ -20,8 +20,13 @@ import com.learn.erp.dto.BonusCreateDTO;
 import com.learn.erp.dto.BonusResponseDTO;
 import com.learn.erp.service.BonusService;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 
+@Tag(
+	    name = "Bonus Controller",
+	    description = "API for managing employee bonuses (create, update, view bonuses)."
+	)
 @RestController
 @RequestMapping("/api/bonuses")
 @RequiredArgsConstructor

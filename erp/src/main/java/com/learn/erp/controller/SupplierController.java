@@ -7,6 +7,7 @@ import com.learn.erp.dto.SupplierUpdateDTO;
 import com.learn.erp.dto.SupplierCreateDTO;
 import com.learn.erp.service.SupplierService;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.http.ResponseEntity;
@@ -15,6 +16,10 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Tag(
+	    name = "Supplier Controller",
+	    description = "API for managing suppliers, including adding, updating, viewing, and deleting supplier records."
+	)
 @RestController
 @RequestMapping("/api/suppliers")
 @RequiredArgsConstructor
