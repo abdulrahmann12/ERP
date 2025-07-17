@@ -19,8 +19,13 @@ import com.learn.erp.dto.EmployeeDetailsResponseDTO;
 import com.learn.erp.dto.EmployeeDetailsUpdateRequestDTO;
 import com.learn.erp.service.EmployeeService;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 
+@Tag(
+	    name = "Employee Controller",
+	    description = "API for managing employees (add, update, and retrieve employee data)."
+	)
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/employees")

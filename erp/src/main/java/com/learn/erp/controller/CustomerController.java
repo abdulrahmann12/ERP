@@ -7,6 +7,7 @@ import com.learn.erp.dto.CustomerDTO;
 import com.learn.erp.dto.CustomerUpdateDTO;
 import com.learn.erp.service.CustomerService;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.http.ResponseEntity;
@@ -15,6 +16,10 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Tag(
+	    name = "Customer Controller",
+	    description = "API for managing customers (create, update, view, delete)."
+	)
 @RestController
 @RequestMapping("/api/customers")
 @RequiredArgsConstructor

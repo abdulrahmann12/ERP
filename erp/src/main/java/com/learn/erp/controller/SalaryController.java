@@ -19,8 +19,13 @@ import com.learn.erp.dto.SalaryResponseDTO;
 import com.learn.erp.dto.SalaryUpdateDTO;
 import com.learn.erp.service.SalaryService;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 
+@Tag(
+	    name = "Salary Controller",
+	    description = "API for creating, updating, and retrieving employee salary information."
+	)
 @RestController
 @RequestMapping("/api/salaries")
 @RequiredArgsConstructor

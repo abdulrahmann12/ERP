@@ -21,8 +21,13 @@ import com.learn.erp.dto.BasicResponse;
 import com.learn.erp.model.User;
 import com.learn.erp.service.AttendanceService;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 
+@Tag(
+	    name = "Attendance Controller",
+	    description = "API for managing employee attendance (check-in, check-out, and attendance history)."
+	)
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/attendance")

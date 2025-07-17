@@ -4,6 +4,8 @@ import com.learn.erp.config.Messages;
 import com.learn.erp.dto.BasicResponse;
 import com.learn.erp.dto.PayrollResponseDTO;
 import com.learn.erp.service.PayrollService;
+
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -11,6 +13,10 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Tag(
+	    name = "Payroll Controller",
+	    description = "API for generating and retrieving payroll information for employees."
+	)
 @RestController
 @RequestMapping("/api/payroll")
 @RequiredArgsConstructor

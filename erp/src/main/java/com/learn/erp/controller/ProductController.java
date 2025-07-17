@@ -8,6 +8,7 @@ import com.learn.erp.dto.ProductUpdateDTO;
 import com.learn.erp.model.User;
 import com.learn.erp.service.ProductService;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
@@ -20,6 +21,10 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+@Tag(
+	    name = "Product Controller",
+	    description = "API for managing products, including creation, update, search, and category filtering."
+	)
 @RestController
 @RequestMapping("/api/products")
 @RequiredArgsConstructor

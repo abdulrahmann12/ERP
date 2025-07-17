@@ -20,8 +20,13 @@ import com.learn.erp.dto.DepartmentResponseDTO;
 import com.learn.erp.dto.DepartmentUpdateRequestDTO;
 import com.learn.erp.service.DepartmentService;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 
+@Tag(
+	    name = "Department Controller",
+	    description = "API for managing departments (create, update, delete, and view)."
+	)
 @RestController
 @RequestMapping("/api/departments")
 @RequiredArgsConstructor
