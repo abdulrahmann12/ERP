@@ -11,6 +11,8 @@ import com.learn.erp.service.PurchaseService;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -79,5 +81,16 @@ public class PurchaseController {
     public ResponseEntity<BigDecimal> getSupplierTotalSales(@PathVariable Long supplierId) {
         BigDecimal total = purchaseService.getSupplierTotalSales(supplierId);
         return ResponseEntity.ok(total);
+    }
+    
+    @GetMapping("/{purchaseId}/pdf")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('PURCHASING_OFFICER')")
+    public ResponseEntity<byte[]> downloadPurchasePdf(@PathVariable Long purchaseId) {
+        byte[] pdfBytes = purchaseService.generatePurchasePdfById(purchaseId);
+
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=purchase-invoice-" + purchaseId + ".pdf")
+                .contentType(MediaType.APPLICATION_PDF)
+                .body(pdfBytes);
     }
 }

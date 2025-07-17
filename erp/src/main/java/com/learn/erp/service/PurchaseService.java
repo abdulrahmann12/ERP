@@ -15,6 +15,7 @@ import com.learn.erp.dto.PurchaseCreateDTO;
 import com.learn.erp.dto.PurchaseItemCreateDTO;
 import com.learn.erp.dto.PurchaseResponseDTO;
 import com.learn.erp.dto.SupplierPurchaseReportDTO;
+import com.learn.erp.exception.MailSendingException;
 import com.learn.erp.exception.ProductNotFoundException;
 import com.learn.erp.exception.PurchaseNotFoundException;
 import com.learn.erp.exception.SupplierNotFoundException;
@@ -47,6 +48,8 @@ public class PurchaseService {
 	private final ProductRepository productRepository;
 	private final PurchaseMapper purchaseMapper;
 	private final SupplierMapper supplierMapper;
+    private final EmailService emailService;
+    private final PdfGeneratorService pdfGeneratorService;
 	
 	public PurchaseResponseDTO createPurchase(Long userId, @Valid PurchaseCreateDTO dto) {
         User user = userRepository.findById(userId)
@@ -86,6 +89,18 @@ public class PurchaseService {
         purchase.setTotalAmount(totalAmount);
         
         Purchase saved = purchaseRepository.save(purchase);
+        
+        try {
+            byte[] pdfBytes = pdfGeneratorService.generatePurchasePdf(purchaseMapper.toDTO(saved));
+            emailService.sendPurchaseInvoiceWithPdf(
+                supplier.getEmail(),
+                saved.getPurchaseId(),
+                saved.getTotalAmount(),
+                pdfBytes
+            );
+        } catch (Exception e) {
+            throw new MailSendingException();
+        }
         return purchaseMapper.toDTO(saved);
 	}
 	
@@ -145,5 +160,9 @@ public class PurchaseService {
                 .totalSales(totalAmount)
                 .numberOfOrders(purchases.size())
                 .build();
+    }
+    
+    public byte[] generatePurchasePdfById(Long purchaseId) {
+        return pdfGeneratorService.generatePurchasePdfById(purchaseId);
     }
 }
