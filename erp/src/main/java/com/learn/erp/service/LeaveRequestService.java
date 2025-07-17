@@ -123,7 +123,6 @@ public class LeaveRequestService {
         LocalDate end = request.getEndDate();
 
         for (LocalDate date = start; !date.isAfter(end); date = date.plusDays(1)) {
-        	System.out.println("Processing date: " + date);
             boolean alreadyExists = attendanceRepository
                     .findByUser_IdAndDate(user.getId(), date)
                     .isPresent();

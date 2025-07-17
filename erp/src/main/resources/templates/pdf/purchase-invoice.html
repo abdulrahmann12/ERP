@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Purchase Invoice</title>
+    <style>
+		@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap');
+
+        body {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 40px;
+            background: #f8fafc;
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        .invoice-box {
+            border: 1px solid #e2e8f0;
+            padding: 40px;
+            border-radius: 12px;
+            background: white;
+            max-width: 800px;
+            width: 100%;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .invoice-box::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 6px;
+            height: 100%;
+            background: linear-gradient(to bottom, #10b981, #3b82f6);
+        }
+
+        h1 {
+            text-align: center;
+            color: #1e293b;
+            font-weight: 700;
+            margin-bottom: 30px;
+            font-size: 28px;
+            letter-spacing: -0.5px;
+            position: relative;
+            padding-bottom: 15px;
+        }
+
+        h1::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 25%;
+            width: 50%;
+            height: 2px;
+            background: linear-gradient(to right, #10b981, #3b82f6);
+        }
+
+        .section {
+            margin-bottom: 30px;
+            padding: 20px;
+            background: #f8fafc;
+            border-radius: 8px;
+        }
+
+        .section-title {
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: #334155;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+        }
+
+        .section-title::before {
+            content: '';
+            display: inline-block;
+            width: 4px;
+            height: 16px;
+            background: #10b981;
+            margin-right: 8px;
+            border-radius: 2px;
+        }
+
+        .info-table {
+            width: 100%;
+        }
+
+        .info-table tr {
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .info-table tr:last-child {
+            border-bottom: none;
+        }
+
+        .info-table td {
+            padding: 10px 0;
+            color: #475569;
+        }
+
+        .info-table td:first-child {
+            font-weight: 500;
+            color: #334155;
+            width: 30%;
+        }
+
+        .items-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+
+        .items-table th,
+        .items-table td {
+            border: 1px solid #e2e8f0;
+            padding: 12px;
+            text-align: left;
+        }
+
+        .items-table th {
+            background-color: #f1f5f9;
+            color: #334155;
+            font-weight: 600;
+        }
+
+        .items-table tr:nth-child(even) {
+            background-color: #f8fafc;
+        }
+
+        .items-table tr:hover {
+            background-color: #f1f5f9;
+        }
+
+        .total {
+            text-align: right;
+            font-weight: 600;
+            margin-top: 20px;
+            font-size: 16px;
+            color: #1e293b;
+            padding: 12px 20px;
+            background: #f1f5f9;
+            border-radius: 6px;
+            display: inline-block;
+            float: right;
+        }
+
+        .total span {
+            color: #10b981;
+            font-weight: 700;
+        }
+
+        .note {
+            margin-top: 30px;
+            font-style: italic;
+            color: #64748b;
+            padding: 15px;
+            background: #f8fafc;
+            border-left: 4px solid #10b981;
+            border-radius: 0 4px 4px 0;
+            clear: both;
+        }
+
+        .note span {
+            font-weight: 500;
+            color: #334155;
+        }
+    </style>
+</head>
+<body>
+<div class="invoice-box">
+    <h1>Purchase Invoice</h1>
+
+    <div class="section">
+        <div class="section-title">Supplier Info:</div>
+        <table class="info-table">
+            <tr><td>Name:</td><td th:text="${purchase.supplier.name}"></td></tr>
+            <tr><td>Phone:</td><td th:text="${purchase.supplier.phone}"></td></tr>
+            <tr><td>Email:</td><td th:text="${purchase.supplier.email}"></td></tr>
+            <tr><td>Address:</td><td th:text="${purchase.supplier.address}"></td></tr>
+        </table>
+    </div>
+
+    <div class="section">
+        <div class="section-title">Employee Info:</div>
+        <table class="info-table">
+            <tr><td>Name:</td><td th:text="${purchase.user.fullName}"></td></tr>
+            <tr><td>Username:</td><td th:text="${purchase.user.username}"></td></tr>
+            <tr><td>Phone:</td><td th:text="${purchase.user.phone}"></td></tr>
+            <tr><td>Department:</td><td th:text="${purchase.user.department}"></td></tr>
+        </table>
+    </div>
+
+    <div class="section">
+        <div class="section-title">Purchase Details:</div>
+        <table class="info-table">
+            <tr><td>Purchase ID:</td><td th:text="${purchase.purchaseId}"></td></tr>
+            <tr><td>Date:</td><td th:text="${formattedDate}">[Date]</td></tr>
+        </table>
+    </div>
+
+    <div class="section">
+        <div class="section-title">Items:</div>
+        <table class="items-table">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Product</th>
+                    <th>Code</th>
+                    <th>Quantity</th>
+                    <th>Unit Price</th>
+                    <th>Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="item, iterStat : ${purchase.items}">
+                    <td th:text="${iterStat.count}">1</td>
+                    <td th:text="${item.product.name}">Product Name</td>
+                    <td th:text="${item.product.code}">P001</td>
+                    <td th:text="${item.quantity}">2</td>
+                    <td th:text="${item.product.price}">100.00</td>
+                    <td th:text="${item.price}">200.00</td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="total">
+            Total Amount: <span th:text="${purchase.totalAmount}">[Total]</span> EGP
+        </div>
+    </div>
+
+    <div class="note" th:if="${purchase.notes != null}">
+        Note: <span th:text="${purchase.notes}">Thanks for your service!</span>
+    </div>
+</div>
+</body>
+</html>

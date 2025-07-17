@@ -17,7 +17,9 @@ import org.thymeleaf.context.Context;
 import com.learn.erp.model.Customer;
 import com.learn.erp.model.LeaveRequest;
 import com.learn.erp.model.Product;
+import com.learn.erp.model.Purchase;
 import com.learn.erp.model.Sale;
+import com.learn.erp.model.Supplier;
 import com.learn.erp.model.User;
 
 @Service
@@ -116,6 +118,19 @@ public class EmailService {
         		);
     }
     
+    public void sendPurchaseConfirmation(Supplier supplier, Purchase purchase) {
+        sendEmail(
+        	supplier.getEmail(),
+            "Purchase Confirmation - Order #" + purchase.getPurchaseId(),
+            "emails/purchase-confirmation",
+            new ContextBuilder()
+                .add("supplierName", supplier.getName())
+                .add("purchaseId", purchase.getPurchaseId())
+                .add("totalAmount", purchase.getTotalAmount())
+                .build()
+        		);
+    }
+    
     public void sendSaleInvoiceWithPdf(String toEmail, Long saleId, BigDecimal totalAmount, byte[] pdfBytes) {
         sendEmailWithAttachment(
             toEmail,
@@ -127,6 +142,20 @@ public class EmailService {
                 .build(),
             pdfBytes,
             "Invoice-" + saleId + ".pdf"
+        );
+    }
+    
+    public void sendPurchaseInvoiceWithPdf(String toEmail, Long purchaseId, BigDecimal totalAmount, byte[] pdfBytes) {
+        sendEmailWithAttachment(
+            toEmail,
+            "Purchase #" + purchaseId,
+            "emails/purchase-confirmation",
+            new ContextBuilder()
+                .add("purchaseId", purchaseId)
+                .add("totalAmount", totalAmount)
+                .build(),
+            pdfBytes,
+            "Purchase-" + purchaseId + ".pdf"
         );
     }
     
