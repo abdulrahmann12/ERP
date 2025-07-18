@@ -169,7 +169,7 @@ public class AuthService {
 	    return new AuthResponse(accessToken, refreshToken);
 	}
 
-	public void logout(HttpServletRequest request) {
+	public void logoutByRequest(HttpServletRequest request) {
 	    final String authHeader = request.getHeader("Authorization");
 
 	    if (authHeader == null || !authHeader.startsWith("Bearer ")) {
