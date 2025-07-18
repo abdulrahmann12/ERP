@@ -22,6 +22,7 @@ import com.learn.erp.dto.CategoryUpdateDTO;
 import com.learn.erp.model.User;
 import com.learn.erp.service.CategoryService;
 
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 
@@ -33,6 +34,10 @@ public class CategoryController {
 	
 	private final CategoryService categoryService;
 	
+	@Operation(
+	        summary = "Create a new category",
+	        description = "Allows the store manager to create a new product category."
+	)
 	@PostMapping
 	@PreAuthorize("hasRole('STORE_MANAGER')")
 	public ResponseEntity<BasicResponse> createCategory(@AuthenticationPrincipal User user, @RequestBody CategoryCreateDTO categoryDTO) {
@@ -40,6 +45,10 @@ public class CategoryController {
         return ResponseEntity.ok(new BasicResponse(Messages.ADD_CATEGORY, createdCategory));		
 	}
 	
+	@Operation(
+	        summary = "Update existing category",
+	        description = "Allows the store manager to update an existing product category by ID."
+	)
 	@PutMapping("/{categoryId}")
 	@PreAuthorize("hasRole('STORE_MANAGER')")
 	public ResponseEntity<BasicResponse> updateCategory(
@@ -49,18 +58,30 @@ public class CategoryController {
         return ResponseEntity.ok(new BasicResponse(Messages.UPDATE_CATEGORY, updateCategory));		
 	}
 	
+	@Operation(
+	        summary = "Get all categories",
+	        description = "Retrieve a list of all available product categories."
+	)
 	@GetMapping
 	@PreAuthorize("isAuthenticated()")
 	public ResponseEntity<List<CategoryResponseDTO>> getAllCategories(){
 		return ResponseEntity.ok(categoryService.getAllCategories());
 	}
 	
+	@Operation(
+	        summary = "Get category by ID",
+	        description = "Retrieve detailed information of a specific category using its ID."
+	)
 	@GetMapping("/{categoryId}")
 	@PreAuthorize("isAuthenticated()")
 	public ResponseEntity<CategoryResponseDTO> getCategoryById(@PathVariable Long categoryId){
 		return ResponseEntity.ok(categoryService.getCategoryById(categoryId));
 	}
 	
+	@Operation(
+	        summary = "Delete existing category",
+	        description = "Remove a category by its ID (only STORE_MANAGER allowed)."
+	)
 	@DeleteMapping("/{categoryId}")
 	@PreAuthorize("hasRole('STORE_MANAGER')")
 	public ResponseEntity<BasicResponse> deleteCategory(@PathVariable Long categoryId){

@@ -19,6 +19,7 @@ import com.learn.erp.dto.SalaryResponseDTO;
 import com.learn.erp.dto.SalaryUpdateDTO;
 import com.learn.erp.service.SalaryService;
 
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 
@@ -33,6 +34,11 @@ public class SalaryController {
 
 	private final SalaryService salaryService;
 	
+	@Operation(
+		    summary = "Assign salary to employee",
+		    description = "Allows HR to assign a fixed salary amount to an employee",
+		    tags = { "Salary" }
+		)
 	@PostMapping
 	@PreAuthorize("hasRole('HR')")
 	public ResponseEntity<BasicResponse> createSalary(@RequestBody SalaryCreateDTO dto){
@@ -40,6 +46,11 @@ public class SalaryController {
 		return ResponseEntity.ok(new BasicResponse(Messages.ADD_SALARY, response));
 	}
 	
+	@Operation(
+		    summary = "Update employee salary by user ID",
+		    description = "Allows HR to update the fixed salary assigned to a specific employee",
+		    tags = { "Salary" }
+		)
 	@PutMapping("/{userId}")
 	@PreAuthorize("hasRole('HR')")
 	public ResponseEntity<BasicResponse> updateSalary(@PathVariable Long userId, @RequestBody SalaryUpdateDTO dto){
@@ -47,6 +58,11 @@ public class SalaryController {
 		return ResponseEntity.ok(new BasicResponse(Messages.UPDATE_SALARY, response));
 	}
 	
+	@Operation(
+		    summary = "Get salary of an employee",
+		    description = "Retrieves the salary details of an employee by their user ID",
+		    tags = { "Salary" }
+		)
 	@GetMapping("/{userId}")
 	@PreAuthorize("hasRole('HR')")
 	public ResponseEntity<SalaryResponseDTO> getUserSalary(@PathVariable Long userId){
@@ -54,6 +70,11 @@ public class SalaryController {
 		return ResponseEntity.ok(response);
 	}
 	
+	@Operation(
+		    summary = "Get salaries of all employees",
+		    description = "Returns a list of all employees' salaries in the system",
+		    tags = { "Salary" }
+		)
 	@GetMapping
 	@PreAuthorize("hasRole('HR')")
 	public ResponseEntity<List<SalaryResponseDTO>> getAllUsersSalaries(){

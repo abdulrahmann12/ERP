@@ -19,6 +19,7 @@ import com.learn.erp.dto.EmployeeDetailsResponseDTO;
 import com.learn.erp.dto.EmployeeDetailsUpdateRequestDTO;
 import com.learn.erp.service.EmployeeService;
 
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 
@@ -33,6 +34,11 @@ public class EmployeeController {
 
 	private final EmployeeService employeeService;
 	
+	@Operation(
+	        summary = "Add new employee",
+	        description = "Allows HR to create a new employee profile including personal and job details.",
+	        tags = { "Employee Controller" }
+	    )
 	@PostMapping
 	@PreAuthorize("hasRole('HR')")
 	public ResponseEntity<BasicResponse> addNewEmployee(@RequestBody EmployeeDetailsCreateRequestDTO dto){
@@ -40,6 +46,11 @@ public class EmployeeController {
 		return ResponseEntity.ok(new BasicResponse(Messages.ADD_EMPLOYEE, response));
 	}
 	
+	@Operation(
+	        summary = "Update employee",
+	        description = "Allows HR to update existing employee information by ID.",
+	        tags = { "Employee Controller" }
+	    )
 	@PutMapping("/{employeeId}")
 	@PreAuthorize("hasRole('HR')")
 	public ResponseEntity<BasicResponse> updateEmployee(@PathVariable Long employeeId, @RequestBody EmployeeDetailsUpdateRequestDTO dto){
@@ -47,6 +58,11 @@ public class EmployeeController {
 		return ResponseEntity.ok(new BasicResponse(Messages.UPDATE_EMPLOYEE, response));
 	}
 
+    @Operation(
+            summary = "Get employee by ID",
+            description = "Retrieves employee details for the given employee ID.",
+            tags = { "Employee Controller" }
+        )
     @GetMapping("/{employeeId}")
     @PreAuthorize("hasRole('HR')")
     public ResponseEntity<EmployeeDetailsResponseDTO> getEmployee(@PathVariable Long employeeId) {
@@ -54,6 +70,11 @@ public class EmployeeController {
         return ResponseEntity.ok(employee);
     }
     
+    @Operation(
+            summary = "Get all employees",
+            description = "Returns a paginated list of all employees.",
+            tags = { "Employee Controller" }
+        )
     @GetMapping
     @PreAuthorize("hasRole('HR')")
     public ResponseEntity<Page<EmployeeDetailsResponseDTO>> getAllEmployees(

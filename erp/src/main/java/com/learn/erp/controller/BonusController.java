@@ -20,6 +20,7 @@ import com.learn.erp.dto.BonusCreateDTO;
 import com.learn.erp.dto.BonusResponseDTO;
 import com.learn.erp.service.BonusService;
 
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 
@@ -34,6 +35,10 @@ public class BonusController {
 
 	private final BonusService bonusService;
 	
+    @Operation(
+            summary = "Create bonus",
+            description = "HR can create a bonus for a specific employee."
+    )
     @PostMapping
     @PreAuthorize("hasRole('HR')")
     public ResponseEntity<BasicResponse> createBonus(@RequestBody BonusCreateDTO dto) {
@@ -41,6 +46,10 @@ public class BonusController {
         return ResponseEntity.ok(new BasicResponse(Messages.ADD_BONUS, response));
     }
     
+    @Operation(
+            summary = "Get bonuses for user",
+            description = "Retrieve a list of bonuses for a specific employee, optionally filtered by month and year."
+    )
     @GetMapping("/user/{userId}")
     @PreAuthorize("hasRole('HR')")
     public ResponseEntity<List<BonusResponseDTO>> getBonusesForUser(
@@ -55,6 +64,10 @@ public class BonusController {
         return ResponseEntity.ok(bonuses);
     }
     
+    @Operation(
+            summary = "Delete bonus",
+            description = "Delete a specific bonus by its ID."
+    )
     @DeleteMapping("/{bonusId}")
     @PreAuthorize("hasRole('HR')")
     public ResponseEntity<BasicResponse> deleteBonus(@PathVariable Long bonusId) {

@@ -69,9 +69,11 @@ public class LeaveRequestService {
 		return leaveRequestMapper.toUserDTO(request);
 	}
 	
-	public Page<LeaveRequestResponseDTO> getAllLeaveRequests(int page, int size){
-		Pageable pageable = PageRequest.of(page, size);
-		return leaveRequestRepository.findAll(pageable).map(leaveRequestMapper::toHRDTO);
+	public Page<LeaveRequestResponseDTO> getAllPendingRequests(int page, int size) {
+	    Pageable pageable = PageRequest.of(page, size);
+	    return leaveRequestRepository
+	            .findAllByStatus(Status.PENDING, pageable)
+	            .map(leaveRequestMapper::toHRDTO);
 	}
 
 	public Page<LeaveRequestResponseDTO> HRGetLeaveRequestsByUser(Long userId, int page, int size){

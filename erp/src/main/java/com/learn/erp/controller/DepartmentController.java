@@ -20,6 +20,7 @@ import com.learn.erp.dto.DepartmentResponseDTO;
 import com.learn.erp.dto.DepartmentUpdateRequestDTO;
 import com.learn.erp.service.DepartmentService;
 
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 
@@ -34,6 +35,10 @@ public class DepartmentController {
 
 	private final DepartmentService departmentService;
 	
+	@Operation(
+	        summary = "Create a new department",
+	        description = "Admin users can create a new department with the necessary info."
+	    )
 	@PostMapping
 	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<BasicResponse> createDepartment(@RequestBody DepartmentCreateRequestDTO dto){
@@ -41,6 +46,10 @@ public class DepartmentController {
 		return ResponseEntity.ok(new BasicResponse(Messages.ADD_DEPARTMENT,response));
 	}
 	
+	@Operation(
+	        summary = "Update department",
+	        description = "Update a department's data using its ID. Only ADMIN can perform this."
+	    )
 	@PutMapping("/{departmentId}")
 	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<BasicResponse> updateDepartment(@PathVariable Long departmentId, @RequestBody DepartmentUpdateRequestDTO dto){
@@ -48,6 +57,10 @@ public class DepartmentController {
 		return ResponseEntity.ok(new BasicResponse(Messages.DEPARTMENT_UPDATE,response));
 	}
 	
+	@Operation(
+	        summary = "Delete department",
+	        description = "Remove a department from the system by ID. Only ADMIN allowed."
+	    )
 	@DeleteMapping("/{departmentId}")
 	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<BasicResponse> deleteDepartment(@PathVariable Long departmentId){
@@ -55,6 +68,10 @@ public class DepartmentController {
 		return ResponseEntity.ok(new BasicResponse(Messages.DELETE_DEPARTMENT));
 	}
 	
+	@Operation(
+	        summary = "Get department by ID",
+	        description = "Retrieve department information by ID. Requires authentication."
+	    )
 	@GetMapping("/{departmentId}")
 	@PreAuthorize("isAuthenticated()")
 	public ResponseEntity<DepartmentResponseDTO> getDepartment(@PathVariable Long departmentId){
@@ -62,6 +79,10 @@ public class DepartmentController {
 		return ResponseEntity.ok(response);
 	}
 	
+	@Operation(
+	        summary = "Get all departments",
+	        description = "Retrieve all departments in the system. Requires authentication."
+	    )
 	@GetMapping
 	@PreAuthorize("isAuthenticated()")
 	public ResponseEntity<List<DepartmentResponseDTO>> getAllDepartments(){

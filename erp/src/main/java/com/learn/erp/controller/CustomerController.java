@@ -7,6 +7,7 @@ import com.learn.erp.dto.CustomerDTO;
 import com.learn.erp.dto.CustomerUpdateDTO;
 import com.learn.erp.service.CustomerService;
 
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 
@@ -27,6 +28,10 @@ public class CustomerController {
 
     private final CustomerService customerService;
 
+    @Operation(
+            summary = "Create a new customer",
+            description = "Add a new customer to the system. Only accessible by SALES_EMPLOYEE."
+    )
     @PostMapping
     @PreAuthorize("hasRole('SALES_EMPLOYEE')")
     public ResponseEntity<BasicResponse> createCustomer(@RequestBody CustomerCreateDTO dto) {
@@ -34,6 +39,10 @@ public class CustomerController {
         return ResponseEntity.ok(new BasicResponse(Messages.ADD_CUSTOMER, created));
     }
 
+    @Operation(
+            summary = "Update a customer",
+            description = "Modify customer data by customer ID. Only accessible by SALES_EMPLOYEE."
+        )
     @PutMapping("/{customerId}")
     @PreAuthorize("hasRole('SALES_EMPLOYEE')")
     public ResponseEntity<BasicResponse> updateCustomer(
@@ -44,6 +53,10 @@ public class CustomerController {
         return ResponseEntity.ok(new BasicResponse(Messages.UPDATE_CUSTOMER, updated));
     }
 
+    @Operation(
+            summary = "Get customer by ID",
+            description = "Retrieve a customer's data by their ID. Accessible by SALES_EMPLOYEE."
+        )
     @GetMapping("/{customerId}")
     @PreAuthorize("hasRole('SALES_EMPLOYEE')")
     public ResponseEntity<CustomerDTO> getCustomer(@PathVariable Long customerId) {
@@ -51,6 +64,10 @@ public class CustomerController {
         return ResponseEntity.ok(customer);
     }
 
+    @Operation(
+            summary = "Get all customers",
+            description = "Returns a list of all customers. Only accessible by SALES_EMPLOYEE."
+        )
     @GetMapping
     @PreAuthorize("hasRole('SALES_EMPLOYEE')")
     public ResponseEntity<List<CustomerDTO>> getAllCustomers() {
@@ -58,6 +75,10 @@ public class CustomerController {
         return ResponseEntity.ok(customers);
     }
 
+    @Operation(
+            summary = "Delete a customer",
+            description = "Remove a customer by ID. Only accessible by SALES_EMPLOYEE."
+        )
     @DeleteMapping("/{customerId}")
     @PreAuthorize("hasRole('SALES_EMPLOYEE')")
     public ResponseEntity<BasicResponse> deleteCustomer(@PathVariable Long customerId) {

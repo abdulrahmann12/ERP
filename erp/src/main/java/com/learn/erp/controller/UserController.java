@@ -28,6 +28,7 @@ import com.learn.erp.model.User;
 import com.learn.erp.model.User.Role;
 import com.learn.erp.service.UserService;
 
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 
@@ -39,6 +40,11 @@ public class UserController {
 	
 	private final UserService userService;
 	
+	@Operation(
+		    summary = "Admin update user",
+		    description = "Allows admin to update details of a specific user by ID",
+		    tags = { "User" }
+		)
 	@PutMapping("/admin/{userId}")
 	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<BasicResponse> adminUpdateUser(@PathVariable Long userId, @RequestBody AdminUpdateUserRequestDTO dto){
@@ -46,6 +52,11 @@ public class UserController {
 		return ResponseEntity.ok(new BasicResponse(Messages.UPDATE_USER, response));
 	}
 	
+	@Operation(
+		    summary = "Update own user profile",
+		    description = "Allows authenticated users to update their profile information",
+		    tags = { "User" }
+		)
 	@PutMapping
 	@PreAuthorize("isAuthenticated()")
 	public ResponseEntity<BasicResponse> updateUser(
@@ -59,54 +70,84 @@ public class UserController {
 		return ResponseEntity.ok(new BasicResponse(Messages.UPDATE_USER, response));
 	}
 	
-		@PutMapping("/image")
-		@PreAuthorize("isAuthenticated()")
-		public ResponseEntity<BasicResponse> updateUserImage(@AuthenticationPrincipal User user, @RequestPart("image") MultipartFile image)throws Exception{
-		    Long userId= user.getId();
-			userService.updateUserImage(userId, image);
-		    return ResponseEntity.ok(new BasicResponse(Messages.USER_UPDATE_IMAGE));
-		}
+	@Operation(
+		    summary = "Update profile image",
+		    description = "Allows authenticated users to update their profile image",
+		    tags = { "User" }
+		)
+	@PutMapping("/image")
+	@PreAuthorize("isAuthenticated()")
+	public ResponseEntity<BasicResponse> updateUserImage(@AuthenticationPrincipal User user, @RequestPart("image") MultipartFile image)throws Exception{
+	    Long userId= user.getId();
+		userService.updateUserImage(userId, image);
+	    return ResponseEntity.ok(new BasicResponse(Messages.USER_UPDATE_IMAGE));
+	}
+
+	@Operation(
+		    summary = "Admin get user by ID",
+		    description = "Allows admin to retrieve full user details by ID",
+		    tags = { "User" }
+		)
+   @GetMapping("/admin/view/{userId}")
+   @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<AdminViewUserResponseDTO> adminFindUserById(@PathVariable Long userId) {
+        return ResponseEntity.ok(userService.adminFindUserById(userId));
+    }
+
+	@Operation(
+		    summary = "Get own profile",
+		    description = "Returns the profile information of the currently authenticated user",
+		    tags = { "User" }
+		)
+	@GetMapping("/profile")
+	@PreAuthorize("isAuthenticated()")
+	public ResponseEntity<ViewUserResponseDTO> getUserById(@AuthenticationPrincipal User user){
+		Long userId = user.getId();
+		return ResponseEntity.ok(userService.findUserById(userId));
+	}
 	
-	   @GetMapping("/admin/view/{userId}")
-	   @PreAuthorize("hasRole('ADMIN')")
-	    public ResponseEntity<AdminViewUserResponseDTO> adminFindUserById(@PathVariable Long userId) {
-	        return ResponseEntity.ok(userService.adminFindUserById(userId));
-	    }
+	@Operation(
+		    summary = "Admin get all users",
+		    description = "Retrieves a paginated list of all users in the system (admin only)",
+		    tags = { "User" }
+		)
+    @GetMapping
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<Page<AdminViewUserResponseDTO>> getAllUsers(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        return ResponseEntity.ok(userService.findAllUsers(page, size));
+    }
+    
+	@Operation(
+		    summary = "Admin delete user",
+		    description = "Allows admin to delete a user account by ID",
+		    tags = { "User" }
+		)
+	@DeleteMapping("/{userId}")
+	@PreAuthorize("hasRole('ADMIN')")
+	public ResponseEntity<BasicResponse> deleteUser(@PathVariable Long userId){
+	    userService.deleteUser(userId);
+	    return ResponseEntity.ok(new BasicResponse(Messages.DELETE_USER));
+	}
 	
-		@GetMapping("/profile")
-		@PreAuthorize("isAuthenticated()")
-		public ResponseEntity<ViewUserResponseDTO> getUserById(@AuthenticationPrincipal User user){
-			Long userId = user.getId();
-			return ResponseEntity.ok(userService.findUserById(userId));
-		}
-		
-	    @GetMapping
-	    @PreAuthorize("hasRole('ADMIN')")
-	    public ResponseEntity<Page<AdminViewUserResponseDTO>> getAllUsers(
-	            @RequestParam(defaultValue = "0") int page,
-	            @RequestParam(defaultValue = "10") int size) {
-	        return ResponseEntity.ok(userService.findAllUsers(page, size));
-	    }
-	    
-		@DeleteMapping("/{userId}")
-		@PreAuthorize("hasRole('ADMIN')")
-		public ResponseEntity<BasicResponse> deleteUser(@PathVariable Long userId){
-		    userService.deleteUser(userId);
-		    return ResponseEntity.ok(new BasicResponse(Messages.DELETE_USER));
-		}
-		
-	    @GetMapping("/user-roles")
-	    @PreAuthorize("hasRole('ADMIN')")
-	    public List<Role> getAllRoles() {
-	        return userService.getAllRoles();
-	    }
-	    
-	    @GetMapping("/department/{departmentId}/users")
-	    @PreAuthorize("hasRole('ADMIN')")
-	    public ResponseEntity<Page<AdminViewUserResponseDTO>> getUsersByDepartment(
-	    		@PathVariable Long departmentId,
-	            @RequestParam(defaultValue = "0") int page,
-	            @RequestParam(defaultValue = "10") int size) {
-	        return ResponseEntity.ok(userService.getUsersByDepartmentId(departmentId, page, size));
-	    }
+	@Operation(
+		    summary = "Get all user roles",
+		    description = "Retrieves all available roles for users (admin only)",
+		    tags = { "User" }
+		)
+    @GetMapping("/user-roles")
+    @PreAuthorize("hasRole('ADMIN')")
+    public List<Role> getAllRoles() {
+        return userService.getAllRoles();
+    }
+    
+    @GetMapping("/department/{departmentId}/users")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<Page<AdminViewUserResponseDTO>> getUsersByDepartment(
+    		@PathVariable Long departmentId,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        return ResponseEntity.ok(userService.getUsersByDepartmentId(departmentId, page, size));
+    }
 }
