@@ -32,8 +32,7 @@ public class LeaveRequestController {
 	
 	@Operation(
 			summary = "Submit leave request",
-			description = "Submit a new leave request by an employee.", 
-			tags = {"Leave Request"}
+			description = "Submit a new leave request by an employee."
 	)
     @PostMapping
     @PreAuthorize("isAuthenticated()")
@@ -44,8 +43,7 @@ public class LeaveRequestController {
     
 	@Operation(
 			summary = "Get my leave requests",
-			description = "Retrieves the current user's submitted leave requests.",
-			tags = {"Leave Request"}
+			description = "Retrieves the current user's submitted leave requests."
 	)
     @GetMapping("/my-requests")
     @PreAuthorize("isAuthenticated()")
@@ -58,8 +56,7 @@ public class LeaveRequestController {
     
 	@Operation(
 			summary = "Get all leave requests",
-			description = "Retrieves a paginated list of all leave requests submitted by employees.",
-			tags = {"Leave Request"}
+			description = "Retrieves a paginated list of all leave requests submitted by employees."
 	)
     @GetMapping
     @PreAuthorize("hasRole('HR')")
@@ -71,8 +68,7 @@ public class LeaveRequestController {
     
 	@Operation(
 			summary = "Get leave requests by user",
-			description = "Fetches leave requests submitted by a specific user.", 
-			tags = {"Leave Request"}
+			description = "Fetches leave requests submitted by a specific user."
 	)
     @GetMapping("/user/{userId}")
     @PreAuthorize("hasRole('HR')")
@@ -85,8 +81,7 @@ public class LeaveRequestController {
     
 	@Operation(
 			summary = "Get leave requests by status",
-			description = "Fetches leave requests filtered by request status (e.g., PENDING, APPROVED, REJECTED).",
-			tags = {"Leave Request"}
+			description = "Fetches leave requests filtered by request status (e.g., PENDING, APPROVED, REJECTED)."
 	)
     @GetMapping("/status")
     @PreAuthorize("hasRole('HR')")
@@ -99,8 +94,7 @@ public class LeaveRequestController {
     
 	@Operation(
 			summary = "Update leave request status",
-			description = "Updates the status of a leave request (approve, reject, etc).",
-			tags = {"Leave Request"}
+			description = "Updates the status of a leave request (approve, reject, etc)."
 	)
     @PutMapping("/{requestId}/status")
     @PreAuthorize("hasRole('HR')")

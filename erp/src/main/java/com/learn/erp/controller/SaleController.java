@@ -36,8 +36,7 @@ public class SaleController {
 
     @Operation(
     	    summary = "Create a new sale",
-    	    description = "Creates a new sale by a sales employee and returns the sale details",
-    	    tags = { "Sale" }
+    	    description = "Creates a new sale by a sales employee and returns the sale details"
     	)
     @PostMapping
     @PreAuthorize("hasRole('SALES_EMPLOYEE')")
@@ -48,8 +47,7 @@ public class SaleController {
 
     @Operation(
     	    summary = "Get all sales",
-    	    description = "Retrieves a paginated list of all sales made in the system",
-    	    tags = { "Sale" }
+    	    description = "Retrieves a paginated list of all sales made in the system"
     	)
     @GetMapping
     @PreAuthorize("hasRole('SALES_EMPLOYEE')")
@@ -63,8 +61,7 @@ public class SaleController {
 
     @Operation(
     	    summary = "Get sale by ID",
-    	    description = "Retrieves the details of a specific sale by its ID",
-    	    tags = { "Sale" }
+    	    description = "Retrieves the details of a specific sale by its ID"
     	)
     @GetMapping("/{saleId}")
     @PreAuthorize("hasRole('SALES_EMPLOYEE')")
@@ -75,8 +72,7 @@ public class SaleController {
 
     @Operation(
     	    summary = "Get sales by user ID",
-    	    description = "Retrieves all sales created by a specific user (admin only)",
-    	    tags = { "Sale" }
+    	    description = "Retrieves all sales created by a specific user (admin only)"
     	)
     @GetMapping("/user/{userId}")
     @PreAuthorize("hasRole('ADMIN')")
@@ -87,8 +83,7 @@ public class SaleController {
 
     @Operation(
     	    summary = "Get sales by customer ID",
-    	    description = "Retrieves all sales made to a specific customer",
-    	    tags = { "Sale" }
+    	    description = "Retrieves all sales made to a specific customer"
     	)
     @GetMapping("/customer/{customerId}")
     @PreAuthorize("hasRole('SALES_EMPLOYEE')")
@@ -99,8 +94,7 @@ public class SaleController {
 
     @Operation(
     	    summary = "Generate customer sales report",
-    	    description = "Generates a summary report for a specific customer's sales (admin only)",
-    	    tags = { "Sale" }
+    	    description = "Generates a summary report for a specific customer's sales (admin only)"
     	)
     @GetMapping("/customer/{customerId}/report")
     @PreAuthorize("hasRole('ADMIN')")
@@ -111,8 +105,7 @@ public class SaleController {
     
     @Operation(
     	    summary = "Get total sales for a customer",
-    	    description = "Retrieves the total sales amount for a specific customer",
-    	    tags = { "Sale" }
+    	    description = "Retrieves the total sales amount for a specific customer"
     	)
     @GetMapping("/customer/{customerId}/total-sales")
     @PreAuthorize("hasRole('ADMIN') or hasRole('SALES_EMPLOYEE')")
@@ -123,8 +116,7 @@ public class SaleController {
      
     @Operation(
     	    summary = "Download sale invoice as PDF",
-    	    description = "Generates and downloads the invoice PDF for a specific sale",
-    	    tags = { "Sale" }
+    	    description = "Generates and downloads the invoice PDF for a specific sale"
     	)
     @GetMapping("/{saleId}/pdf")
     @PreAuthorize("hasRole('ADMIN') or hasRole('SALES_EMPLOYEE')")

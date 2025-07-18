@@ -42,8 +42,7 @@ public class UserController {
 	
 	@Operation(
 		    summary = "Admin update user",
-		    description = "Allows admin to update details of a specific user by ID",
-		    tags = { "User" }
+		    description = "Allows admin to update details of a specific user by ID"
 		)
 	@PutMapping("/admin/{userId}")
 	@PreAuthorize("hasRole('ADMIN')")
@@ -54,8 +53,7 @@ public class UserController {
 	
 	@Operation(
 		    summary = "Update own user profile",
-		    description = "Allows authenticated users to update their profile information",
-		    tags = { "User" }
+		    description = "Allows authenticated users to update their profile information"
 		)
 	@PutMapping
 	@PreAuthorize("isAuthenticated()")
@@ -72,8 +70,7 @@ public class UserController {
 	
 	@Operation(
 		    summary = "Update profile image",
-		    description = "Allows authenticated users to update their profile image",
-		    tags = { "User" }
+		    description = "Allows authenticated users to update their profile image"
 		)
 	@PutMapping("/image")
 	@PreAuthorize("isAuthenticated()")
@@ -85,8 +82,7 @@ public class UserController {
 
 	@Operation(
 		    summary = "Admin get user by ID",
-		    description = "Allows admin to retrieve full user details by ID",
-		    tags = { "User" }
+		    description = "Allows admin to retrieve full user details by ID"
 		)
    @GetMapping("/admin/view/{userId}")
    @PreAuthorize("hasRole('ADMIN')")
@@ -96,8 +92,7 @@ public class UserController {
 
 	@Operation(
 		    summary = "Get own profile",
-		    description = "Returns the profile information of the currently authenticated user",
-		    tags = { "User" }
+		    description = "Returns the profile information of the currently authenticated user"
 		)
 	@GetMapping("/profile")
 	@PreAuthorize("isAuthenticated()")
@@ -108,8 +103,7 @@ public class UserController {
 	
 	@Operation(
 		    summary = "Admin get all users",
-		    description = "Retrieves a paginated list of all users in the system (admin only)",
-		    tags = { "User" }
+		    description = "Retrieves a paginated list of all users in the system (admin only)"
 		)
     @GetMapping
     @PreAuthorize("hasRole('ADMIN')")
@@ -121,8 +115,7 @@ public class UserController {
     
 	@Operation(
 		    summary = "Admin delete user",
-		    description = "Allows admin to delete a user account by ID",
-		    tags = { "User" }
+		    description = "Allows admin to delete a user account by ID"
 		)
 	@DeleteMapping("/{userId}")
 	@PreAuthorize("hasRole('ADMIN')")
@@ -133,8 +126,7 @@ public class UserController {
 	
 	@Operation(
 		    summary = "Get all user roles",
-		    description = "Retrieves all available roles for users (admin only)",
-		    tags = { "User" }
+		    description = "Retrieves all available roles for users (admin only)"
 		)
     @GetMapping("/user-roles")
     @PreAuthorize("hasRole('ADMIN')")

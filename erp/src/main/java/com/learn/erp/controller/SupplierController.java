@@ -30,8 +30,7 @@ public class SupplierController {
 
     @Operation(
     	    summary = "Create new supplier",
-    	    description = "Allows the purchasing officer to add a new supplier to the system",
-    	    tags = { "Supplier" }
+    	    description = "Allows the purchasing officer to add a new supplier to the system"
     	)
     @PostMapping
     @PreAuthorize("hasRole('PURCHASING_OFFICER')")
@@ -42,8 +41,7 @@ public class SupplierController {
 
     @Operation(
     	    summary = "Update supplier details",
-    	    description = "Allows the purchasing officer to update information for an existing supplier",
-    	    tags = { "Supplier" }
+    	    description = "Allows the purchasing officer to update information for an existing supplier"
     	)
     @PutMapping("/{supplierId}")
     @PreAuthorize("hasRole('PURCHASING_OFFICER')")
@@ -57,8 +55,7 @@ public class SupplierController {
 
     @Operation(
     	    summary = "Get supplier by ID",
-    	    description = "Retrieves details of a specific supplier by their ID",
-    	    tags = { "Supplier" }
+    	    description = "Retrieves details of a specific supplier by their ID"
     	)
     @GetMapping("/{supplierId}")
     @PreAuthorize("hasRole('PURCHASING_OFFICER')")
@@ -69,8 +66,7 @@ public class SupplierController {
 
     @Operation(
     	    summary = "Get all suppliers",
-    	    description = "Returns a list of all suppliers in the system",
-    	    tags = { "Supplier" }
+    	    description = "Returns a list of all suppliers in the system"
     	)
     @GetMapping
     @PreAuthorize("hasRole('PURCHASING_OFFICER')")
@@ -81,8 +77,7 @@ public class SupplierController {
 
     @Operation(
     	    summary = "Delete supplier",
-    	    description = "Allows the purchasing officer to delete a supplier by their ID",
-    	    tags = { "Supplier" }
+    	    description = "Allows the purchasing officer to delete a supplier by their ID"
     	)
     @DeleteMapping("/{supplierId}")
     @PreAuthorize("hasRole('PURCHASING_OFFICER')")

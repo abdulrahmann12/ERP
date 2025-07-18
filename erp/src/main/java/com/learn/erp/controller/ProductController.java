@@ -35,8 +35,7 @@ public class ProductController {
 	
 	@Operation(
 		    summary = "Create Product",
-		    description = "Creates a new product with optional image upload.",
-		    tags = {"Product"}
+		    description = "Creates a new product with optional image upload."
 		)
     @PostMapping
     @PreAuthorize("hasRole('STORE_MANAGER')")
@@ -51,8 +50,7 @@ public class ProductController {
     
 	@Operation(
 		    summary = "Update Product",
-		    description = "Updates the details and image of an existing product.",
-		    tags = {"Product"}
+		    description = "Updates the details and image of an existing product."
 		)
     @PutMapping("/{productId}")
     @PreAuthorize("hasRole('STORE_MANAGER')")
@@ -68,8 +66,7 @@ public class ProductController {
     
 	@Operation(
 		    summary = "Get Product by ID",
-		    description = "Fetches a single product by its ID.",
-		    tags = {"Product"}
+		    description = "Fetches a single product by its ID."
 		)
     @GetMapping("/{productId}")
     @PreAuthorize("isAuthenticated()")
@@ -80,8 +77,7 @@ public class ProductController {
     
 	@Operation(
 		    summary = "Get All Products",
-		    description = "Returns a paginated list of all products.",
-		    tags = {"Product"}
+		    description = "Returns a paginated list of all products."
 		)
     @GetMapping
     @PreAuthorize("isAuthenticated()")
@@ -95,8 +91,7 @@ public class ProductController {
     
 	@Operation(
 		    summary = "Get Products by Category",
-		    description = "Returns a paginated list of products that belong to the specified category.",
-		    tags = {"Product"}
+		    description = "Returns a paginated list of products that belong to the specified category."
 		)
     @GetMapping("/category/{categoryId}")
 	@PreAuthorize("isAuthenticated()")
@@ -111,8 +106,7 @@ public class ProductController {
 
 	@Operation(
 		    summary = "Search Products by Name",
-		    description = "Searches products based on a keyword (partial match).",
-		    tags = {"Product"}
+		    description = "Searches products based on a keyword (partial match)."
 		)
 	@GetMapping("/search")
     @PreAuthorize("isAuthenticated()") 

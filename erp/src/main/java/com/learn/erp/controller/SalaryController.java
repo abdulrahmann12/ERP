@@ -36,8 +36,7 @@ public class SalaryController {
 	
 	@Operation(
 		    summary = "Assign salary to employee",
-		    description = "Allows HR to assign a fixed salary amount to an employee",
-		    tags = { "Salary" }
+		    description = "Allows HR to assign a fixed salary amount to an employee"
 		)
 	@PostMapping
 	@PreAuthorize("hasRole('HR')")
@@ -48,8 +47,7 @@ public class SalaryController {
 	
 	@Operation(
 		    summary = "Update employee salary by user ID",
-		    description = "Allows HR to update the fixed salary assigned to a specific employee",
-		    tags = { "Salary" }
+		    description = "Allows HR to update the fixed salary assigned to a specific employee"
 		)
 	@PutMapping("/{userId}")
 	@PreAuthorize("hasRole('HR')")
@@ -60,8 +58,7 @@ public class SalaryController {
 	
 	@Operation(
 		    summary = "Get salary of an employee",
-		    description = "Retrieves the salary details of an employee by their user ID",
-		    tags = { "Salary" }
+		    description = "Retrieves the salary details of an employee by their user ID"
 		)
 	@GetMapping("/{userId}")
 	@PreAuthorize("hasRole('HR')")
@@ -72,8 +69,7 @@ public class SalaryController {
 	
 	@Operation(
 		    summary = "Get salaries of all employees",
-		    description = "Returns a list of all employees' salaries in the system",
-		    tags = { "Salary" }
+		    description = "Returns a list of all employees' salaries in the system"
 		)
 	@GetMapping
 	@PreAuthorize("hasRole('HR')")
