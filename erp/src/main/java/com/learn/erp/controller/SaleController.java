@@ -8,6 +8,7 @@ import com.learn.erp.dto.SaleResponseDTO;
 import com.learn.erp.model.User;
 import com.learn.erp.service.SaleService;
 
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 
@@ -33,6 +34,11 @@ public class SaleController {
 
     private final SaleService saleService;
 
+    @Operation(
+    	    summary = "Create a new sale",
+    	    description = "Creates a new sale by a sales employee and returns the sale details",
+    	    tags = { "Sale" }
+    	)
     @PostMapping
     @PreAuthorize("hasRole('SALES_EMPLOYEE')")
     public ResponseEntity<BasicResponse> createSale(@RequestBody SaleCreateDTO dto, @AuthenticationPrincipal User user) {
@@ -40,6 +46,11 @@ public class SaleController {
         return ResponseEntity.ok(new BasicResponse(Messages.ADD_SALE, created));
     }
 
+    @Operation(
+    	    summary = "Get all sales",
+    	    description = "Retrieves a paginated list of all sales made in the system",
+    	    tags = { "Sale" }
+    	)
     @GetMapping
     @PreAuthorize("hasRole('SALES_EMPLOYEE')")
     public ResponseEntity<Page<SaleResponseDTO>> getAllSales(
@@ -50,6 +61,11 @@ public class SaleController {
         return ResponseEntity.ok(sales);
     }
 
+    @Operation(
+    	    summary = "Get sale by ID",
+    	    description = "Retrieves the details of a specific sale by its ID",
+    	    tags = { "Sale" }
+    	)
     @GetMapping("/{saleId}")
     @PreAuthorize("hasRole('SALES_EMPLOYEE')")
     public ResponseEntity<SaleResponseDTO> getSaleById(@PathVariable Long saleId) {
@@ -57,6 +73,11 @@ public class SaleController {
         return ResponseEntity.ok(sale);
     }
 
+    @Operation(
+    	    summary = "Get sales by user ID",
+    	    description = "Retrieves all sales created by a specific user (admin only)",
+    	    tags = { "Sale" }
+    	)
     @GetMapping("/user/{userId}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<SaleResponseDTO>> getSalesByUser(@PathVariable Long userId) {
@@ -64,6 +85,11 @@ public class SaleController {
         return ResponseEntity.ok(sales);
     }
 
+    @Operation(
+    	    summary = "Get sales by customer ID",
+    	    description = "Retrieves all sales made to a specific customer",
+    	    tags = { "Sale" }
+    	)
     @GetMapping("/customer/{customerId}")
     @PreAuthorize("hasRole('SALES_EMPLOYEE')")
     public ResponseEntity<List<SaleResponseDTO>> getSalesByCustomer(@PathVariable Long customerId) {
@@ -71,6 +97,11 @@ public class SaleController {
         return ResponseEntity.ok(sales);
     }
 
+    @Operation(
+    	    summary = "Generate customer sales report",
+    	    description = "Generates a summary report for a specific customer's sales (admin only)",
+    	    tags = { "Sale" }
+    	)
     @GetMapping("/customer/{customerId}/report")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<CustomerSalesReportDTO> generateCustomerSalesReport(@PathVariable Long customerId) {
@@ -78,6 +109,11 @@ public class SaleController {
         return ResponseEntity.ok(report);
     }
     
+    @Operation(
+    	    summary = "Get total sales for a customer",
+    	    description = "Retrieves the total sales amount for a specific customer",
+    	    tags = { "Sale" }
+    	)
     @GetMapping("/customer/{customerId}/total-sales")
     @PreAuthorize("hasRole('ADMIN') or hasRole('SALES_EMPLOYEE')")
     public ResponseEntity<BigDecimal> getCustomerTotalSales(@PathVariable Long customerId) {
@@ -85,6 +121,11 @@ public class SaleController {
         return ResponseEntity.ok(totalSales);
     }
      
+    @Operation(
+    	    summary = "Download sale invoice as PDF",
+    	    description = "Generates and downloads the invoice PDF for a specific sale",
+    	    tags = { "Sale" }
+    	)
     @GetMapping("/{saleId}/pdf")
     @PreAuthorize("hasRole('ADMIN') or hasRole('SALES_EMPLOYEE')")
     public ResponseEntity<byte[]> downloadSalePdf(@PathVariable Long saleId) {

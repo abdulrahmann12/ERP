@@ -8,6 +8,7 @@ import com.learn.erp.dto.SupplierPurchaseReportDTO;
 import com.learn.erp.model.User;
 import com.learn.erp.service.PurchaseService;
 
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 
@@ -33,6 +34,11 @@ public class PurchaseController {
 
 	private final PurchaseService purchaseService;
 	
+	@Operation(
+		    summary = "Create Purchase",
+		    description = "Creates a new purchase order with the given items and supplier.",
+		    tags = {"Purchase"}
+		)
     @PostMapping
     @PreAuthorize("hasRole('PURCHASING_OFFICER')")
     public ResponseEntity<BasicResponse> createPurchase(
@@ -43,6 +49,11 @@ public class PurchaseController {
         return ResponseEntity.ok(new BasicResponse(Messages.ADD_PURCHASE, created));
     }
     
+	@Operation(
+		    summary = "Get All Purchases",
+		    description = "Fetches a paginated list of all purchases in the system.",
+		    tags = {"Purchase"}
+		)
     @GetMapping
     @PreAuthorize("hasRole('PURCHASING_OFFICER')")
     public ResponseEntity<Page<PurchaseResponseDTO>> getAllPurchases(
@@ -53,6 +64,11 @@ public class PurchaseController {
         return ResponseEntity.ok(purchases);
     }
     
+	@Operation(
+		    summary = "Get Purchase by ID",
+		    description = "Returns detailed information of a specific purchase order.",
+		    tags = {"Purchase"}
+		)
     @GetMapping("/{purchaseId}")
     @PreAuthorize("hasRole('PURCHASING_OFFICER')")
     public ResponseEntity<PurchaseResponseDTO> getPurchaseById(@PathVariable Long purchaseId) {
@@ -60,6 +76,11 @@ public class PurchaseController {
         return ResponseEntity.ok(purchase);
     }
     
+    @Operation(
+    	    summary = "Get Purchases by User",
+    	    description = "Returns a list of all purchases made by a specific user.",
+    	    tags = {"Purchase"}
+    	)
     @GetMapping("/user/{userId}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<PurchaseResponseDTO>> getPurchasesByUser(@PathVariable Long userId) {
@@ -67,13 +88,23 @@ public class PurchaseController {
         return ResponseEntity.ok(purchases);
     }
     
+    @Operation(
+    	    summary = "Get Purchases by Supplier",
+    	    description = "Returns a list of purchases associated with a specific supplier.",
+    	    tags = {"Purchase"}
+    	)
     @GetMapping("/supplier/{supplierId}")
     @PreAuthorize("hasRole('PURCHASING_OFFICER')")
     public ResponseEntity<List<PurchaseResponseDTO>> getPurchasesBySupplier(@PathVariable Long supplierId) {
         List<PurchaseResponseDTO> purchases = purchaseService.getPurchasesBySupplier(supplierId);
         return ResponseEntity.ok(purchases);
     }
-    
+
+    @Operation(
+    	    summary = "Generate Supplier Purchase Report",
+    	    description = "Generates a summary report for all purchases made from a specific supplier.",
+    	    tags = {"Purchase"}
+    	)
     @GetMapping("/supplier/{supplierId}/report")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<SupplierPurchaseReportDTO> generateSupplierPurchaseReport(@PathVariable Long supplierId) {
@@ -81,6 +112,11 @@ public class PurchaseController {
         return ResponseEntity.ok(report);
     }
     
+    @Operation(
+    	    summary = "Get Supplier Total Sales",
+    	    description = "Returns the total value of all purchases from a specific supplier.",
+    	    tags = {"Purchase"}
+    	)
     @GetMapping("/supplier/{supplierId}/total-purchase")
     @PreAuthorize("hasRole('ADMIN') or hasRole('PURCHASING_OFFICER')")
     public ResponseEntity<BigDecimal> getSupplierTotalSales(@PathVariable Long supplierId) {
@@ -88,6 +124,11 @@ public class PurchaseController {
         return ResponseEntity.ok(total);
     }
     
+    @Operation(
+    	    summary = "Download Purchase PDF",
+    	    description = "Generates and downloads a PDF invoice for a specific purchase.",
+    	    tags = {"Purchase"}
+    	)
     @GetMapping("/{purchaseId}/pdf")
     @PreAuthorize("hasRole('ADMIN') or hasRole('PURCHASING_OFFICER')")
     public ResponseEntity<byte[]> downloadPurchasePdf(@PathVariable Long purchaseId) {

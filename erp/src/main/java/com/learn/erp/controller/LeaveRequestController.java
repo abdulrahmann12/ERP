@@ -16,6 +16,7 @@ import com.learn.erp.model.LeaveRequest.Status;
 import com.learn.erp.model.User;
 import com.learn.erp.service.LeaveRequestService;
 
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 
@@ -29,7 +30,11 @@ import lombok.RequiredArgsConstructor;
 public class LeaveRequestController {
 	private final LeaveRequestService leaveRequestService;
 	
-
+	@Operation(
+			summary = "Submit leave request",
+			description = "Submit a new leave request by an employee.", 
+			tags = {"Leave Request"}
+	)
     @PostMapping
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<BasicResponse> createLeaveRequest(@AuthenticationPrincipal User user, @RequestBody LeaveRequestCreateDTO dto) {
@@ -37,6 +42,11 @@ public class LeaveRequestController {
 		return ResponseEntity.ok(new BasicResponse(Messages.LEAVE_REQUEST_SUBMITTED, response));
     }
     
+	@Operation(
+			summary = "Get my leave requests",
+			description = "Retrieves the current user's submitted leave requests.",
+			tags = {"Leave Request"}
+	)
     @GetMapping("/my-requests")
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<Page<UserLeaveRequestResponseDTO>> getMyRequests(@AuthenticationPrincipal User user,
@@ -46,14 +56,24 @@ public class LeaveRequestController {
         return ResponseEntity.ok(response);
     }
     
+	@Operation(
+			summary = "Get all leave requests",
+			description = "Retrieves a paginated list of all leave requests submitted by employees.",
+			tags = {"Leave Request"}
+	)
     @GetMapping
     @PreAuthorize("hasRole('HR')")
     public ResponseEntity<Page<LeaveRequestResponseDTO>> getAllRequests(@RequestParam(defaultValue = "0") int page,
                                                                          @RequestParam(defaultValue = "10") int size) {
-        Page<LeaveRequestResponseDTO> response = leaveRequestService.getAllLeaveRequests(page, size);
+        Page<LeaveRequestResponseDTO> response = leaveRequestService.getAllPendingRequests(page, size);
         return ResponseEntity.ok(response);
     }	
     
+	@Operation(
+			summary = "Get leave requests by user",
+			description = "Fetches leave requests submitted by a specific user.", 
+			tags = {"Leave Request"}
+	)
     @GetMapping("/user/{userId}")
     @PreAuthorize("hasRole('HR')")
     public ResponseEntity<Page<LeaveRequestResponseDTO>> getRequestsByUser(@PathVariable Long userId,
@@ -63,6 +83,11 @@ public class LeaveRequestController {
         return ResponseEntity.ok(response);
     }
     
+	@Operation(
+			summary = "Get leave requests by status",
+			description = "Fetches leave requests filtered by request status (e.g., PENDING, APPROVED, REJECTED).",
+			tags = {"Leave Request"}
+	)
     @GetMapping("/status")
     @PreAuthorize("hasRole('HR')")
     public ResponseEntity<Page<LeaveRequestResponseDTO>> getRequestsByStatus(@RequestParam Status status,
@@ -72,6 +97,11 @@ public class LeaveRequestController {
         return ResponseEntity.ok(response);
     }
     
+	@Operation(
+			summary = "Update leave request status",
+			description = "Updates the status of a leave request (approve, reject, etc).",
+			tags = {"Leave Request"}
+	)
     @PutMapping("/{requestId}/status")
     @PreAuthorize("hasRole('HR')")
     public ResponseEntity<BasicResponse> updateStatus(@PathVariable Long requestId,

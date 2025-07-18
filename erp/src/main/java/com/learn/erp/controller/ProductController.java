@@ -8,6 +8,7 @@ import com.learn.erp.dto.ProductUpdateDTO;
 import com.learn.erp.model.User;
 import com.learn.erp.service.ProductService;
 
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -32,6 +33,11 @@ public class ProductController {
 
 	private final ProductService productService;
 	
+	@Operation(
+		    summary = "Create Product",
+		    description = "Creates a new product with optional image upload.",
+		    tags = {"Product"}
+		)
     @PostMapping
     @PreAuthorize("hasRole('STORE_MANAGER')")
     public ResponseEntity<BasicResponse> createProduct(
@@ -43,6 +49,11 @@ public class ProductController {
         return ResponseEntity.ok(new BasicResponse(Messages.ADD_PRODUCT, response));
     }
     
+	@Operation(
+		    summary = "Update Product",
+		    description = "Updates the details and image of an existing product.",
+		    tags = {"Product"}
+		)
     @PutMapping("/{productId}")
     @PreAuthorize("hasRole('STORE_MANAGER')")
     public ResponseEntity<BasicResponse> updateProduct(
@@ -55,6 +66,11 @@ public class ProductController {
         return ResponseEntity.ok(new BasicResponse(Messages.UPDATE_PRODUCT, response));
     }
     
+	@Operation(
+		    summary = "Get Product by ID",
+		    description = "Fetches a single product by its ID.",
+		    tags = {"Product"}
+		)
     @GetMapping("/{productId}")
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<ProductResponseDTO> getProduct(@PathVariable Long productId) {
@@ -62,6 +78,11 @@ public class ProductController {
         return ResponseEntity.ok(response);
     }
     
+	@Operation(
+		    summary = "Get All Products",
+		    description = "Returns a paginated list of all products.",
+		    tags = {"Product"}
+		)
     @GetMapping
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<Page<ProductResponseDTO>> getAllProducts(
@@ -72,6 +93,11 @@ public class ProductController {
         return ResponseEntity.ok(products);
     }
     
+	@Operation(
+		    summary = "Get Products by Category",
+		    description = "Returns a paginated list of products that belong to the specified category.",
+		    tags = {"Product"}
+		)
     @GetMapping("/category/{categoryId}")
 	@PreAuthorize("isAuthenticated()")
 	public ResponseEntity<Page<ProductResponseDTO>> getProductsByCategoryId(
@@ -82,8 +108,13 @@ public class ProductController {
     	Page<ProductResponseDTO> products = productService.getProductsByCategory(categoryId, page, size);
         return ResponseEntity.ok(products);	   
     }
-    
-    @GetMapping("/search")
+
+	@Operation(
+		    summary = "Search Products by Name",
+		    description = "Searches products based on a keyword (partial match).",
+		    tags = {"Product"}
+		)
+	@GetMapping("/search")
     @PreAuthorize("isAuthenticated()") 
     public List<ProductResponseDTO> fastSearchByName(@RequestParam String keyword) {
         return productService.fastSearch(keyword);

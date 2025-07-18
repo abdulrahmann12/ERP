@@ -7,6 +7,7 @@ import com.learn.erp.dto.SupplierUpdateDTO;
 import com.learn.erp.dto.SupplierCreateDTO;
 import com.learn.erp.service.SupplierService;
 
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 
@@ -27,6 +28,11 @@ public class SupplierController {
 
     private final SupplierService supplierService;
 
+    @Operation(
+    	    summary = "Create new supplier",
+    	    description = "Allows the purchasing officer to add a new supplier to the system",
+    	    tags = { "Supplier" }
+    	)
     @PostMapping
     @PreAuthorize("hasRole('PURCHASING_OFFICER')")
     public ResponseEntity<BasicResponse> createSupplier(@RequestBody SupplierCreateDTO dto) {
@@ -34,6 +40,11 @@ public class SupplierController {
         return ResponseEntity.ok(new BasicResponse(Messages.ADD_SUPPLIER, created));
     }
 
+    @Operation(
+    	    summary = "Update supplier details",
+    	    description = "Allows the purchasing officer to update information for an existing supplier",
+    	    tags = { "Supplier" }
+    	)
     @PutMapping("/{supplierId}")
     @PreAuthorize("hasRole('PURCHASING_OFFICER')")
     public ResponseEntity<BasicResponse> updateSupplier(
@@ -44,6 +55,11 @@ public class SupplierController {
         return ResponseEntity.ok(new BasicResponse(Messages.UPDATE_SUPPLIER, updated));
     }
 
+    @Operation(
+    	    summary = "Get supplier by ID",
+    	    description = "Retrieves details of a specific supplier by their ID",
+    	    tags = { "Supplier" }
+    	)
     @GetMapping("/{supplierId}")
     @PreAuthorize("hasRole('PURCHASING_OFFICER')")
     public ResponseEntity<SupplierDTO> getSupplier(@PathVariable Long supplierId) {
@@ -51,6 +67,11 @@ public class SupplierController {
         return ResponseEntity.ok(supplier);
     }
 
+    @Operation(
+    	    summary = "Get all suppliers",
+    	    description = "Returns a list of all suppliers in the system",
+    	    tags = { "Supplier" }
+    	)
     @GetMapping
     @PreAuthorize("hasRole('PURCHASING_OFFICER')")
     public ResponseEntity<List<SupplierDTO>> getAllSuppliers() {
@@ -58,6 +79,11 @@ public class SupplierController {
         return ResponseEntity.ok(suppliers);
     }
 
+    @Operation(
+    	    summary = "Delete supplier",
+    	    description = "Allows the purchasing officer to delete a supplier by their ID",
+    	    tags = { "Supplier" }
+    	)
     @DeleteMapping("/{supplierId}")
     @PreAuthorize("hasRole('PURCHASING_OFFICER')")
     public ResponseEntity<BasicResponse> deleteSupplier(@PathVariable Long supplierId) {

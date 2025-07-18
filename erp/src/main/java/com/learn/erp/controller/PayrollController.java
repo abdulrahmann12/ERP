@@ -5,6 +5,7 @@ import com.learn.erp.dto.BasicResponse;
 import com.learn.erp.dto.PayrollResponseDTO;
 import com.learn.erp.service.PayrollService;
 
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +25,11 @@ public class PayrollController {
 
     private final PayrollService payrollService;
 
+    @Operation(
+    	    summary = "Generate Payroll for All Users",
+    	    description = "Generates monthly payroll for all employees for a given month and year.",
+    	    tags = {"Payroll"}
+    	)
     @PostMapping("/generate")
     @PreAuthorize("hasRole('ACCOUNTANT')")
     public ResponseEntity<BasicResponse> generatePayrollForAllUsers(
@@ -34,6 +40,11 @@ public class PayrollController {
         return ResponseEntity.ok(new BasicResponse(Messages.GENERATE_PAYROLL, response));
     }
 
+    @Operation(
+    	    summary = "Get Payroll for User",
+    	    description = "Retrieves the payroll information for a specific user based on the provided month and year.",
+    	    tags = {"Payroll"}
+    	)
     @GetMapping("/user/{userId}")
     @PreAuthorize("hasRole('ACCOUNTANT')")
     public ResponseEntity<PayrollResponseDTO> getPayrollForUser(
