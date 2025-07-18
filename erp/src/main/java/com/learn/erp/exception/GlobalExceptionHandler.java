@@ -2,7 +2,7 @@ package com.learn.erp.exception;
 
 import java.nio.file.AccessDeniedException;
 
-import javax.naming.AuthenticationException;
+import org.springframework.security.core.AuthenticationException;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

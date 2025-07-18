@@ -27,8 +27,7 @@ public class PayrollController {
 
     @Operation(
     	    summary = "Generate Payroll for All Users",
-    	    description = "Generates monthly payroll for all employees for a given month and year.",
-    	    tags = {"Payroll"}
+    	    description = "Generates monthly payroll for all employees for a given month and year."
     	)
     @PostMapping("/generate")
     @PreAuthorize("hasRole('ACCOUNTANT')")
@@ -42,8 +41,7 @@ public class PayrollController {
 
     @Operation(
     	    summary = "Get Payroll for User",
-    	    description = "Retrieves the payroll information for a specific user based on the provided month and year.",
-    	    tags = {"Payroll"}
+    	    description = "Retrieves the payroll information for a specific user based on the provided month and year."
     	)
     @GetMapping("/user/{userId}")
     @PreAuthorize("hasRole('ACCOUNTANT')")

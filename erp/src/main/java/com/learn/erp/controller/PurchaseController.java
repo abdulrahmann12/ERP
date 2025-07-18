@@ -36,8 +36,7 @@ public class PurchaseController {
 	
 	@Operation(
 		    summary = "Create Purchase",
-		    description = "Creates a new purchase order with the given items and supplier.",
-		    tags = {"Purchase"}
+		    description = "Creates a new purchase order with the given items and supplier."
 		)
     @PostMapping
     @PreAuthorize("hasRole('PURCHASING_OFFICER')")
@@ -51,8 +50,7 @@ public class PurchaseController {
     
 	@Operation(
 		    summary = "Get All Purchases",
-		    description = "Fetches a paginated list of all purchases in the system.",
-		    tags = {"Purchase"}
+		    description = "Fetches a paginated list of all purchases in the system."
 		)
     @GetMapping
     @PreAuthorize("hasRole('PURCHASING_OFFICER')")
@@ -66,8 +64,7 @@ public class PurchaseController {
     
 	@Operation(
 		    summary = "Get Purchase by ID",
-		    description = "Returns detailed information of a specific purchase order.",
-		    tags = {"Purchase"}
+		    description = "Returns detailed information of a specific purchase order."
 		)
     @GetMapping("/{purchaseId}")
     @PreAuthorize("hasRole('PURCHASING_OFFICER')")
@@ -78,8 +75,7 @@ public class PurchaseController {
     
     @Operation(
     	    summary = "Get Purchases by User",
-    	    description = "Returns a list of all purchases made by a specific user.",
-    	    tags = {"Purchase"}
+    	    description = "Returns a list of all purchases made by a specific user."
     	)
     @GetMapping("/user/{userId}")
     @PreAuthorize("hasRole('ADMIN')")
@@ -90,8 +86,7 @@ public class PurchaseController {
     
     @Operation(
     	    summary = "Get Purchases by Supplier",
-    	    description = "Returns a list of purchases associated with a specific supplier.",
-    	    tags = {"Purchase"}
+    	    description = "Returns a list of purchases associated with a specific supplier."
     	)
     @GetMapping("/supplier/{supplierId}")
     @PreAuthorize("hasRole('PURCHASING_OFFICER')")
@@ -102,8 +97,7 @@ public class PurchaseController {
 
     @Operation(
     	    summary = "Generate Supplier Purchase Report",
-    	    description = "Generates a summary report for all purchases made from a specific supplier.",
-    	    tags = {"Purchase"}
+    	    description = "Generates a summary report for all purchases made from a specific supplier."
     	)
     @GetMapping("/supplier/{supplierId}/report")
     @PreAuthorize("hasRole('ADMIN')")
@@ -114,8 +108,7 @@ public class PurchaseController {
     
     @Operation(
     	    summary = "Get Supplier Total Sales",
-    	    description = "Returns the total value of all purchases from a specific supplier.",
-    	    tags = {"Purchase"}
+    	    description = "Returns the total value of all purchases from a specific supplier."
     	)
     @GetMapping("/supplier/{supplierId}/total-purchase")
     @PreAuthorize("hasRole('ADMIN') or hasRole('PURCHASING_OFFICER')")
@@ -126,8 +119,7 @@ public class PurchaseController {
     
     @Operation(
     	    summary = "Download Purchase PDF",
-    	    description = "Generates and downloads a PDF invoice for a specific purchase.",
-    	    tags = {"Purchase"}
+    	    description = "Generates and downloads a PDF invoice for a specific purchase."
     	)
     @GetMapping("/{purchaseId}/pdf")
     @PreAuthorize("hasRole('ADMIN') or hasRole('PURCHASING_OFFICER')")

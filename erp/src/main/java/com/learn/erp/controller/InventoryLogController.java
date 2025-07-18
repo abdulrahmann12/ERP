@@ -25,8 +25,7 @@ public class InventoryLogController {
 
     @Operation(
     		summary = "Get all inventory logs",
-    		description = "Fetches the complete history of inventory logs.",
-    		tags = {"Inventory Log"}
+    		description = "Fetches the complete history of inventory logs."
     	)
     @GetMapping
     @PreAuthorize("hasRole('ADMIN')")
@@ -37,8 +36,7 @@ public class InventoryLogController {
 
     @Operation(
     		summary = "Get inventory logs by product",
-    		description = "Fetches inventory log entries for a specific product.", 
-    		tags = {"Inventory Log"}
+    		description = "Fetches inventory log entries for a specific product."
     )
     @GetMapping("/product/{productId}")
     @PreAuthorize("hasRole('ADMIN')")
