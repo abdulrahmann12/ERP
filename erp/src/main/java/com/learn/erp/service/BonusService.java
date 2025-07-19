@@ -44,6 +44,12 @@ public class BonusService {
                 .stream().map(bonusMapper::toDTO).collect(Collectors.toList());
     }
     
+    public List<BonusResponseDTO> getAllBonusForMonth( int month, int year) {
+
+        return bonusRepository.findByMonthAndYear(month, year)
+                .stream().map(bonusMapper::toDTO).collect(Collectors.toList());
+    }
+    
     public void deleteBonus(Long bonusId) {
     	 Bonus bonus = bonusRepository.findById(bonusId)
     			 .orElseThrow(() -> new BonusNotFoundException());
