@@ -65,6 +65,23 @@ public class BonusController {
     }
     
     @Operation(
+            summary = "Get all bonuses for a specific month",
+            description = "Retrieve all bonus records for all users by month and year"
+    )
+    @GetMapping
+    @PreAuthorize("hasRole('HR')")
+    public ResponseEntity<List<BonusResponseDTO>> getAllBonusesByMonth(
+            @RequestParam(required = false) Integer month,
+            @RequestParam(required = false) Integer year) {
+
+        int targetMonth = (month != null) ? month : LocalDate.now().getMonthValue();
+        int targetYear = (year != null) ? year : LocalDate.now().getYear();
+
+        List<BonusResponseDTO> bonuses = bonusService.getAllBonusForMonth(targetMonth, targetYear);
+        return ResponseEntity.ok(bonuses);
+    }
+    
+    @Operation(
             summary = "Delete bonus",
             description = "Delete a specific bonus by its ID."
     )

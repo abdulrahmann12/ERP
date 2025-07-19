@@ -19,4 +19,6 @@ public interface BonusRepository extends JpaRepository<Bonus, Long> {
     BigDecimal findTotalBonusByUserIdAndMonthAndYear(@Param("userId") Long userId,
                                                      @Param("month") int month,
                                                      @Param("year") int year);
+    List<Bonus> findByMonthAndYear(int month, int year);
+
 }

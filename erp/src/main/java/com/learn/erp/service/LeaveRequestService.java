@@ -77,11 +77,15 @@ public class LeaveRequestService {
 	}
 
 	public Page<LeaveRequestResponseDTO> HRGetLeaveRequestsByUser(Long userId, int page, int size){
+		userRepository.findById(userId)
+		.orElseThrow(() -> new UserNotFoundException());
 		Pageable pageable = PageRequest.of(page, size);
 		return leaveRequestRepository.findByUser_Id(userId, pageable).map(leaveRequestMapper::toHRDTO);
 	}
 	
 	public Page<UserLeaveRequestResponseDTO> getLeaveRequestsByUser(Long userId, int page, int size){
+		userRepository.findById(userId)
+		.orElseThrow(() -> new UserNotFoundException());
 		Pageable pageable = PageRequest.of(page, size);
 		return leaveRequestRepository.findByUser_Id(userId, pageable).map(leaveRequestMapper::toUserDTO);
 	}

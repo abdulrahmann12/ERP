@@ -94,9 +94,14 @@ public class ProductService {
         product.setCode(dto.getCode());
         product.setDescription(dto.getDescription());
         product.setPrice(dto.getPrice());
-        product.setStock(dto.getStock());
         product.setUnit(dto.getUnit());
         product.setCategory(category);
+        
+        boolean stockChanged = dto.getStock() != null && !dto.getStock().equals(product.getStock());
+
+        if (dto.getStock() != null) {
+            product.setStock(dto.getStock());
+        }
         
         if (image != null && !image.isEmpty()) {
             try {
@@ -110,17 +115,18 @@ public class ProductService {
         Product updated = productRepository.save(product);
 
         // Save InventoryLog
-        InventoryLog log = InventoryLog.builder()
-                .product(updated)
-                .quantityBefore(quantityBefore)
-                .quantityAfter(updated.getStock())
-                .actionType(InventoryLog.ActionType.ADJUSTMENT)
-                .note(Messages.STOCK_UPDATED)
-                .createdBy(userRepository.findById(userId).orElse(null))
-                .build();
+        if (stockChanged) {
+            InventoryLog log = InventoryLog.builder()
+                    .product(updated)
+                    .quantityBefore(quantityBefore)
+                    .quantityAfter(updated.getStock())
+                    .actionType(InventoryLog.ActionType.ADJUSTMENT)
+                    .note(Messages.STOCK_UPDATED)
+                    .createdBy(userRepository.findById(userId).orElse(null))
+                    .build();
 
-        inventoryLogRepository.save(log);
-
+            inventoryLogRepository.save(log);
+        }
         return productMapper.toDTO(updated);
     }
     
