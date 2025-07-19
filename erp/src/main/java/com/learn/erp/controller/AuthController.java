@@ -5,7 +5,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,6 +18,7 @@ import com.learn.erp.dto.EmailRequestDTO;
 import com.learn.erp.dto.LoginRequestDTO;
 import com.learn.erp.dto.ResetPasswordRequestDTO;
 import com.learn.erp.dto.UserChangePasswordRequestDTO;
+import com.learn.erp.model.User;
 import com.learn.erp.service.AuthService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -82,9 +82,9 @@ public class AuthController {
 		    description = "Authenticated user changes their current password."
 	)
 	@PostMapping("/change-password")
-	public ResponseEntity<BasicResponse> changePassword(@AuthenticationPrincipal UserDetails userDetails,
+	public ResponseEntity<BasicResponse> changePassword(@AuthenticationPrincipal User user,
 	                                                    @Valid @RequestBody UserChangePasswordRequestDTO request){
-	    authService.changePassword(userDetails.getUsername(), request);
+	    authService.changePassword(user.getEmail(), request);
 	    return ResponseEntity.ok(new BasicResponse(Messages.CHANGE_PASSWORD));
 	}
 	
@@ -93,9 +93,9 @@ public class AuthController {
 		    description = "Send a new verification code to the user’s email."
 	)
 	@PostMapping("/regenerate-code")
-	public ResponseEntity<BasicResponse> regenerateCode(@AuthenticationPrincipal UserDetails userDetails) {
+	public ResponseEntity<BasicResponse> regenerateCode(@AuthenticationPrincipal User user) {
 
-	    authService.reGenerateCode(userDetails.getUsername());
+	    authService.reGenerateCode(user.getEmail());
 	    return ResponseEntity.ok(new BasicResponse(Messages.CODE_SENT));
 	}
 

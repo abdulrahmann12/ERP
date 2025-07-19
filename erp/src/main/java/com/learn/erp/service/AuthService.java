@@ -4,6 +4,7 @@ import java.util.Random;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.annotation.Validated;
 
 import com.learn.erp.config.Messages;
 import com.learn.erp.dto.AdminCreateUserRequestDTO;
@@ -33,6 +34,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @Service
+@Validated
 @RequiredArgsConstructor
 public class AuthService {
 
@@ -127,9 +129,10 @@ public class AuthService {
 		}
 	}
 	
-	public User getUserByEmail(String email) {
-		return userRepository.findByEmail(email).
-				orElseThrow(()-> new UserNotFoundException());
+	public User getUserByEmail(String username) {
+	    return userRepository.findByUsername(username)
+	            .or(() -> userRepository.findByEmail(username))
+	            .orElseThrow(UserNotFoundException::new);
 	}
 	
 	public void logout(String token) {
@@ -151,13 +154,13 @@ public class AuthService {
 	    }
 
 	    final String refreshToken = authHeader.substring(7);
-	    final String userEmail = jwtService.extractUsername(refreshToken);
+	    final String username = jwtService.extractUsername(refreshToken);
 
-	    if (userEmail == null) {
+	    if (username == null) {
 	        throw new InvalidTokenException(Messages.COULD_NOT_EXTRACT_USER);
 	    }
 
-	    User user = getUserByEmail(userEmail);
+	    User user = getUserByEmail(username);
 
 	    if (!jwtService.validateToken(refreshToken, user)) {
 	        throw new InvalidTokenException(Messages.INVALID_REFRESH_TOKEN);
