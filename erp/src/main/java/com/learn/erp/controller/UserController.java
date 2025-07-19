@@ -134,6 +134,10 @@ public class UserController {
         return userService.getAllRoles();
     }
     
+	@Operation(
+			summary = "Get users by department",
+		    description = "Retrieve a paginated list of users that belong to a specific department (admin only)"
+	)
     @GetMapping("/department/{departmentId}/users")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Page<AdminViewUserResponseDTO>> getUsersByDepartment(
