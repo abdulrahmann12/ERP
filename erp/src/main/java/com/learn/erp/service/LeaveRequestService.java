@@ -7,8 +7,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
 import org.springframework.validation.annotation.Validated;
 
+import com.learn.erp.config.AfterCommitExecutor;
 import com.learn.erp.config.Messages;
 import com.learn.erp.dto.LeaveRequestCreateDTO;
 import com.learn.erp.dto.LeaveRequestResponseDTO;
@@ -27,6 +29,7 @@ import com.learn.erp.repository.AttendanceRepository;
 import com.learn.erp.repository.LeaveRequestRepository;
 import com.learn.erp.repository.UserRepository;
 
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
@@ -34,117 +37,109 @@ import lombok.RequiredArgsConstructor;
 @Validated
 @RequiredArgsConstructor
 public class LeaveRequestService {
-	
+
 	private final LeaveRequestRepository leaveRequestRepository;
 	private final LeaveRequestMapper leaveRequestMapper;
 	private final UserRepository userRepository;
 	private final AttendanceRepository attendanceRepository;
 	private final EmailService emailService;
-	
-	public UserLeaveRequestResponseDTO createLeaveRequest(Long userId, @Valid LeaveRequestCreateDTO dto) {
-		User user = userRepository.findById(userId)
-				.orElseThrow(() -> new UserNotFoundException());
-		
-	    if (dto.getStartDate().isAfter(dto.getEndDate())) {
-	        throw new IllegalArgumentException(Messages.ERROR_DATE);
-	    }
-	    
-		List<LeaveRequest> overlappingRequests = leaveRequestRepository
-		        .findByUser_IdAndStatus(userId, Status.PENDING)
-		        .stream()
-		        .filter(r ->
-		            !(dto.getEndDate().isBefore(r.getStartDate()) || dto.getStartDate().isAfter(r.getEndDate()))
-		        )
-		        .toList();
 
-	    if (!overlappingRequests.isEmpty()) {
-	        throw new DuplicateResourceException(Messages.USER_HAVE_PEMDING_REQUEST);
-	    }
-	    
+	@Transactional
+	public UserLeaveRequestResponseDTO createLeaveRequest(Long userId, @Valid LeaveRequestCreateDTO dto) {
+		User user = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException());
+
+		if (dto.getStartDate().isAfter(dto.getEndDate())) {
+			throw new IllegalArgumentException(Messages.ERROR_DATE);
+		}
+
+		List<LeaveRequest> overlappingRequests = leaveRequestRepository.findByUser_IdAndStatus(userId, Status.PENDING)
+				.stream().filter(r -> !(dto.getEndDate().isBefore(r.getStartDate())
+						|| dto.getStartDate().isAfter(r.getEndDate())))
+				.toList();
+
+		if (!overlappingRequests.isEmpty()) {
+			throw new DuplicateResourceException(Messages.USER_HAVE_PEMDING_REQUEST);
+		}
+
 		LeaveRequest request = leaveRequestMapper.toEntity(dto);
 		request.setUser(user);
 		request.setStatus(Status.PENDING);
-		
+
 		leaveRequestRepository.save(request);
 		return leaveRequestMapper.toUserDTO(request);
 	}
-	
+
 	public Page<LeaveRequestResponseDTO> getAllPendingRequests(int page, int size) {
-	    Pageable pageable = PageRequest.of(page, size);
-	    return leaveRequestRepository
-	            .findAllByStatus(Status.PENDING, pageable)
-	            .map(leaveRequestMapper::toHRDTO);
+		Pageable pageable = PageRequest.of(page, size);
+		return leaveRequestRepository.findAllByStatus(Status.PENDING, pageable).map(leaveRequestMapper::toHRDTO);
 	}
 
-	public Page<LeaveRequestResponseDTO> HRGetLeaveRequestsByUser(Long userId, int page, int size){
-		userRepository.findById(userId)
-		.orElseThrow(() -> new UserNotFoundException());
+	public Page<LeaveRequestResponseDTO> HRGetLeaveRequestsByUser(Long userId, int page, int size) {
+		userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException());
 		Pageable pageable = PageRequest.of(page, size);
 		return leaveRequestRepository.findByUser_Id(userId, pageable).map(leaveRequestMapper::toHRDTO);
 	}
-	
-	public Page<UserLeaveRequestResponseDTO> getLeaveRequestsByUser(Long userId, int page, int size){
-		userRepository.findById(userId)
-		.orElseThrow(() -> new UserNotFoundException());
+
+	public Page<UserLeaveRequestResponseDTO> getLeaveRequestsByUser(Long userId, int page, int size) {
+		userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException());
 		Pageable pageable = PageRequest.of(page, size);
 		return leaveRequestRepository.findByUser_Id(userId, pageable).map(leaveRequestMapper::toUserDTO);
 	}
 
-    public Page<LeaveRequestResponseDTO> getLeaveRequestsByStatus(Status status, int page, int size) {
-        Pageable pageable = PageRequest.of(page, size);
-        return leaveRequestRepository.findByStatus(status, pageable)
-                .map(leaveRequestMapper::toHRDTO);
-    }
-    
-    public void updateLeaveRequestStatus(Long requestId, @Valid LeaveRequestStatusUpdateDTO dto) {
-        LeaveRequest request = leaveRequestRepository.findById(requestId)
-            .orElseThrow(() -> new LeaveRequestNotFoundException());
+	public Page<LeaveRequestResponseDTO> getLeaveRequestsByStatus(Status status, int page, int size) {
+		Pageable pageable = PageRequest.of(page, size);
+		return leaveRequestRepository.findByStatus(status, pageable).map(leaveRequestMapper::toHRDTO);
+	}
 
-        Status oldStatus = request.getStatus(); 
-        Status newStatus = dto.getStatus();
+	@Transactional
+	public void updateLeaveRequestStatus(Long requestId, @Valid LeaveRequestStatusUpdateDTO dto) {
+		LeaveRequest request = leaveRequestRepository.findById(requestId)
+				.orElseThrow(() -> new LeaveRequestNotFoundException());
 
-        if (oldStatus != Status.PENDING) {
-            throw new IllegalArgumentException(Messages.LEAVE_REQUEST_STATUS_ALREADY_UPDATED);
-        }
+		Status oldStatus = request.getStatus();
+		Status newStatus = dto.getStatus();
 
-        request.setStatus(newStatus);
-        leaveRequestRepository.save(request);
+		if (oldStatus != Status.PENDING) {
+			throw new IllegalArgumentException(Messages.LEAVE_REQUEST_STATUS_ALREADY_UPDATED);
+		}
 
-        try {
-            if (newStatus == Status.APPROVED) {
-                createLeaveAttendances(request);
-                emailService.sendLeaveApproved(request.getUser(), request);
-            } else if (newStatus == Status.REJECTED) {
-                emailService.sendLeaveRejected(request.getUser(), request);
-            }
-        } catch (Exception e) {
-            throw new MailSendingException();
-        }
-    }
+		request.setStatus(newStatus);
+		leaveRequestRepository.save(request);
 
+		TransactionSynchronizationManager.registerSynchronization(new AfterCommitExecutor() {
 
-    private void createLeaveAttendances(LeaveRequest request) {
-        User user = request.getUser();
-        LocalDate start = request.getStartDate();
-        LocalDate end = request.getEndDate();
+			@Override
+			public void afterCommit() {
+				try {
+					if (newStatus == Status.APPROVED) {
+						createLeaveAttendances(request);
+						emailService.sendLeaveApproved(request.getUser(), request);
+					} else if (newStatus == Status.REJECTED) {
+						emailService.sendLeaveRejected(request.getUser(), request);
+					}
+				} catch (Exception e) {
+					throw new MailSendingException();
+				}
+			}
+		});
 
-        for (LocalDate date = start; !date.isAfter(end); date = date.plusDays(1)) {
-            boolean alreadyExists = attendanceRepository
-                    .findByUser_IdAndDate(user.getId(), date)
-                    .isPresent();
+	}
 
-            if (!alreadyExists) {
-                Attendance leaveAttendance = Attendance.builder()
-                        .user(user)
-                        .date(date)
-                        .status(Attendance.Status.ON_LEAVE)
-                        .checkIn(null)
-                        .checkOut(null)
-                        .workingHours(0)
-                        .build();
+	@Transactional
+	private void createLeaveAttendances(LeaveRequest request) {
+		User user = request.getUser();
+		LocalDate start = request.getStartDate();
+		LocalDate end = request.getEndDate();
 
-                attendanceRepository.save(leaveAttendance);
-            }
-        }
-    }
+		for (LocalDate date = start; !date.isAfter(end); date = date.plusDays(1)) {
+			boolean alreadyExists = attendanceRepository.findByUser_IdAndDate(user.getId(), date).isPresent();
+
+			if (!alreadyExists) {
+				Attendance leaveAttendance = Attendance.builder().user(user).date(date)
+						.status(Attendance.Status.ON_LEAVE).checkIn(null).checkOut(null).workingHours(0).build();
+
+				attendanceRepository.save(leaveAttendance);
+			}
+		}
+	}
 }

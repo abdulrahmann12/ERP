@@ -16,6 +16,7 @@ import com.learn.erp.mapper.CustomerMapper;
 import com.learn.erp.model.Customer;
 import com.learn.erp.repository.CustomerRepository;
 
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
@@ -27,6 +28,7 @@ public class CustomerService {
 	private final CustomerRepository customerRepository;
 	private final CustomerMapper customerMapper;
 	
+	@Transactional
 	public CustomerDTO createCustomer(@Valid CustomerCreateDTO dto) {
         customerRepository.findByEmail(dto.getEmail()).ifPresent(c -> {
             throw new DuplicateResourceException(Messages.CUSTOMER_ALREADY_EXISTS);
@@ -36,6 +38,7 @@ public class CustomerService {
         return customerMapper.toDTO(savedCustomer);
 	}
 	
+	@Transactional
 	public CustomerDTO updateCustomer(Long customerId, @Valid CustomerUpdateDTO dto) {
 		Customer existingCustomer = customerRepository.findById(customerId)
 				.orElseThrow(() -> new CustomerNotFoundException());
@@ -67,6 +70,7 @@ public class CustomerService {
 				.collect(Collectors.toList());
 	}
 
+	@Transactional
 	public void deleteCustomer(Long customerId) {
 		Customer customer = customerRepository.findById(customerId)
 				.orElseThrow(() -> new CustomerNotFoundException());

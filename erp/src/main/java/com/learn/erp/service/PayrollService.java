@@ -10,6 +10,7 @@ import com.learn.erp.mapper.PayrollMapper;
 import com.learn.erp.model.*;
 import com.learn.erp.repository.*;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.scheduling.annotation.Scheduled;
@@ -33,6 +34,7 @@ public class PayrollService {
 
     private static final BigDecimal DEDUCTION_PER_ABSENCE = new BigDecimal("100");
 
+    @Transactional
     public List<PayrollResponseDTO> generatePayrollForAllUsers(int month, int year) {
         List<User> users = userRepository.findAll();
 
@@ -72,6 +74,7 @@ public class PayrollService {
         }).collect(Collectors.toList());
     }
     
+    @Transactional
     public PayrollResponseDTO getPayrollForUser(Long userId, int month, int year) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException());
@@ -82,6 +85,7 @@ public class PayrollService {
         return payrollMapper.toDTO(payroll);
     }
 
+    @Transactional
     @Scheduled(cron = "0 0 1 1 * *") 
     public void autoGeneratePayrollMonthly() {
         LocalDate now = LocalDate.now().minusMonths(1);

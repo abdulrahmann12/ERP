@@ -19,6 +19,7 @@ import com.learn.erp.model.User;
 import com.learn.erp.repository.CategoryRepository;
 import com.learn.erp.repository.UserRepository;
 
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
@@ -31,6 +32,7 @@ public class CategoryService {
 	private final CategoryMapper categoryMapper;
 	private final UserRepository userRepository;
 	
+	@Transactional
 	public CategoryResponseDTO createCategory(Long userId, @Valid CategoryCreateDTO dto) {
 		User user = userRepository.findById(userId)
 				.orElseThrow(() -> new UserNotFoundException());
@@ -44,6 +46,7 @@ public class CategoryService {
 		return categoryMapper.toDTO(savedCategory);
 	}
 
+	@Transactional
 	public CategoryResponseDTO updateCategory(Long categoryId, @Valid CategoryUpdateDTO dto){
 		
 		Category existingCategory = categoryRepository.findById(categoryId)
@@ -67,9 +70,10 @@ public class CategoryService {
         return categoryRepository.findAll()
                 .stream()
                 .map(categoryMapper::toDTO)
-                .collect(Collectors.toList());	
-        }
+                .collect(Collectors.toList());	  
+	}
 	
+	@Transactional
 	public void deleteCategory(Long categoryId) {
 		Category category = categoryRepository.findById(categoryId)
                 .orElseThrow(() -> new CategoryNotFoundException());

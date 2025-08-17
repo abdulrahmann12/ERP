@@ -26,6 +26,7 @@ import com.learn.erp.model.User.Role;
 import com.learn.erp.repository.DepartmentRepository;
 import com.learn.erp.repository.UserRepository;
 
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
@@ -40,6 +41,7 @@ public class UserService {
 	private final AuthService authService;
 	private final DepartmentRepository departmentRepository;
 	
+	@Transactional
 	public AdminViewUserResponseDTO adminUpdateUser(Long userId, @Valid AdminUpdateUserRequestDTO dto) {
 		User user = userRepository.findById(userId)
 				.orElseThrow(() -> new UserNotFoundException());
@@ -58,6 +60,7 @@ public class UserService {
 		return userMapper.toAdminViewUserDTO(updatedUser);
 	}
 	
+	@Transactional
 	public ViewUserResponseDTO updateUser(Long userId, @Valid UserUpdateRequestDTO dto, String token) {
 		User existingUser = userRepository.findById(userId)
 				.orElseThrow(() -> new UserNotFoundException());
@@ -83,6 +86,7 @@ public class UserService {
 		return userMapper.toViewUserDTO(updatedUser);
 	}
 	
+	@Transactional
 	public void updateUserImage(Long userId, MultipartFile image) throws Exception{
 		User user = userRepository.findById(userId)
 				.orElseThrow(() -> new UserNotFoundException());
@@ -117,6 +121,7 @@ public class UserService {
 	    return usersPage.map(userMapper::toAdminViewUserDTO);
 	}
 	
+	@Transactional
 	public void deleteUser(Long userId) {
 		User user = userRepository.findById(userId)
 			    .orElseThrow(() -> new UserNotFoundException());

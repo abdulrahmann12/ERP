@@ -19,6 +19,7 @@ import com.learn.erp.model.User;
 import com.learn.erp.repository.SalaryRepository;
 import com.learn.erp.repository.UserRepository;
 
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
@@ -31,6 +32,7 @@ public class SalaryService {
 	private final SalaryMapper salaryMapper;
 	private final UserRepository userRepository;
 	
+	@Transactional
 	public SalaryResponseDTO createUserSalary(@Valid SalaryCreateDTO dto) {
 		User user = userRepository.findById(dto.getUserId())
 				.orElseThrow(() -> new UserNotFoundException());
@@ -46,6 +48,7 @@ public class SalaryService {
 		return salaryMapper.toDTO(savedSalary);
 	}
 	
+	@Transactional
 	public SalaryResponseDTO updateUserSalary(Long userId, @Valid SalaryUpdateDTO dto) {
 		userRepository.findById(userId)
 				.orElseThrow(() -> new UserNotFoundException());
