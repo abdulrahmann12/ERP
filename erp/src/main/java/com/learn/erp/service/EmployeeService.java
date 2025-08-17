@@ -4,8 +4,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
 import org.springframework.validation.annotation.Validated;
 
+import com.learn.erp.config.AfterCommitExecutor;
 import com.learn.erp.config.Messages;
 import com.learn.erp.dto.EmployeeDetailsCreateRequestDTO;
 import com.learn.erp.dto.EmployeeDetailsResponseDTO;
@@ -34,6 +36,7 @@ public class EmployeeService {
 	private final UserRepository userRepository;
 	private final EmailService emailService;
 	
+	@Transactional
 	public EmployeeDetailsResponseDTO addNewEmployee(@Valid EmployeeDetailsCreateRequestDTO dto) {
 		User user = userRepository.findById(dto.getUserId())
 			    .orElseThrow(() -> new UserNotFoundException());
@@ -44,11 +47,17 @@ public class EmployeeService {
 		EmployeeDetails newEmployee = employeeMapper.toEntity(dto);
 		newEmployee.setUser(user);
 		employeeDetailsRepository.save(newEmployee);
-		try {
-		emailService.sendEmployeeWelcomeEmail(user);	
-		}catch (Exception e) {
-			throw new MailSendingException();
-		}
+		
+		TransactionSynchronizationManager.registerSynchronization(new AfterCommitExecutor() {
+			@Override
+			public void afterCommit() {
+				try {
+				emailService.sendEmployeeWelcomeEmail(user);	
+				}catch (Exception e) {
+					throw new MailSendingException();
+				}
+		    }
+		});
 		return employeeMapper.toDTO(newEmployee);
 	}
 	

@@ -16,6 +16,7 @@ import com.learn.erp.mapper.SupplierMapper;
 import com.learn.erp.model.Supplier;
 import com.learn.erp.repository.SupplierRepository;
 
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
@@ -27,6 +28,7 @@ public class SupplierService {
     private final SupplierRepository supplierRepository;
     private final SupplierMapper supplierMapper;
 
+    @Transactional
     public SupplierDTO createSupplier(@Valid SupplierCreateDTO dto) {
         supplierRepository.findByEmail(dto.getEmail()).ifPresent(existing -> {
             throw new DuplicateResourceException(Messages.SUPPLIER_ALREADY_EXISTS);
@@ -37,6 +39,7 @@ public class SupplierService {
         return supplierMapper.toDTO(savedSupplier);
     }
 
+    @Transactional
     public SupplierDTO updateSupplier(Long supplierId, @Valid SupplierUpdateDTO dto) {
         Supplier existingSupplier = supplierRepository.findById(supplierId)
                 .orElseThrow(SupplierNotFoundException::new);
@@ -69,6 +72,7 @@ public class SupplierService {
                 .collect(Collectors.toList());
     }
 
+    @Transactional
     public void deleteSupplier(Long supplierId) {
         Supplier supplier = supplierRepository.findById(supplierId)
                 .orElseThrow(SupplierNotFoundException::new);

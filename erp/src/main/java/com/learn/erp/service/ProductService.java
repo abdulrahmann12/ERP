@@ -44,6 +44,7 @@ public class ProductService {
     private final UserRepository userRepository;
     private final ImageService imageService;
     
+    @Transactional
     public ProductResponseDTO createProduct(Long userId, @Valid ProductCreateDTO dto, MultipartFile image) throws Exception {
         Category category = categoryRepository.findById(dto.getCategoryId())
                 .orElseThrow(() -> new CategoryNotFoundException());

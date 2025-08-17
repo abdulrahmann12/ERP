@@ -16,6 +16,7 @@ import com.learn.erp.mapper.DepartmentMapper;
 import com.learn.erp.model.Department;
 import com.learn.erp.repository.DepartmentRepository;
 
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
@@ -27,6 +28,7 @@ public class DepartmentService {
 	private final DepartmentRepository departmentRepository;
 	private final DepartmentMapper departmentMapper;
 	
+	@Transactional
 	public DepartmentResponseDTO createDepartment(@Valid DepartmentCreateRequestDTO dto) {
 		Department department = departmentMapper.toEntity(dto);
 		departmentRepository.findByName(dto.getName())
@@ -36,6 +38,7 @@ public class DepartmentService {
 		return departmentMapper.toDTO(savedDepartment);
 	}
 	
+	@Transactional
 	public DepartmentResponseDTO updateDepartment(Long departmentId, @Valid DepartmentUpdateRequestDTO dto) {
 		Department department = departmentRepository.findById(departmentId)
 				 .orElseThrow(() -> new DepartmentNotFoundException());
