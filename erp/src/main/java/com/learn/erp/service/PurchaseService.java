@@ -4,6 +4,8 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -55,6 +57,17 @@ public class PurchaseService {
 	private final PdfGeneratorService pdfGeneratorService;
 
 	@Transactional
+	@CacheEvict(
+		    value = {
+		        "allPurchases",
+		        "purchasesBySupplier",
+		        "purchaseById",
+		        "purchasesByUser",
+		        "supplierTotalSales",
+		        "supplierPurchaseReport"
+		    },
+		    allEntries = true
+		)
 	public PurchaseResponseDTO createPurchase(Long userId, @Valid PurchaseCreateDTO dto) {
 		User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
 
@@ -101,11 +114,13 @@ public class PurchaseService {
 		return purchaseMapper.toDTO(saved);
 	}
 
+	@Cacheable(value = "allPurchases", key = "{#page, #size}")
 	public Page<PurchaseResponseDTO> getAllPurchases(int page, int size) {
 		Pageable pageable = PageRequest.of(page, size);
 		return purchaseRepository.findAll(pageable).map(purchaseMapper::toDTO);
 	}
 
+	@Cacheable(value = "purchasesBySupplier", key = "#supplierId")
 	public List<PurchaseResponseDTO> getPurchasesBySupplier(Long supplierId) {
 		Supplier supplier = supplierRepository.findById(supplierId).orElseThrow(SupplierNotFoundException::new);
 
@@ -113,11 +128,13 @@ public class PurchaseService {
 		return purchases.stream().map(purchaseMapper::toDTO).collect(Collectors.toList());
 	}
 
+	@Cacheable(value = "purchaseById", key = "#purchaseId")
 	public PurchaseResponseDTO getPurchaseById(Long purchaseId) {
 		Purchase purchase = purchaseRepository.findById(purchaseId).orElseThrow(PurchaseNotFoundException::new);
 		return purchaseMapper.toDTO(purchase);
 	}
 
+	@Cacheable(value = "purchasesByUser", key = "#userId")
 	public List<PurchaseResponseDTO> getPurchasesByUser(Long userId) {
 		User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
 

@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -86,6 +87,7 @@ public class AttendanceService {
 		return attendanceMapper.toDTO(attendance);
 	}
 
+	@Cacheable(value = "userAttendanceHistory", key = "#userId + '_' + #page + '_' + #size")
 	public Page<AttendanceResponseDTO> getUserAttendanceHistory(Long userId, int page, int size) {
 		userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException());
 		Pageable pageable = PageRequest.of(page, size);
@@ -93,12 +95,14 @@ public class AttendanceService {
 		return attendances.map(attendanceMapper::toDTO);
 	}
 
+	
 	public Page<AttendanceResponseDTO> getAllAttendance(int page, int size) {
 		Pageable pageable = PageRequest.of(page, size);
 		Page<Attendance> attendances = attendanceRepository.findAll(pageable);
 		return attendances.map(attendanceMapper::toDTO);
 	}
 
+	@Cacheable(value = "attendanceByDate", key = "#date")
 	public Page<AttendanceResponseDTO> getAttendanceByDate(LocalDate date, int page, int size) {
 		Pageable pageable = PageRequest.of(page, size);
 		Page<Attendance> attendances = attendanceRepository.findAllByDate(date, pageable);

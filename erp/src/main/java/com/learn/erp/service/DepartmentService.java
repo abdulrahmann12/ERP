@@ -3,6 +3,8 @@ package com.learn.erp.service;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
@@ -29,6 +31,7 @@ public class DepartmentService {
 	private final DepartmentMapper departmentMapper;
 	
 	@Transactional
+    @CacheEvict(value = {"departments", "allDepartments"}, allEntries = true)
 	public DepartmentResponseDTO createDepartment(@Valid DepartmentCreateRequestDTO dto) {
 		Department department = departmentMapper.toEntity(dto);
 		departmentRepository.findByName(dto.getName())
@@ -39,6 +42,7 @@ public class DepartmentService {
 	}
 	
 	@Transactional
+    @CacheEvict(value = {"departments", "allDepartments"}, allEntries = true)
 	public DepartmentResponseDTO updateDepartment(Long departmentId, @Valid DepartmentUpdateRequestDTO dto) {
 		Department department = departmentRepository.findById(departmentId)
 				 .orElseThrow(() -> new DepartmentNotFoundException());
@@ -54,6 +58,7 @@ public class DepartmentService {
 		return departmentMapper.toDTO(savedDepartment);
 	}
 	
+    @CacheEvict(value = {"departments", "allDepartments"}, allEntries = true)
 	public void deleteDepartment(Long departmentId) {
 		Department department = departmentRepository.findById(departmentId)
 				 .orElseThrow(() -> new DepartmentNotFoundException());
@@ -69,6 +74,7 @@ public class DepartmentService {
 		return departmentMapper.toDTO(department);
 	}
 	
+    @Cacheable(value = "allDepartments")
 	public List<DepartmentResponseDTO> getAllDepartments(){
 		return departmentRepository.findAll()
                 .stream()
