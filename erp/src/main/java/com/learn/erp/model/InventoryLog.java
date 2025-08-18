@@ -6,47 +6,43 @@ import lombok.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "inventory_logs")
+@Table(name = "inventory_logs", indexes = { @Index(name = "idx_inventory_product", columnList = "product_id"), })
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 public class InventoryLog {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long logId;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long logId;
 
-    @ManyToOne
-    @JoinColumn(name = "product_id", nullable = false)
-    private Product product;
+	@ManyToOne
+	@JoinColumn(name = "product_id", nullable = false)
+	private Product product;
 
-    private Integer quantityBefore;
+	private Integer quantityBefore;
 
-    private Integer quantityAfter;
+	private Integer quantityAfter;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "user_id", nullable = false)
-    private User createdBy;
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "user_id", nullable = false)
+	private User createdBy;
 
-    @Enumerated(EnumType.STRING)
-    private ActionType actionType;
+	@Enumerated(EnumType.STRING)
+	private ActionType actionType;
 
-    @Column(columnDefinition = "TEXT")
-    private String note;
+	@Column(columnDefinition = "TEXT")
+	private String note;
 
-    private LocalDateTime createdAt;
+	private LocalDateTime createdAt;
 
-    public enum ActionType {
-        PURCHASE,
-        SALE,
-        ADJUSTMENT,
-        RETURN,
-        INVENTORY_CORRECTION
-    }
-    
-    @PrePersist
-    protected void onCreate() {
-        this.createdAt = LocalDateTime.now();
-    }
+	public enum ActionType {
+		PURCHASE, SALE, ADJUSTMENT, RETURN, INVENTORY_CORRECTION
+	}
+
+	@PrePersist
+	protected void onCreate() {
+		this.createdAt = LocalDateTime.now();
+	}
 }
