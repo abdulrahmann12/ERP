@@ -3,6 +3,7 @@ package com.learn.erp.service;
 import java.io.IOException;
 import java.util.List;
 
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -45,6 +46,7 @@ public class ProductService {
     private final ImageService imageService;
     
     @Transactional
+    @CacheEvict(value = {"products", "allProducts", "productsByCategory"}, allEntries = true)
     public ProductResponseDTO createProduct(Long userId, @Valid ProductCreateDTO dto, MultipartFile image) throws Exception {
         Category category = categoryRepository.findById(dto.getCategoryId())
                 .orElseThrow(() -> new CategoryNotFoundException());
@@ -82,6 +84,7 @@ public class ProductService {
     }
     
     @Transactional
+    @CacheEvict(value = {"products", "allProducts", "productsByCategory"}, allEntries = true)
     public ProductResponseDTO updateProduct(Long userId, Long productId, @Valid ProductUpdateDTO dto, MultipartFile image) throws Exception {
         Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new ProductNotFoundException());
@@ -131,18 +134,21 @@ public class ProductService {
         return productMapper.toDTO(updated);
     }
     
+    @Cacheable(value = "allProducts", key = "{#page, #size}")
     public Page<ProductResponseDTO> getAllProducts(int page, int size) {
     	Pageable pageable = PageRequest.of(page, size);
         return productRepository.findAll(pageable)
                 .map(productMapper::toDTO);
     }
     
+    @Cacheable(value = "productById", key = "#id")
     public ProductResponseDTO getProduct(Long id) {
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new ProductNotFoundException());
         return productMapper.toDTO(product);
     }
     
+    @Cacheable(value = "productsByCategory", key = "{#categoryId, #page, #size}")
     public Page<ProductResponseDTO> getProductsByCategory(Long categoryId, int page, int size) {
     	categoryRepository.findById(categoryId)
     		.orElseThrow(() -> new CategoryNotFoundException());

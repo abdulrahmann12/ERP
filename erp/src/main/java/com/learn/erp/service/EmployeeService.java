@@ -1,5 +1,7 @@
 package com.learn.erp.service;
 
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -37,6 +39,7 @@ public class EmployeeService {
 	private final EmailService emailService;
 	
 	@Transactional
+	@CacheEvict(value = {"employees", "employee"}, allEntries = true) 
 	public EmployeeDetailsResponseDTO addNewEmployee(@Valid EmployeeDetailsCreateRequestDTO dto) {
 		User user = userRepository.findById(dto.getUserId())
 			    .orElseThrow(() -> new UserNotFoundException());
@@ -62,6 +65,7 @@ public class EmployeeService {
 	}
 	
 	@Transactional
+	@CacheEvict(value = {"employees", "employee"}, allEntries = true) 
 	public EmployeeDetailsResponseDTO updateEmployee(Long employeeId, @Valid EmployeeDetailsUpdateRequestDTO dto) {
 		EmployeeDetails existingEmployee = employeeDetailsRepository.findById(employeeId)
 			    .orElseThrow(() -> new EmployeeNotFoundException());
@@ -77,12 +81,14 @@ public class EmployeeService {
 		return employeeMapper.toDTO(updatedEmployee);
 	}
 	
+	@Cacheable(value = "employee", key = "#employeeId")
 	public EmployeeDetailsResponseDTO getEmployee(Long employeeId) {
 		EmployeeDetails employee = employeeDetailsRepository.findById(employeeId)
 			    .orElseThrow(() -> new EmployeeNotFoundException());
 		return employeeMapper.toDTO(employee);
 	}
 	
+	@Cacheable(value = "employees", key = "{#page, #size}")
 	public Page<EmployeeDetailsResponseDTO> getAllEmployees(int page, int size) {
 		Pageable pageable = PageRequest.of(page, size);
 		Page<EmployeeDetails> employeesPage = employeeDetailsRepository.findAll(pageable);

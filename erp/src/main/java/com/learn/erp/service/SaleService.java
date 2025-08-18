@@ -4,6 +4,8 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -54,6 +56,17 @@ public class SaleService {
 	private final PdfGeneratorService generatorService;
 
 	@Transactional
+	@CacheEvict(
+		    value = {
+		        "salesByUser",
+		        "salesByCustomer",
+		        "customerTotalSales",
+		        "allSales",
+		        "saleById",
+		        "customerSalesReport"
+		    },
+		    allEntries = true
+		)
 	public SaleResponseDTO createSale(Long userId, @Valid SaleCreateDTO dto) {
 		User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
 
@@ -117,6 +130,7 @@ public class SaleService {
 		return saleMapper.toDTO(savedSale);
 	}
 
+	@Cacheable(value = "salesByUser", key = "#userId")
 	public List<SaleResponseDTO> getSalesByUser(Long userId) {
 		User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
 
@@ -128,6 +142,7 @@ public class SaleService {
 		return sales.stream().map(saleMapper::toDTO).collect(Collectors.toList());
 	}
 
+	@Cacheable(value = "salesByCustomer", key = "#customerId")
 	public List<SaleResponseDTO> getSalesByCustomer(Long customerId) {
 		Customer customer = customerRepository.findById(customerId).orElseThrow(CustomerNotFoundException::new);
 
@@ -142,11 +157,13 @@ public class SaleService {
 		return sales.stream().map(Sale::getTotalAmount).reduce(BigDecimal.ZERO, BigDecimal::add);
 	}
 
+	@Cacheable(value = "allSales", key = "{#page, #size}")
 	public Page<SaleResponseDTO> getAllSales(int page, int size) {
 		Pageable pageable = PageRequest.of(page, size);
 		return saleRepository.findAll(pageable).map(saleMapper::toDTO);
 	}
 
+	@Cacheable(value = "saleById", key = "#saleId")
 	public SaleResponseDTO getSaleById(Long saleId) {
 		Sale sale = saleRepository.findById(saleId).orElseThrow(() -> new SaleNotFoundException());
 		return saleMapper.toDTO(sale);

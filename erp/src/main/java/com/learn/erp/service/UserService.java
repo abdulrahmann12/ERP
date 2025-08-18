@@ -3,6 +3,9 @@ package com.learn.erp.service;
 import java.util.Arrays;
 import java.util.List;
 
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -42,6 +45,7 @@ public class UserService {
 	private final DepartmentRepository departmentRepository;
 	
 	@Transactional
+	@CachePut(value = "users", key = "#userId")
 	public AdminViewUserResponseDTO adminUpdateUser(Long userId, @Valid AdminUpdateUserRequestDTO dto) {
 		User user = userRepository.findById(userId)
 				.orElseThrow(() -> new UserNotFoundException());
@@ -61,6 +65,7 @@ public class UserService {
 	}
 	
 	@Transactional
+	@CachePut(value = "users", key = "#userId")
 	public ViewUserResponseDTO updateUser(Long userId, @Valid UserUpdateRequestDTO dto, String token) {
 		User existingUser = userRepository.findById(userId)
 				.orElseThrow(() -> new UserNotFoundException());
@@ -87,6 +92,7 @@ public class UserService {
 	}
 	
 	@Transactional
+	@CachePut(value = "users", key = "#userId")
 	public void updateUserImage(Long userId, MultipartFile image) throws Exception{
 		User user = userRepository.findById(userId)
 				.orElseThrow(() -> new UserNotFoundException());
@@ -102,18 +108,21 @@ public class UserService {
 	    }
 	}
 	
+	@Cacheable(value = "users", key = "#userId")
 	public ViewUserResponseDTO findUserById(Long userId) {
 		User user = userRepository.findById(userId)
 				.orElseThrow(() -> new UserNotFoundException());
 			return userMapper.toViewUserDTO(user);	
 	}
 	
+	@Cacheable(value = "users", key = "#userId")
 	public AdminViewUserResponseDTO adminFindUserById(Long userId) {
 		User user = userRepository.findById(userId)
 				.orElseThrow(() -> new UserNotFoundException());
 			return userMapper.toAdminViewUserDTO(user);	
 	}
 	
+	@Cacheable(value = "users", key = "'page_' + #page + '_size_' + #size")
 	public Page<AdminViewUserResponseDTO> findAllUsers(int page, int size) {
 	    Pageable pageable = PageRequest.of(page, size);
 	    Page<User> usersPage = userRepository.findAll(pageable);
@@ -122,6 +131,7 @@ public class UserService {
 	}
 	
 	@Transactional
+	@CacheEvict(value = "users", key = "#userId")
 	public void deleteUser(Long userId) {
 		User user = userRepository.findById(userId)
 			    .orElseThrow(() -> new UserNotFoundException());
@@ -137,6 +147,7 @@ public class UserService {
 
 	}
 
+	@Cacheable(value = "roles")
 	public List<Role> getAllRoles(){
 		return Arrays.asList(Role.values());
 	}

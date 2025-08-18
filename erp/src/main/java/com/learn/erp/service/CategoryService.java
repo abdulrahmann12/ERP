@@ -4,6 +4,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
@@ -33,6 +36,7 @@ public class CategoryService {
 	private final UserRepository userRepository;
 	
 	@Transactional
+	@CacheEvict(value = {"categories"}, allEntries = true)
 	public CategoryResponseDTO createCategory(Long userId, @Valid CategoryCreateDTO dto) {
 		User user = userRepository.findById(userId)
 				.orElseThrow(() -> new UserNotFoundException());
@@ -47,6 +51,10 @@ public class CategoryService {
 	}
 
 	@Transactional
+	@Caching(evict = {
+			@CacheEvict(value = "categories", allEntries = true),
+			@CacheEvict(value = "category", key = "#categoryId")
+	})
 	public CategoryResponseDTO updateCategory(Long categoryId, @Valid CategoryUpdateDTO dto){
 		
 		Category existingCategory = categoryRepository.findById(categoryId)
@@ -66,6 +74,7 @@ public class CategoryService {
 		return categoryMapper.toDTO(savedCategory);
 	}
 	
+	@Cacheable(value = "categories")
 	public List<CategoryResponseDTO> getAllCategories(){
         return categoryRepository.findAll()
                 .stream()
@@ -74,12 +83,17 @@ public class CategoryService {
 	}
 	
 	@Transactional
+	@Caching(evict = {
+			@CacheEvict(value = "categories", allEntries = true),
+			@CacheEvict(value = "category", key = "#categoryId")
+	})
 	public void deleteCategory(Long categoryId) {
 		Category category = categoryRepository.findById(categoryId)
                 .orElseThrow(() -> new CategoryNotFoundException());
 		categoryRepository.delete(category);
 	}
 	
+	@Cacheable(value = "category", key = "#categoryId")
 	public CategoryResponseDTO getCategoryById(Long categoryId) {
 		Category category = categoryRepository.findById(categoryId)
                 .orElseThrow(() -> new CategoryNotFoundException());

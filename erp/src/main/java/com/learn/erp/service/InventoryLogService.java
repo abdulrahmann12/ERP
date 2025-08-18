@@ -5,6 +5,8 @@ import com.learn.erp.mapper.InventoryLogMapper;
 import com.learn.erp.repository.InventoryLogRepository;
 
 import lombok.RequiredArgsConstructor;
+
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,12 +19,14 @@ public class InventoryLogService {
     private final InventoryLogRepository inventoryLogRepository;
     private final InventoryLogMapper inventoryLogMapper;
 
+    @Cacheable(value = "inventoryLogs")
     public List<InventoryLogResponseDTO> getAllLogs() {
         return inventoryLogRepository.findAll().stream()
                 .map(inventoryLogMapper::toDTO)
                 .collect(Collectors.toList());
     }
 
+    @Cacheable(value = "inventoryLogsByProduct", key = "#productId")
     public List<InventoryLogResponseDTO> getLogsByProductId(Long productId) {
         return inventoryLogRepository.findByProduct_ProductId(productId).stream()
                 .map(inventoryLogMapper::toDTO)
