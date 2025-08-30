@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "payroll",uniqueConstraints = {
-	    @UniqueConstraint(columnNames = {"user_id", "month", "year"})
+	    @UniqueConstraint(columnNames = {"user_id", "payroll_month", "payroll_year"})
 	})
 @Data
 @NoArgsConstructor
@@ -25,8 +25,10 @@ public class Payroll {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
+    @Column(name = "payroll_month")
     private int month;
 
+    @Column(name = "payroll_year")
     private int year;
 
     private BigDecimal basicSalary;

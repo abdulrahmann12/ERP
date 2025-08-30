@@ -3,6 +3,7 @@ package com.learn.erp.model;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -18,7 +19,12 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "bonuses", indexes = { @Index(name = "idx_bonus_user_month_year", columnList = "user_id, month, year") })
+@Table(
+	    name = "bonuses",
+	    indexes = { 
+	        @Index(name = "idx_bonus_user_month_year", columnList = "user_id, bonus_month, bonus_year") 
+	    }
+	)
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -37,8 +43,10 @@ public class Bonus {
 
 	private String reason;
 
+	@Column(name = "bonus_month")
 	private int month;
 
+	@Column(name = "bonus_year")
 	private int year;
 
 	private LocalDateTime createdAt;
