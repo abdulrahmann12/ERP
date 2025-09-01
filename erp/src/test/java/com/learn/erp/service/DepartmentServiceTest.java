@@ -32,77 +32,107 @@ public class DepartmentServiceTest {
 
 	@Mock
 	private DepartmentMapper departmentMapper;
-	
-    @InjectMocks
-    private DepartmentService departmentService;
-        
-    private DepartmentCreateRequestDTO requestDTO;
-    private Department department;
-    private DepartmentResponseDTO responseDTO;
-    
-    @BeforeEach
-    public void setUp() {
-        requestDTO = new DepartmentCreateRequestDTO();
-        requestDTO.setName("IT");
-        requestDTO.setDescription("Information Technology");
 
-        department = new Department();
-        department.setDepartmentId(1L);
-        department.setName("IT");
-        department.setDescription("Information Technology");
+	@InjectMocks
+	private DepartmentService departmentService;
 
-        responseDTO = new DepartmentResponseDTO();
-        responseDTO.setDepartmentId(1L);
-        responseDTO.setName("IT");
-        responseDTO.setDescription("Information Technology");
-    }
-    
-    @Test
-    @DisplayName("Create Department")
-    public void createDepartment_ShouldReturnResponseDTO_WhenSuccess() {
+	private DepartmentCreateRequestDTO requestDTO;
+	private Department department;
+	private DepartmentResponseDTO responseDTO;
 
-    	// Arrange
-    	when(departmentRepository.save(department)).thenReturn(department);
-    	when(departmentMapper.toEntity(requestDTO)).thenReturn(department);
-    	when(departmentMapper.toDTO(department)).thenReturn(responseDTO);
-    	
-    	// Act
-    	DepartmentResponseDTO result = departmentService.createDepartment(requestDTO);
-    	
-    	// Assert
-    	assertNotNull(result);
-    	assertEquals(responseDTO.getDepartmentId(), result.getDepartmentId());
-    	assertEquals(responseDTO.getName(), result.getName());
-    	assertEquals(responseDTO.getDescription(), result.getDescription());
-    	
-    	// Verify
-    	verify(departmentMapper, times(1)).toEntity(requestDTO);
-    	verify(departmentMapper, times(1)).toDTO(department);
-    	verify(departmentRepository, times(1)).save(department);
-    }   
-    
-    
-    @Test
-    void testCreateDepartment_DepartmentAlreadyExists() {
-        // Arrange
-        DepartmentCreateRequestDTO dto = new DepartmentCreateRequestDTO();
-        dto.setName("HR");
-        dto.setDescription("Human Resources");
+	@BeforeEach
+	public void setUp() {
+		requestDTO = new DepartmentCreateRequestDTO();
+		requestDTO.setName("IT");
+		requestDTO.setDescription("Information Technology");
 
-        Department existingDepartment = new Department();
-        existingDepartment.setDepartmentId(1L);
-        existingDepartment.setName("HR");
+		department = new Department();
+		department.setDepartmentId(1L);
+		department.setName("IT");
+		department.setDescription("Information Technology");
 
-        when(departmentRepository.findByName("HR"))
-                .thenReturn(Optional.of(existingDepartment));
+		responseDTO = new DepartmentResponseDTO();
+		responseDTO.setDepartmentId(1L);
+		responseDTO.setName("IT");
+		responseDTO.setDescription("Information Technology");
+	}
 
-        // Act & Assert
-        assertThrows(DepartmentAlreadyExistsException.class, () -> {
-            departmentService.createDepartment(dto);
-        });
+	@Test
+	@DisplayName("Create Department")
+	public void createDepartment_ShouldReturnResponseDTO_WhenSuccess() {
 
-        // Verify
-        verify(departmentRepository, times(0)).save(existingDepartment);
-    }
+		// Arrange
+		when(departmentRepository.save(department)).thenReturn(department);
+		when(departmentMapper.toEntity(requestDTO)).thenReturn(department);
+		when(departmentMapper.toDTO(department)).thenReturn(responseDTO);
+
+		// Act
+		DepartmentResponseDTO result = departmentService.createDepartment(requestDTO);
+
+		// Assert
+		assertNotNull(result);
+		assertEquals(responseDTO.getDepartmentId(), result.getDepartmentId());
+		assertEquals(responseDTO.getName(), result.getName());
+		assertEquals(responseDTO.getDescription(), result.getDescription());
+
+		// Verify
+		verify(departmentMapper, times(1)).toEntity(requestDTO);
+		verify(departmentMapper, times(1)).toDTO(department);
+		verify(departmentRepository, times(1)).save(department);
+	}
+
+	@Test
+	void testCreateDepartment_DepartmentAlreadyExists() {
+		// Arrange
+		DepartmentCreateRequestDTO dto = new DepartmentCreateRequestDTO();
+		dto.setName("HR");
+		dto.setDescription("Human Resources");
+
+		Department existingDepartment = new Department();
+		existingDepartment.setDepartmentId(1L);
+		existingDepartment.setName("HR");
+
+		when(departmentRepository.findByName("HR")).thenReturn(Optional.of(existingDepartment));
+
+		// Act & Assert
+		assertThrows(DepartmentAlreadyExistsException.class, () -> {
+			departmentService.createDepartment(dto);
+		});
+
+		// Verify
+		verify(departmentRepository, times(0)).save(existingDepartment);
+	}
+
+	@Test
+	@DisplayName("Get Department By Id - Success")
+	public void getDepartmentById_ShouldReturnResponseDTO_WhenDepartmentExists() {
+		// Arrange
+		Long departmentId = 1L;
+		when(departmentRepository.findById(departmentId)).thenReturn(Optional.of(department));
+		when(departmentMapper.toDTO(department)).thenReturn(responseDTO);
+
+		// Act
+		DepartmentResponseDTO result = departmentService.getDepartment(departmentId);
+
+		// Assert
+		assertNotNull(result);
+		assertEquals(responseDTO.getDepartmentId(), result.getDepartmentId());
+		assertEquals(responseDTO.getName(), result.getName());
+		assertEquals(responseDTO.getDescription(), result.getDescription());
+
+	}
+
+	@Test
+	@DisplayName("Get Department By Id - Not Found")
+	public void getDepartmentById_ShouldThrowException_WhenDepartmentNotFound() {
+		Long departmentId = 2L;
+		when(departmentRepository.findById(departmentId)).thenReturn(Optional.empty());
+
+		RuntimeException exception = assertThrows(RuntimeException.class,
+				() -> departmentService.getDepartment(departmentId));
+
+		assertEquals("Department not found", exception.getMessage());
+
+	}
 
 }
