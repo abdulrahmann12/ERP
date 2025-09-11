@@ -118,4 +118,14 @@ public class AuthController {
 			authService.resetPassword(resetPasswodDTO);
 			return ResponseEntity.ok(new BasicResponse(Messages.CHANGE_PASSWORD));
 	}
+	
+	@Operation(
+			summary = "User login",
+		    description = "Authenticate user using username/email and password and return access and refresh tokens."
+	)
+	@PostMapping("/google")
+	public ResponseEntity<?> loginWithGoogle(){
+
+		return ResponseEntity.ok(Messages.LOGIN_SUCCESS);
+	}
 }

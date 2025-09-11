@@ -9,6 +9,7 @@ public class Messages {
 	
 	// ==================== Auth Messages ==================== 
     public static final String LOGIN_SUCCESS = "Login successfully";
+    public static final String GOOGLE_LOGIN_SUCCESS = "Google login successful!";
     public static final String CREATE_NEW_USER = "New user created successfully";
     public static final String LOGOUT_SUCCESS = "Logged out successfully";
     public static final String ALREADY_LOGGED_OUT = "You are already logged out";
