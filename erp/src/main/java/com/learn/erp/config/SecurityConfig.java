@@ -30,6 +30,8 @@ public class SecurityConfig {
 	private final JwtService jwtService;
 	private final UserRepository userRepository;
 	private final TokenRepository tokenRepository;
+    private final OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler;
+
 
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
@@ -43,11 +45,14 @@ public class SecurityConfig {
 	                .requestMatchers("/api/auth/**").permitAll()
 					.requestMatchers(HttpMethod.GET,"/api/products/**").permitAll()
 					.requestMatchers("/api/auth/change-password").authenticated()
+					.requestMatchers("/api/auth/google").permitAll()
 					.requestMatchers("/api/auth/refresh-token").permitAll()
 					.anyRequest().authenticated())
-			.sessionManagement(session -> session
-					.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-			.addFilterBefore(jwtAuthenticationFilter(),UsernamePasswordAuthenticationFilter.class);
+		    .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+            .oauth2Login(oauth2 -> oauth2
+                    .successHandler(oAuth2AuthenticationSuccessHandler) 
+                )
+		    .addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
 		return http.build();
 	}
 	
@@ -67,5 +72,4 @@ public class SecurityConfig {
 	public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception{
 		return authenticationConfiguration.getAuthenticationManager();
 	}
-	
 }

@@ -3,6 +3,7 @@ package com.learn.erp.service;
 import java.util.Random;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
 import org.springframework.validation.annotation.Validated;
@@ -26,6 +27,7 @@ import com.learn.erp.exception.UsernameAlreadyExistsException;
 import com.learn.erp.mapper.UserMapper;
 import com.learn.erp.model.Department;
 import com.learn.erp.model.User;
+import com.learn.erp.model.User.Role;
 import com.learn.erp.repository.DepartmentRepository;
 import com.learn.erp.repository.TokenRepository;
 import com.learn.erp.repository.UserRepository;
@@ -211,5 +213,36 @@ public class AuthService {
 		Random random = new Random();
 		int code = 1000 + random.nextInt(90000);
 		return String.valueOf(code);
+	}
+	
+	@Transactional
+	public AuthResponse loginOrRegisterOAuthUser(OAuth2User oAuth2User) {
+	    String email = oAuth2User.getAttribute("email");
+	    String name = oAuth2User.getAttribute("name");
+
+	    User user = userRepository.findByEmail(email).orElse(null);
+
+		Department department = departmentRepository.findById(2l)
+				.orElseThrow(DepartmentNotFoundException::new);
+		
+	    if (user == null) {
+	        user = new User();
+	        user.setEmail(email);
+	        user.setFullName(name);
+	        user.setUsername(email.split("@")[0]);
+	        user.setActive(true);
+	        user.setDepartment(department);
+	        user.setRole(Role.EMPLOYEE);
+	        
+	        user.setPassword(passwordEncoder.encode(email));
+	        user = userRepository.save(user);
+	    }
+
+	    String accessToken = jwtService.generateToken(user);
+	    String refreshToken = jwtService.generateRefreshToken(user);
+	    jwtService.revokeAllUserTokens(user);
+	    jwtService.saveUserToken(user, accessToken);
+
+	    return new AuthResponse(accessToken, refreshToken);
 	}
 }
