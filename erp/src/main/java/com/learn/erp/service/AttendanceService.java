@@ -41,7 +41,7 @@ public class AttendanceService {
 	private final UserRepository userRepository;
 	private final AttendanceMapper attendanceMapper;
 	private final EmailService emailService;
-
+ 
 	@Transactional
 	public AttendanceResponseDTO checkIn(Long userId) {
 		User user = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException());
