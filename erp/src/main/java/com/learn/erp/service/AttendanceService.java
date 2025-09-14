@@ -6,21 +6,21 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.support.TransactionSynchronizationManager;
 import org.springframework.validation.annotation.Validated;
 
-import com.learn.erp.config.AfterCommitExecutor;
+import static com.learn.erp.rabbitconfig.RabbitConstants.*;
 import com.learn.erp.config.Messages;
 import com.learn.erp.dto.AttendanceResponseDTO;
+import com.learn.erp.events.UserAbsenceEvent;
 import com.learn.erp.exception.AlreadyCheckedOutException;
 import com.learn.erp.exception.DuplicateResourceException;
-import com.learn.erp.exception.MailSendingException;
 import com.learn.erp.exception.UserNotFoundException;
 import com.learn.erp.mapper.AttendanceMapper;
 import com.learn.erp.model.Attendance;
@@ -40,8 +40,8 @@ public class AttendanceService {
 	private final AttendanceRepository attendanceRepository;
 	private final UserRepository userRepository;
 	private final AttendanceMapper attendanceMapper;
-	private final EmailService emailService;
- 
+	private final RabbitTemplate rabbitTemplate;
+
 	@Transactional
 	public AttendanceResponseDTO checkIn(Long userId) {
 		User user = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException());
@@ -95,7 +95,6 @@ public class AttendanceService {
 		return attendances.map(attendanceMapper::toDTO);
 	}
 
-	
 	public Page<AttendanceResponseDTO> getAllAttendance(int page, int size) {
 		Pageable pageable = PageRequest.of(page, size);
 		Page<Attendance> attendances = attendanceRepository.findAll(pageable);
@@ -145,16 +144,8 @@ public class AttendanceService {
 
 				absences.add(absent);
 
-				TransactionSynchronizationManager.registerSynchronization(new AfterCommitExecutor() {
-					@Override
-					public void afterCommit() {
-						try {
-							emailService.sendAbsenceAlert(user);
-						} catch (Exception e) {
-							throw new MailSendingException();
-						}
-					}
-				});
+				UserAbsenceEvent event = new UserAbsenceEvent(user.getEmail(), user.getUsername());
+				rabbitTemplate.convertAndSend(ATTENDANCE_EXCHANGE, ATTENDANCE_MARK_ABSENCES_KEY, event);
 
 			}
 		}

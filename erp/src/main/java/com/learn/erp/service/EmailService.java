@@ -16,6 +16,7 @@ import org.thymeleaf.context.Context;
 
 import com.learn.erp.events.PasswordCodeRegeneratedEvent;
 import com.learn.erp.events.PasswordResetRequestedEvent;
+import com.learn.erp.events.UserAbsenceEvent;
 import com.learn.erp.events.UserRegisteredEvent;
 import com.learn.erp.model.Customer;
 import com.learn.erp.model.LeaveRequest;
@@ -58,7 +59,7 @@ public class EmailService {
         );
     }
 
-    public void sendAbsenceAlert(User user) {
+    public void sendAbsenceAlert(UserAbsenceEvent user) {
         sendEmail(
             user.getEmail(),
             "Absence Alert - Missed Check-in",

@@ -25,7 +25,7 @@ public class AuthRabbitConfig {
 	}
 	
 	@Bean
-	public Queue RegenerateCodeQueue() {
+	public Queue regenerateCodeQueue() {
 	    return new Queue(PASSWORD_CODE_REGENERATED_QUEUE, true);
 	}
 
@@ -40,7 +40,7 @@ public class AuthRabbitConfig {
 	}
 
 	@Bean
-	public Binding RegenerateCodeBinding(TopicExchange authExchange, Queue RegenerateCodeQueue) {
-	    return BindingBuilder.bind(RegenerateCodeQueue).to(authExchange).with(PASSWORD_CODE_REGENERATED_KEY);
+	public Binding regenerateCodeBinding(TopicExchange authExchange, Queue regenerateCodeQueue) {
+	    return BindingBuilder.bind(regenerateCodeQueue).to(authExchange).with(PASSWORD_CODE_REGENERATED_KEY);
 	}
 }
