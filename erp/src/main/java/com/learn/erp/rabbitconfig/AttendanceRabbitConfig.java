@@ -15,12 +15,12 @@ public class AttendanceRabbitConfig {
 	}
 
 	@Bean
-	public Queue markAbsencesAndNotify() {
+	public Queue markAbsencesAndNotifyQueue() {
 	    return new Queue(ATTENDANCE_MARK_ABSENCES_QUEUE, true);
 	}
 
 	@Bean
-	public Binding markAbsencesAndNotifyBinding(TopicExchange attendanceExchange, Queue markAbsencesAndNotify) {
-	    return BindingBuilder.bind(markAbsencesAndNotify).to(attendanceExchange).with(ATTENDANCE_MARK_ABSENCES_KEY);
+	public Binding markAbsencesAndNotifyBinding(TopicExchange attendanceExchange, Queue markAbsencesAndNotifyQueue) {
+	    return BindingBuilder.bind(markAbsencesAndNotifyQueue).to(attendanceExchange).with(ATTENDANCE_MARK_ABSENCES_KEY);
 	}
 }

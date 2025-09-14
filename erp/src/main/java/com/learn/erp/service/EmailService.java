@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 
+import com.learn.erp.events.AddEmployeeEvent;
 import com.learn.erp.events.PasswordCodeRegeneratedEvent;
 import com.learn.erp.events.PasswordResetRequestedEvent;
 import com.learn.erp.events.UserAbsenceEvent;
@@ -48,7 +49,7 @@ public class EmailService {
         );
     }
     
-    public void sendEmployeeWelcomeEmail(User user) {
+    public void sendEmployeeWelcomeEmail(AddEmployeeEvent user) {
         sendEmail(
             user.getEmail(),
             "You're officially part of the team!",

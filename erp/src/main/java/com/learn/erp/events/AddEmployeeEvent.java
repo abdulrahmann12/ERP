@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserAbsenceEvent {
+public class AddEmployeeEvent {
 	private String email;
 	private String username;
 }
