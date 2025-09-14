@@ -15,7 +15,6 @@ public class LoggingAspect {
 	
 	private static final Logger logger = LoggerFactory.getLogger(LoggingAspect.class);
 
-	
     @Pointcut("execution(* com.learn.erp.service..*(..))")
     public void serviceMethods() {}
 	
