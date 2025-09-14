@@ -1,14 +1,14 @@
 package com.learn.erp.service;
 
+import java.time.LocalDateTime;
 import java.util.Random;
 
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.support.TransactionSynchronizationManager;
 import org.springframework.validation.annotation.Validated;
 
-import com.learn.erp.config.AfterCommitExecutor;
 import com.learn.erp.config.Messages;
 import com.learn.erp.dto.AdminCreateUserRequestDTO;
 import com.learn.erp.dto.AdminViewUserResponseDTO;
@@ -16,12 +16,14 @@ import com.learn.erp.dto.AuthResponse;
 import com.learn.erp.dto.LoginRequestDTO;
 import com.learn.erp.dto.ResetPasswordRequestDTO;
 import com.learn.erp.dto.UserChangePasswordRequestDTO;
+import com.learn.erp.events.PasswordCodeRegeneratedEvent;
+import com.learn.erp.events.PasswordResetRequestedEvent;
+import com.learn.erp.events.UserRegisteredEvent;
 import com.learn.erp.exception.DepartmentNotFoundException;
 import com.learn.erp.exception.EmailAlreadyExistsException;
 import com.learn.erp.exception.InvalidCurrentPasswordException;
 import com.learn.erp.exception.InvalidResetCodeException;
 import com.learn.erp.exception.InvalidTokenException;
-import com.learn.erp.exception.MailSendingException;
 import com.learn.erp.exception.UserNotFoundException;
 import com.learn.erp.exception.UsernameAlreadyExistsException;
 import com.learn.erp.mapper.UserMapper;
@@ -31,6 +33,7 @@ import com.learn.erp.model.User.Role;
 import com.learn.erp.repository.DepartmentRepository;
 import com.learn.erp.repository.TokenRepository;
 import com.learn.erp.repository.UserRepository;
+import static com.learn.erp.rabbitconfig.RabbitConstants.*;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
@@ -47,8 +50,8 @@ public class AuthService {
 	private final UserMapper userMapper;
 	private final TokenRepository tokenRepository;
 	private final JwtService jwtService;
-	private final EmailService emailService;
 	private final DepartmentRepository departmentRepository;
+	private final RabbitTemplate rabbitTemplate;
 
 	@Transactional
 	public AuthResponse login(LoginRequestDTO loginRequest) {
@@ -82,17 +85,9 @@ public class AuthService {
 		user.setDepartment(department);
 		User savedUser = userRepository.save(user);
 
-		TransactionSynchronizationManager.registerSynchronization(new AfterCommitExecutor() {
-
-			@Override
-			public void afterCommit() {
-				try {
-					emailService.sendWelcomeEmail(user);
-				} catch (Exception e) {
-					throw new MailSendingException();
-				}
-			}
-		});
+		UserRegisteredEvent event = new UserRegisteredEvent(savedUser.getId(), savedUser.getEmail(),
+				savedUser.getFullName(), LocalDateTime.now());
+		rabbitTemplate.convertAndSend(AUTH_EXCHANGE, USER_REGISTERED_KEY, event);
 
 		return userMapper.toAdminViewUserDTO(savedUser);
 	}
@@ -103,16 +98,9 @@ public class AuthService {
 		user.setRequestCode(resetCode);
 		userRepository.save(user);
 
-		TransactionSynchronizationManager.registerSynchronization(new AfterCommitExecutor() {
-			@Override
-			public void afterCommit() {
-				try {
-					emailService.sendCode(user, Messages.RESET_PASSWORD);
-				} catch (Exception e) {
-					throw new MailSendingException();
-				}
-			}
-		});
+		PasswordResetRequestedEvent event = new PasswordResetRequestedEvent(user.getId(), user.getUsername(),
+				user.getEmail(), resetCode, LocalDateTime.now());
+		rabbitTemplate.convertAndSend(AUTH_EXCHANGE, PASSWORD_RESET_KEY, event);
 
 	}
 
@@ -125,6 +113,7 @@ public class AuthService {
 		user.setPassword(passwordEncoder.encode(resetPasswodDTO.getNewPassword()));
 		user.setRequestCode(null);
 		userRepository.save(user);
+
 	}
 
 	public void changePassword(String email, UserChangePasswordRequestDTO request) {
@@ -141,16 +130,9 @@ public class AuthService {
 		String resetCode = generateConfirmationCode();
 		user.setRequestCode(resetCode);
 		userRepository.save(user);
-		TransactionSynchronizationManager.registerSynchronization(new AfterCommitExecutor() {
-			@Override
-			public void afterCommit() {
-				try {
-					emailService.sendCode(user, Messages.RESEND_CODE);
-				} catch (Exception e) {
-					throw new MailSendingException();
-				}
-			}
-		});
+
+		rabbitTemplate.convertAndSend(AUTH_EXCHANGE, PASSWORD_CODE_REGENERATED_KEY,
+				new PasswordCodeRegeneratedEvent(user.getEmail(), user.getUsernameField(), resetCode));
 
 	}
 
@@ -214,35 +196,34 @@ public class AuthService {
 		int code = 1000 + random.nextInt(90000);
 		return String.valueOf(code);
 	}
-	
+
 	@Transactional
 	public AuthResponse loginOrRegisterOAuthUser(OAuth2User oAuth2User) {
-	    String email = oAuth2User.getAttribute("email");
-	    String name = oAuth2User.getAttribute("name");
+		String email = oAuth2User.getAttribute("email");
+		String name = oAuth2User.getAttribute("name");
 
-	    User user = userRepository.findByEmail(email).orElse(null);
+		User user = userRepository.findByEmail(email).orElse(null);
 
-		Department department = departmentRepository.findById(2l)
-				.orElseThrow(DepartmentNotFoundException::new);
-		
-	    if (user == null) {
-	        user = new User();
-	        user.setEmail(email);
-	        user.setFullName(name);
-	        user.setUsername(email.split("@")[0]);
-	        user.setActive(true);
-	        user.setDepartment(department);
-	        user.setRole(Role.EMPLOYEE);
-	        
-	        user.setPassword(passwordEncoder.encode(email));
-	        user = userRepository.save(user);
-	    }
+		Department department = departmentRepository.findById(2l).orElseThrow(DepartmentNotFoundException::new);
 
-	    String accessToken = jwtService.generateToken(user);
-	    String refreshToken = jwtService.generateRefreshToken(user);
-	    jwtService.revokeAllUserTokens(user);
-	    jwtService.saveUserToken(user, accessToken);
+		if (user == null) {
+			user = new User();
+			user.setEmail(email);
+			user.setFullName(name);
+			user.setUsername(email.split("@")[0]);
+			user.setActive(true);
+			user.setDepartment(department);
+			user.setRole(Role.EMPLOYEE);
 
-	    return new AuthResponse(accessToken, refreshToken);
+			user.setPassword(passwordEncoder.encode(email));
+			user = userRepository.save(user);
+		}
+
+		String accessToken = jwtService.generateToken(user);
+		String refreshToken = jwtService.generateRefreshToken(user);
+		jwtService.revokeAllUserTokens(user);
+		jwtService.saveUserToken(user, accessToken);
+
+		return new AuthResponse(accessToken, refreshToken);
 	}
 }

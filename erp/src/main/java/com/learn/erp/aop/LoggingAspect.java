@@ -19,27 +19,30 @@ public class LoggingAspect {
     @Pointcut("execution(* com.learn.erp.service..*(..))")
     public void serviceMethods() {}
 	
-	@Around("serviceMethods()")
-	public Object logExecutionTime(ProceedingJoinPoint joinPoint) throws Throwable {
-	    long start = System.currentTimeMillis();
+    @Around("serviceMethods()")
+    public Object logExecutionTime(ProceedingJoinPoint joinPoint) throws Throwable {
+        long start = System.currentTimeMillis();
 
-	    try {
-	        Object result = joinPoint.proceed(); 
-	        long end = System.currentTimeMillis();
+        try {
+            Object result = joinPoint.proceed();
+            long end = System.currentTimeMillis();
 
-	        logger.info("⏱️ Method: {} executed in {} ms | Result: {}", 
-	                    joinPoint.getSignature().getName(), 
-	                    (end - start), 
-	                    result);
-	        return result;
-	    } catch (Exception ex) {
-	        long end = System.currentTimeMillis();
-	        
-	        logger.error("❌ Exception in method: {} after {} ms | Message: {}", 
-	                     joinPoint.getSignature().getName(), 
-	                     (end - start), 
-	                     ex.getMessage(), ex);
-	        throw ex; 
-	    }
-	}
+            logger.info("⏱️ Method: {} executed in {} ms | Result: {}",
+                        joinPoint.getSignature().getName(),
+                        (end - start),
+                        result);
+            return result;
+        } catch (Exception ex) {
+            long end = System.currentTimeMillis();
+
+            // مختصر بدون stack trace
+            logger.error("❌ Exception in method: {} after {} ms | Message: {}",
+                         joinPoint.getSignature().getName(),
+                         (end - start),
+                         ex.getMessage());
+
+            throw ex;
+        }
+    }
+
 }

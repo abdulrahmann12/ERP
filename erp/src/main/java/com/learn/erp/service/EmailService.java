@@ -14,6 +14,9 @@ import org.springframework.stereotype.Service;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 
+import com.learn.erp.events.PasswordCodeRegeneratedEvent;
+import com.learn.erp.events.PasswordResetRequestedEvent;
+import com.learn.erp.events.UserRegisteredEvent;
 import com.learn.erp.model.Customer;
 import com.learn.erp.model.LeaveRequest;
 import com.learn.erp.model.Product;
@@ -33,13 +36,13 @@ public class EmailService {
     private String fromEmail;
    
    
-    public void sendWelcomeEmail(User user) {
+    public void sendWelcomeEmail(UserRegisteredEvent user) {
         sendEmail(
             user.getEmail(),
             "Welcome to ERP System!",
             "emails/welcome", 
             new ContextBuilder()
-                .add("username", user.getUsername()) 
+                .add("username", user.getFullName()) 
                 .build()
         );
     }
@@ -159,14 +162,26 @@ public class EmailService {
         );
     }
     
-    public void sendCode(User user, String subject) {
+    public void sendCode(PasswordResetRequestedEvent user, String subject) {
         sendEmail(
                 user.getEmail(),
                 subject,
                 "emails/send-code", // template path inside /resources/templates
                 new ContextBuilder()
-                        .add("name", user.getFullName())
-                        .add("code", user.getRequestCode())
+                        .add("name", user.getUsername())
+                        .add("code", user.getCode())
+                        .build()
+        );
+    }
+    
+    public void sendRegenerateCode(PasswordCodeRegeneratedEvent user, String subject) {
+        sendEmail(
+                user.getEmail(),
+                subject,
+                "emails/send-code", // template path inside /resources/templates
+                new ContextBuilder()
+                        .add("name", user.getUsername())
+                        .add("code", user.getCode())
                         .build()
         );
     }
