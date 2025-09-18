@@ -1,10 +1,12 @@
 # Library Management System (Spring Boot)
 
 ## Project Overview
-The Library Management System is a comprehensive solution for managing a library's operations.  
-It allows the administration of books, publishers, and members, with advanced features such as role-based access control, user activity logging, automated email notifications, and integration with external services like RabbitMQ and cloud storage for images.  
+The Library Management System is a comprehensive solution designed to manage library members and their book borrowings.
+It automates processes such as tracking borrowed books, sending overdue email reminders, and managing member activities.
 
-The system ensures smooth library management, keeps track of all user activities, and automates processes such as overdue book reminders.
+The system includes role-based access control, user activity logging, automated notifications, and integration with external services like RabbitMQ for background tasks and cloud storage for images.
+
+It ensures smooth member management, keeps track of all borrowing activities, and automates communication with members to improve library operations.
 
 ---
 
