@@ -19,7 +19,9 @@ It ensures smooth member management, keeps track of all borrowing activities, an
 
 ### Member Management
 - Create, update, delete, and view library members.  
-- Search members by name.  
+- Search members by name.
+- Track borrowed books for each member.
+- Send automated email reminders for overdue books.
 
 ### Book & Publisher Management
 - Manage books, publishers, and multiple authors per book.  
