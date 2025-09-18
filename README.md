@@ -13,7 +13,7 @@ It ensures smooth member management, keeps track of all borrowing activities, an
 ## Key Features
 
 ### User Management
-- Manage users with different roles (Admin, Librarian, Member).  
+- Manage users with different roles (Admin, Librarian, Staff).  
 - Update user profiles and profile images.  
 - Role-based access control for secured operations.  
 
