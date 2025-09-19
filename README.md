@@ -24,10 +24,12 @@ It ensures smooth member management, keeps track of all borrowing activities, an
 - Send automated email reminders for overdue books.
 
 ### Book & Publisher Management
-- Manage books, publishers, and multiple authors per book.  
-- Search for books and publishers.  
-- Category/genre classification with hierarchical structure.  
-- Support for CRUD operations with validation.  
+- Manage books: Create, update, delete, and view books with full validation.
+- Manage multiple authors per book: Support for books with more than one author.
+- Manage publishers: Create, update, delete, and view publishers.
+- Search functionality: Search for books, authors, and publishers by name.
+- Category/Genre Classification: Supports hierarchical categories for organizing books (e.g., Fiction → Sci-Fi).
+- CRUD Operations with Validation: All operations include proper request validation and error handling.
 
 ### Role Management
 - Admin can create roles and assign them to users.  
