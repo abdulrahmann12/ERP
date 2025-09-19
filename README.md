@@ -117,6 +117,25 @@ It ensures smooth member management, keeps track of all borrowing activities, an
 
 ## Setup & Run
 
-1. Clone the repository:  
-```bash
-git clone <repo-url>
+1. Clone the repository
+- git clone <repo-url>
+- cd <repository-folder>
+
+2. Configure application.properties
+- `/api/logs` – View activity logs
+- Database (MySQL) connection settings
+- JWT secret key
+- Cloud storage credentials for images
+- Email SMTP settings for sending notifications
+- RabbitMQ configuration
+
+3. Run the project
+mvn spring-boot:run
+
+4. Access Swagger UI
+   Open your browser:
+   http://localhost:8080/swagger-ui.html
+
+
+
+
