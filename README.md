@@ -81,7 +81,7 @@ It ensures smooth member management, keeps track of all borrowing activities, an
 ---
 
 ## How It Works
-1. Users can register or be created by Admin/Librarian.  
+1. Users and members are created by Admin. 
 2. Members can borrow books.  
 3. The system automatically tracks borrowings and overdue books.  
 4. Scheduled tasks send email notifications to members with overdue books.  
@@ -96,20 +96,22 @@ It ensures smooth member management, keeps track of all borrowing activities, an
 - `/api/books` – Manage books  
 - `/api/publishers` – Manage publishers  
 - `/api/roles` – Manage roles  
-- `/api/logs` – View activity logs  
+- `/api/logs` – View activity logs
+- `/api/transactions` – Manage book borrow/return transactions
 
 ---
 
 ## Architecture
-- **Controllers:** Handle API requests (`UserController`, `MemberController`, `PublisherController`, `RoleController`, `UserActivityLogController`)  
-- **Services:** Business logic for all entities  
-- **Repositories:** JPA repositories for database access  
-- **DTOs:** Data Transfer Objects for request/response  
-- **Entities:** JPA entities representing database tables  
-- **AOP:** `LoggingAspect` (execution time logging), `ActivityLoggingAspect` (create/update/delete logs)  
-- **Scheduler:** Sends overdue book reminders automatically  
-- **Validation:** DTO field validation using annotations  
-- **Global Exception Handling:** Handles exceptions and returns structured responses  
+- Controllers: Handle API requests (UserController, MemberController, PublisherController, RoleController, UserActivityLogController, TransactionController)  
+- Services: Business logic for all entities
+- Repositories: JPA repositories for database access
+- DTOs: Data Transfer Objects for request/response
+- Entities: JPA entities representing database tables 
+- AOP: LoggingAspect (execution time logging), ActivityLoggingAspect (create/update/delete logs) 
+- Scheduler: Sends overdue book reminders automatically
+- RabbitMQ Integration: Handles asynchronous messaging and background tasks
+- Validation: DTO field validation using annotations
+- Global Exception Handling: Handles exceptions and returns structured responses
 
 ---
 
